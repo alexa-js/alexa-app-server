@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Alexa Tester</title>
+		<script>
+		function changetype(type) {
+			if (!type){return;}
+			var json = template[type];
+			var types = {'':0, 'launch':1, 'intent':2, 'session_end':3};
+			document.getElementById('template').selectedIndex = types[type];
+			if (type=="intent" && session) {
+				json.session.attributes = session;
+			}
+			document.getElementById('json').innerText = JSON.stringify(json,null,3);
+		}
+		function post(data) {
+			try {
+				var xhr = new XMLHttpRequest();
+				xhr.open ('POST', location.href, true);
+				xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+				xhr.onload = function(){ 
+					var json = JSON.parse(xhr.responseText);
+					// Copy session variables
+					if (json && json.sessionAttributes) {
+						session = json.sessionAttributes;
+					}
+					document.getElementById('response').innerHTML = JSON.stringify(json,null,3); 
+				}
+				xhr.send (data);
+			} catch(e) { alert(e.message); }
+		}
+		var session = {};
+		var template = {};
+		
+		// LaunchRequest template
+		template.launch = {
+		  "version": "1.0",
+		  "session": {
+			"new": true,
+			"sessionId": "amzn1.echo-api.session.abeee1a7-aee0-41e6-8192-e6faaed9f5ef",
+			"attributes": {},
+			"user": {
+			  "userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2"
+			}
+		  },
+		  "request": {
+			"type": "LaunchRequest",
+			"requestId": "amzn1.echo-api.request.9cdaa4db-f20e-4c58-8d01-c75322d6c423"
+		  }
+		};
+		// IntentRequest template
+		template.intent = {
+		  "version": "1.0",
+		  "session": {
+			"new": false,
+			"sessionId": "amzn1.echo-api.session.abeee1a7-aee0-41e6-8192-e6faaed9f5ef",
+			"attributes": {},
+			"user": {
+			  "userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2"
+			}
+		  },
+		  "request": {
+			"type": "IntentRequest",
+			"requestId": "amzn1.echo-api.request.6919844a-733e-4e89-893a-fdcb77e2ef0d",
+			"intent": {
+			  "name": "intent",
+			  "slots": {
+			    "example": {
+				  "name":"example",
+				  "value":null
+				}
+			  }
+			}
+		  }
+		};
+		// SessionEndedRequest template
+		template.session_end = {
+		  "version": "1.0",
+		  "session": {
+			"new": false,
+			"sessionId": "amzn1.echo-api.session.abeee1a7-aee0-41e6-8192-e6faaed9f5ef",
+			"attributes": {},
+			"user": {
+			  "userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2"
+			}
+		  },
+		  "request": {
+			"type": "SessionEndedRequest",
+			"requestId": "amzn1.echo-api.request.d8c37cd6-0e1c-458e-8877-5bb4160bf1e1",
+			"reason": "USER_INITIATED"
+		  }
+		};
+		</script>
+		<style>
+		#json, #response { white-space:pre; font-family:monospace; border:1px solid #666; display:inline-block; padding:5px; }
+		</style>
+	</head>
+	<body>
+
+	This is a simple testing utility to POST to your endpoint and simulate an Alexa request
+<h2>Request</h2>
+<div>
+Type: 
+	<select id="template" onchange="changetype(this.options[this.selectedIndex].value)">
+		<option value=""></option>
+		<option value="launch">LaunchRequest</option>
+		<option value="intent">IntentRequest</option>
+		<option value="session_end">SessionEndedRequest</option>
+	</select>
+</div>
+<div>
+<div id="json" contenteditable="true"></div>
+</div>
+<div>
+<input type="button" value="Send Request" onclick="post(document.getElementById('json').innerText)">
+</div>
+
+<h2>Response</h2>
+<div>
+<div id="response"></div>
+</div>
+
+	</body>
+</html>
