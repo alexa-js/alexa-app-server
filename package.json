@@ -1,6 +1,6 @@
 {
   "name": "alexa-app-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An example server for Alexa (Amazon Echo) apps using Node.js and alexa-app",
   "main": "server.js",
   "author": "Matt Kruse",

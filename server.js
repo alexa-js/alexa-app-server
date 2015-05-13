@@ -1,7 +1,6 @@
 // Start up the server
 var express = require('express');
-var alexa = require('../alexa-app/index.js');
-//var alexa = require('alexa-app');
+var alexa = require('alexa-app');
 var bodyParser = require('body-parser');
 
 var app = express();

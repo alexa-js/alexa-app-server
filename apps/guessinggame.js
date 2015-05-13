@@ -1,7 +1,6 @@
-var alexa = require('../../alexa-app/index.js');
-//var alexa = require('alexa-app');
+var alexa = require('alexa-app');
 var app = new alexa.app('guessinggame','guessinggame');
-app.onLaunch(function(req,res) {
+app.launch(function(req,res) {
 	var number = Math.floor(Math.random()*99)+1;
 	res.session('number',number);
 	res.session('guesses',0);
