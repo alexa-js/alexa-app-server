@@ -1,15 +1,15 @@
 {
   "name": "alexa-app-server",
-  "version": "1.0.1",
-  "description": "An example server for Alexa (Amazon Echo) apps using Node.js and alexa-app",
+  "version": "2.0.0",
+  "description": "A web server for Alexa (Amazon Echo) apps (skills) using Node.js, Express, and alexa-app",
   "main": "server.js",
   "author": "Matt Kruse",
   "dependencies": {
-    "alexa-app": "^1.0.1",
+    "alexa-app": "^2.1.0",
     "body-parser": "~1.0.1",
     "ejs": "~0.7.1",
     "express": "~4.0.0",
-    "require-dir": "^0.3.0"
+    "hotswap": "^1.1.0"
   },
   "devDependencies": {
     "supervisor": "^0.6.0"
