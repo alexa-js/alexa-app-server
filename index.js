@@ -1,0 +1,148 @@
+var hotswap = require('hotswap');
+var fs = require('fs');
+var path = path = require('path');
+var express = require('express');
+var alexa = require('alexa-app');
+var bodyParser = require('body-parser');
+
+var appServer = function(config) {
+	var self = {};
+	config = config || {};
+	self.apps = {};
+	
+	self.log = function(msg) {
+		if (config.log!==false) {
+			console.log(msg);
+		}
+	};
+	self.error = function(msg) { console.log(msg); };
+	
+	// Configure hotswap to watch for changes and swap out module code
+	hotswap.on('swap', function(filename) {
+		self.log("hotswap reloaded "+filename);
+	});
+	hotswap.on('error', function(e) {
+		self.log("-----\nhotswap error: "+e+"\n-----\n");
+	});
+
+	// Load application modules
+	self.load_apps = function(app_dir,root) {
+		var app_directories = function(srcpath) {
+		  return fs.readdirSync(srcpath).filter(function(file) {
+			return fs.statSync(path.join(srcpath, file)).isDirectory();
+		  });
+		}
+		app_directories(app_dir).forEach(function(dir) {
+			var package_json = path.join(app_dir,dir,"/package.json");
+			if (!fs.existsSync(package_json) || !fs.statSync(package_json).isFile()) { 
+				self.log("   package.json not found in directory "+dir);
+				return; 
+			}
+			var pkg = JSON.parse(fs.readFileSync(package_json, 'utf8'));
+			if (!pkg || !pkg.main || !pkg.name) { 
+				self.log("   Failed to load "+package_json);
+				return; 
+			}
+			var main = fs.realpathSync( path.join(app_dir,dir,pkg.main) );
+			if (!fs.existsSync(main) || !fs.statSync(main).isFile()) { 
+				self.log("   main file not found for app ["+pkg.name+"]: "+main);
+				return; 
+			}
+			try {
+				var app = require(main);
+				self.apps[pkg.name] = pkg;
+				self.apps[pkg.name].exports = app;
+				if (typeof app.express!="function") {
+					self.log("   App ["+pkg.name+"] is not an instance of alexa-app");
+					return;
+				}
+				
+				// Extract Alexa-specific attributes from package.json, if they exist
+				if (typeof pkg.alexa=="object") {
+					app.id = pkg.alexa.applicationId;
+				}
+
+				// The express() function in alexa-app doesn't play nicely with hotswap,
+				// so bootstrap manually to express
+				var endpoint = (root||'/') + (app.endpoint || app.name);
+				self.express.post(endpoint,function(req,res) {
+					app.request(req.body).then(function(response) {
+						res.json(response);
+					},function(response) {
+						res.status(500).send("Server Error");
+					});
+				});
+				// Configure GET requests to run a debugger UI
+				if (false!==config.debug) {
+					self.express.get(endpoint,function(req,res) {
+						res.render('test',{"app":app,"schema":app.schema(),"utterances":app.utterances(),"intents":app.intents});
+					});
+				}
+				
+				self.log("   Loaded app ["+pkg.name+"] at endpoint: "+endpoint);
+			}
+			catch(e) {
+				self.log("Error loading app ["+main+"]: "+e);
+			}
+		});
+		return self.apps;
+	};
+
+	self.start = function() {
+		// Instantiate up the server
+		self.express = express();
+		self.express.use(bodyParser.urlencoded({ extended: true }));
+		self.express.use(bodyParser.json());
+		self.express.set('views', path.join(__dirname,'views'));
+		self.express.set('view engine', 'ejs');
+
+		// Run the pre() method if defined
+		if (typeof config.pre=="function") {
+			config.pre(self);
+		}
+		
+		// Serve static content
+		var static_dir = config.public_html || 'public_html';
+		if (fs.existsSync(static_dir) && fs.statSync(static_dir).isDirectory()) { 
+			self.log("Serving static content from: "+static_dir);
+			self.express.use(express.static(static_dir));
+		}
+		else {
+			self.log("Not serving static content because directory ["+static_dir+"] does not exist");
+		}
+
+		// Find and load alexa-app modules
+		var app_dir = config.app_dir || 'apps';
+		if (fs.existsSync(app_dir) && fs.statSync(app_dir).isDirectory()) { 
+			self.log("Loading apps from: "+app_dir);
+			self.load_apps(app_dir,config.app_root || '/alexa/');
+		}
+		else {
+			self.log("Apps not loaded because directory ["+app_dir+"] does not exist");
+		}
+		
+		// Start the server listening
+		config.port = config.port || process.env.port || 80;
+		self.express.listen(config.port);
+		self.log("Listening on port "+config.port);
+		
+		// Run the post() method if defined
+		if (typeof config.post=="function") {
+			config.post(self);
+		}
+	};
+	
+	return self;
+};
+
+// A shortcut start(config) method to avoid creating an instance if not needed
+appServer.start = function(config) {
+	var appServerInstance = new appServer(config);
+	appServerInstance.start();
+	return appServerInstance;
+};
+
+module.exports = appServer;
+
+
+
