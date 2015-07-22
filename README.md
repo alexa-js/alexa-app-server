@@ -65,33 +65,38 @@ The start() method accepts a configuration object. The defaults are shown below.
 ```javascript
 require('alexa-app-server').start({
 	// A directory containing static content to serve as the document root.
-    // This directory is relative to the script using alexa-app-server, not relative to the module directory.
+    // This directory is relative to the script using alexa-app-server, not 
+	// relative to the module directory.
     public_html : "public_html",
     
-    // A directory containing Alexa Apps. This directory should contain one or more
-    // subdirectories. Each subdirectory is a stand-alone Alexa App built with the alexa-app framework.
-    // These directories are each processed during server startup and hooked into the server.
+    // A directory containing Alexa Apps. This directory should contain one 
+	// or more subdirectories. Each subdirectory is a stand-alone Alexa App 
+	// built with the alexa-app framework. These directories are each 
+	// processed during server startup and hooked into the server.
     app_dir : "apps",
     
-    // The prefix to use for all Alexa Apps. For example, you may want all your Alexa endpoints
-    // to be accessed under the "/api/" path off the root of your web server.
+    // The prefix to use for all Alexa Apps. For example, you may want all 
+	// your Alexa endpoints to be accessed under the "/api/" path off the 
+	// root of your web server.
     app_root : "/alexa/",
     
     // The port the server should bind to
     port : 80,
     
-    // By default, GET requests to Alexa App endpoints will show the debugger UI. This can be disabled.
+    // By default, GET requests to Alexa App endpoints will show the 
+	// debugger UI. This can be disabled.
     debug : true,
     
     // By default, some information is logged with console.log(), which can be disabled
-    log : true
+    log : true,
     
-    // The pre() method is called after the express server has been instantiated, but before
-    // and Alexa Apps have been loaded. It is passed the AlexaAppServer object itself.
+    // The pre() method is called after the express server has been instantiated, 
+	// but before and Alexa Apps have been loaded. It is passed the AlexaAppServer 
+	// object itself.
     pre : function(appServer) { },
     
-    // The post() method is called after the server has started and the start() method is ready
-    // to exit. It is passed the AlexaAppServer object itself.
+    // The post() method is called after the server has started and the start() method 
+	// is ready to exit. It is passed the AlexaAppServer object itself.
     post : function(appServer) { }
 });
 ```
