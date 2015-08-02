@@ -1,6 +1,8 @@
 var hotswap = require('hotswap');
 var fs = require('fs');
 var path = path = require('path');
+var http = require('http');
+var https = require('https');
 var express = require('express');
 var alexa = require('alexa-app');
 var bodyParser = require('body-parser');
@@ -66,7 +68,14 @@ var appServer = function(config) {
 				// so bootstrap manually to express
 				var endpoint = (root||'/') + (app.endpoint || app.name);
 				self.express.post(endpoint,function(req,res) {
-					app.request(req.body).then(function(response) {
+					var json = req.body;
+					if (typeof config.preRequest=="function") {
+						json = config.preRequest(json,req,res) || json;
+					}
+					app.request(json).then(function(response) {
+						if (typeof config.postRequest=="function") {
+							response = config.postRequest(response,req,res) || response;
+						}
 						res.json(response);
 					},function(response) {
 						res.status(500).send("Server Error");
@@ -88,6 +97,24 @@ var appServer = function(config) {
 		return self.apps;
 	};
 
+	// Load server modules. For example, code the process forms, etc. Anything that
+	// wants to hook into express
+	self.load_server_modules = function(server_dir) {
+		var server_files = function(srcpath) {
+			return fs.readdirSync(srcpath).filter(function(file) {
+				return fs.statSync(path.join(srcpath, file)).isFile();
+			});
+		};
+		server_files(server_dir).forEach(function(file) {
+			file = fs.realpathSync( path.join(server_dir,file) );
+			self.log("   Loaded "+file);
+			var func = require(file);
+			if (typeof func=="function") {
+				func(self.express, self);
+			}
+		});
+	};
+	
 	self.start = function() {
 		// Instantiate up the server
 		self.express = express();
@@ -109,6 +136,16 @@ var appServer = function(config) {
 		}
 		else {
 			self.log("Not serving static content because directory ["+static_dir+"] does not exist");
+		}
+		
+		// Find any server-side processing modules and let them hook in
+		var server_dir = config.server_dir || 'server';
+		if (fs.existsSync(server_dir) && fs.statSync(server_dir).isDirectory()) { 
+			self.log("Loading server-side modules from: "+server_dir);
+			self.load_server_modules(server_dir);
+		}
+		else {
+			self.log("No server modules loaded because directory ["+server_dir+"] does not exist");
 		}
 
 		// Find and load alexa-app modules

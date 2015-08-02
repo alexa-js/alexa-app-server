@@ -79,6 +79,9 @@ require('alexa-app-server').start({
 	// your Alexa endpoints to be accessed under the "/api/" path off the 
 	// root of your web server.
     app_root : "/alexa/",
+	
+	// The directory containing server-side processing modules (see below)
+	server_dir : "server",
     
     // The port the server should bind to
     port : 80,
@@ -97,8 +100,35 @@ require('alexa-app-server').start({
     
     // The post() method is called after the server has started and the start() method 
 	// is ready to exit. It is passed the AlexaAppServer object itself.
-    post : function(appServer) { }
+    post : function(appServer) { },
+	
+	// Like pre(), but this function is fired on every request, but before the 
+	// application itself gets called. You can use this to load up user details before
+	// every request, for example, and insert it into the json request itself for
+	// the application to use.
+	preRequest : function(json,request,response) { },
+	
+	// Like post(), but this function is fired after every request. It has a final 
+	// opportunity to modify the JSON response before it is returned back to the
+	// Alexa service.
+	postRequest : function(json,request,response) { }
 });
+```
+
+## Dynamic Server-side Functionality
+
+Most servers will need some server-side processing logic. For example, to handle logins, or process forms, etc. You can specify a directory containing files that define server-side functionality by hooking into express. These files are stand-alone modules that export a single function that the framework calls. An example is below and in the "examples/server/" directory.
+
+The default directory used to hold these modules is "server/" but you can change this by using the "server_dir" configuration parameter, as shown above.
+
+examples/server/login.js
+
+```javascript
+module.exports = function(express,alexaAppServerObject) {
+	express.use('/login',function(req,res) {
+		res.send("Imagine this is a dynamic server-side login action");
+	});
+};
 ```
 
 ## Example App Structure
