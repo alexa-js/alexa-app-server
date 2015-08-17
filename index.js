@@ -10,6 +10,7 @@ var bodyParser = require('body-parser');
 var appServer = function(config) {
 	var self = {};
 	config = config || {};
+	var server_root = config.server_root || '';
 	self.apps = {};
 	
 	self.log = function(msg) {
@@ -129,7 +130,7 @@ var appServer = function(config) {
 		}
 		
 		// Serve static content
-		var static_dir = config.public_html || 'public_html';
+		var static_dir = path.join(server_root,config.public_html || 'public_html');
 		if (fs.existsSync(static_dir) && fs.statSync(static_dir).isDirectory()) { 
 			self.log("Serving static content from: "+static_dir);
 			self.express.use(express.static(static_dir));
@@ -139,7 +140,7 @@ var appServer = function(config) {
 		}
 		
 		// Find any server-side processing modules and let them hook in
-		var server_dir = config.server_dir || 'server';
+		var server_dir = path.join(server_root,config.server_dir || 'server');
 		if (fs.existsSync(server_dir) && fs.statSync(server_dir).isDirectory()) { 
 			self.log("Loading server-side modules from: "+server_dir);
 			self.load_server_modules(server_dir);
@@ -149,7 +150,7 @@ var appServer = function(config) {
 		}
 
 		// Find and load alexa-app modules
-		var app_dir = config.app_dir || 'apps';
+		var app_dir = path.join(server_root,config.app_dir || 'apps');
 		if (fs.existsSync(app_dir) && fs.statSync(app_dir).isDirectory()) { 
 			self.log("Loading apps from: "+app_dir);
 			self.load_apps(app_dir,config.app_root || '/alexa/');
