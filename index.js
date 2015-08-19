@@ -6,6 +6,7 @@ var https = require('https');
 var express = require('express');
 var alexa = require('alexa-app');
 var bodyParser = require('body-parser');
+var Promise = require('bluebird');
 
 var appServer = function(config) {
 	var self = {};
@@ -69,18 +70,27 @@ var appServer = function(config) {
 				// so bootstrap manually to express
 				var endpoint = (root||'/') + (app.endpoint || app.name);
 				self.express.post(endpoint,function(req,res) {
-					var json = req.body;
-					if (typeof config.preRequest=="function") {
-						json = config.preRequest(json,req,res) || json;
-					}
-					app.request(json).then(function(response) {
-						if (typeof config.postRequest=="function") {
-							response = config.postRequest(response,req,res) || response;
-						}
-						res.json(response);
-					},function(response) {
-						res.status(500).send("Server Error");
-					});
+					var json = req.body, response_json;
+					// preRequest may return altered request JSON, or undefined, or a Promise
+					Promise.resolve( typeof config.preRequest=="function" ? config.preRequest(json,req,res) : json )
+						.then(function(json_new) {
+							if (json_new) {
+								json = json_new;
+							}
+							return json;
+						})
+						.then(app.request)
+						.then(function(app_response_json) {
+							response_json = app_response_json;
+							return Promise.resolve( typeof config.postRequest=="function" ? config.postRequest(app_response_json,req,res) : app_response_json )
+						})
+						.then(function(response_json_new) {
+							response_json = response_json_new || response_json;
+							res.json(response_json).send();
+						})
+						.catch(function() {
+							res.status(500).send("Server Error");
+						});
 				});
 				// Configure GET requests to run a debugger UI
 				if (false!==config.debug) {
