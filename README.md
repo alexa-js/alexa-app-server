@@ -129,6 +129,20 @@ require('alexa-app-server').start({
 });
 ```
 
+## Debugging With The Echo Simulator
+
+Each app (skill) is available at a url endpoint on the server, and responds to POST requests from the Echo. If you load an app's endpoint in your browser with a GET request, it will display an echo simulator that can be used to debug your application. With it, you can send different request types to your app, load slots with values you specify, etc and see the actual generated JSON output from your application.
+
+## View Generated Schema And Utterances
+
+In the Echo Simulator, your application's schema definition and example utterances are displayed. These can be directly pasted into the Amazon Developer interface when defining your skill.
+
+You can also get the schema and utterances directly from your endpoint url using url parameters:
+```
+GET /your/app/endpoint?schema
+GET /your/app/endpoint?utterances
+```
+
 ## Dynamic Server-side Functionality
 
 Most servers will need some server-side processing logic. For example, to handle logins, or process forms, etc. You can specify a directory containing files that define server-side functionality by hooking into express. These files are stand-alone modules that export a single function that the framework calls. An example is below and in the "examples/server/" directory.
@@ -168,3 +182,13 @@ This is an example directory structure of what a complete app server might look 
 ## Examples
 
 See example application in the "examples" directory.
+
+## History
+
+- 2.2.3 - Aug 19, 2015
+  - Added the ability to retrieve schema and utterances output directly using url parameters
+    - Example: /your/app/endpoint?schema
+
+- 2.2.2 - Aug 18, 2015
+  - Changed preRequest() and postRequest() to allow them to return a Promise if they perform async operations
+  
