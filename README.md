@@ -224,6 +224,9 @@ See example application in the "examples" directory.
 
 ## History
 
+- 2.2.4 - Sep 13, 2015
+  - Added HTTPS Support
+  
 - 2.2.3 - Aug 19, 2015
   - Added the ability to retrieve schema and utterances output directly using url parameters
     - Example: /your/app/endpoint?schema
