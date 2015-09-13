@@ -177,10 +177,46 @@ var appServer = function(config) {
 			self.log("Apps not loaded because directory ["+app_dir+"] does not exist");
 		}
 		
+		if(config.httpsEnabled == true) {
+			self.log("httpsEnabled is true. Reading HTTPS config");
+
+			if(config.privateKey != undefined && config.certificate != undefined && config.httpsPort != undefined) { //Ensure that all of the needed properties are set
+				var privateKeyFile = 'sslcert/' + config.privateKey;
+				var certificateFile = 'sslcert/' + config.certificate;
+				
+				if(fs.existsSync(privateKeyFile) && fs.existsSync(certificateFile)) { //Make sure the key and cert exist.
+					
+					var privateKey  = fs.readFileSync(privateKeyFile, 'utf8');
+					var certificate = fs.readFileSync(certificateFile  , 'utf8');
+			
+						if(privateKey != undefined && certificate != undefined) {
+							var credentials = {key: privateKey, cert: certificate};
+								
+									try { //The line below can fail it the certs were generated incorrectly. But we can continue startup without HTTPS
+								  	https.createServer(credentials, self.express).listen(config.httpsPort); //create the HTTPS server 
+								  	self.log("Listening on HTTPS port " + config.httpsPort);
+								}catch(error) {
+									self.log("Failed to listen via HTTPS Error: " + error);
+								}
+						} else {
+						self.log("Failed to load privateKey or certificate from /sslcert. HTTPS will not be enabled");
+				
+						} 
+			
+				} else {
+				self.log("privateKey: '" + config.privateKey +  "' or certificate: '" + config.certificate + "' do not exist in /sslcert. HTTPS will not be enabled");
+		
+				} 	
+		} else {
+			self.log("privatekey, httpsPort, or certificate paramater not set in config. HTTPS will not be enabled");
+				
+		}
+		
+	}
 		// Start the server listening
 		config.port = config.port || process.env.port || 80;
 		self.express.listen(config.port);
-		self.log("Listening on port "+config.port);
+		self.log("Listening on HTTP port "+config.port);
 		
 		// Run the post() method if defined
 		if (typeof config.post=="function") {
@@ -199,6 +235,3 @@ appServer.start = function(config) {
 };
 
 module.exports = appServer;
-
-
-
