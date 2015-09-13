@@ -125,9 +125,47 @@ require('alexa-app-server').start({
 	// If it returns a non-falsy value, the response json is replaced with what was returned.
 	// If it returns a Promise, response processing pauses until the Promise resolves.
 	//    The value passed on by the promise (if any) replaces the response json.
-	postRequest : function(json,request,response) { }
+	postRequest : function(json,request,response) { },
+	
+	//Enables https support. Note httpsPort, privateKey, and certificate are needed.
+	httpsEnabled : true,
+	
+	//The https port the server will bind to. No default. Must be set if httpsEnable = true
+	httpsPort : 443,
+	
+	//privateKey filename. This file must reside in the sslcert folder under the root of the project. Must be set if httpsEnable = true
+	privateKey:'private-key.key',
+	
+	//certificate filename. This file must reside in the sslcert folder under the root of the project. Must be set if httpsEnable = true
+	certificate:'cert.cer'
+
 });
 ```
+
+## Enabling HTTPS 
+
+You can enable HTTPS support for the app-server using the instructions below.
+
+
+Generate a x509 SSL Certificate using the following commands:
+
+```
+openssl genrsa -out private-key.pem 1024
+openssl req -new -x509 -key private-key.pem -out cert.cer -days 365 --generates the certificate
+```
+
+Then add the following properties the to config (currently in server.js) that creates the server. Place the two generated files in the sslcert directory.
+	
+```javascript
+AlexaAppServer.start( {
+	httpsPort:443,
+	httpsEnabled:true,
+	privateKey:'private-key.pem',
+	certificate:'cert.cer'
+	}
+} );
+```
+
 
 ## Debugging With The Echo Simulator
 
@@ -166,6 +204,7 @@ This is an example directory structure of what a complete app server might look 
 ```
 .
 +--- server.js
++--- sslcert
 +--- apps
      +--- alexa-app-1
           +--- package.json
