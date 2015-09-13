@@ -149,8 +149,10 @@ You can enable HTTPS support for the app-server using the instructions below.
 
 Generate a x509 SSL Certificate using the following commands:
 
+```
 openssl genrsa -out private-key.pem 1024
 openssl req -new -x509 -key private-key.pem -out cert.cer -days 365 --generates the certificate
+```
 
 Then add the following properties the to config (currently in server.js) that creates the server. Place the two generated files in the sslcert directory.
 	
