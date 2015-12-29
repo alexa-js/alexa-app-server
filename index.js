@@ -102,7 +102,7 @@ var appServer = function(config) {
 							res.set('Content-Type', 'text/plain').send(app.utterances());
 						}
 						else {
-							res.render('test',{"app":app,"schema":app.schema(),"utterances":app.utterances(),"intents":app.intents});
+							res.render('test',{"app":app,"schema":app.schema(),"customSlotTypes":app.customSlotTypes(),"utterances":app.utterances(),"intents":app.intents});
 						}
 					});
 				}
