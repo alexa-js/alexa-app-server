@@ -215,13 +215,15 @@ var appServer = function(config) {
 	}
 		// Start the server listening
 		config.port = config.port || process.env.port || 80;
-		self.express.listen(config.port);
+		var instance = self.express.listen(config.port);
 		self.log("Listening on HTTP port "+config.port);
 		
 		// Run the post() method if defined
 		if (typeof config.post=="function") {
 			config.post(self);
 		}
+		
+		return instance;
 	};
 	
 	return self;
