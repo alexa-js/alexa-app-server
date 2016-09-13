@@ -4,7 +4,7 @@ An Alexa App (Skill) Server module using Node.js and the [alexa-app](https://www
 
 ## Installation
 
-	npm install
+	npm install alexa-app-server --save
 
 ## Usage
 
