@@ -79,39 +79,21 @@ var appServer = function(config) {
                             return next();
                         }
 
-                        // mark the request body as already having been parsed so it's ignored by
-                        // other body parser middlewares
-                        req._body = true;
-                        req.rawBody = '';
-                        req.on('data', function(data) {
-                            return req.rawBody += data;
-                        });
-                        req.on('end', function() {
-                            var cert_url, er, error, requestBody, signature;
-                            try {
-                                req.body = JSON.parse(req.rawBody);
-                            } catch (error) {
-                                er = error;
-                                req.body = {};
+                        var cert_url = req.headers.signaturecertchainurl;
+                        var signature = req.headers.signature;
+                        var requestBody = req.rawBody;
+                        verifier(cert_url, signature, requestBody, function(er) {
+                            if (er) {
+                                res.status(401).json({ status: 'failure', reason: er });
+                            } else {
+                                req.verified = true;
+                                next();
                             }
-                            cert_url = req.headers.signaturecertchainurl;
-                            signature = req.headers.signature;
-                            requestBody = req.rawBody;
-                            verifier(cert_url, signature, requestBody, function(er) {
-                                if (er) {
-                                    console.error('error validating the alexa cert:', er);
-                                    res.status(401).json({ status: 'failure', reason: er });
-                                } else {
-                                	req.verified = true;
-                                    next();
-                                }
-                            });
                         });
 					});
 				}
 				self.express.post(endpoint,function(req,res) {
 					if (config.verify && !req.verified) {
-                        console.error('Request failed validation');
                         res.status(401).json({ status: 'failure', reason: er });
 					}
 					var json = req.body, response_json;
@@ -182,7 +164,26 @@ var appServer = function(config) {
 		// Instantiate up the server
 		self.express = express();
 		self.express.use(bodyParser.urlencoded({ extended: true }));
-		self.express.use(bodyParser.json());
+
+		//We need the rawBody for request verification
+		self.express.use(function(req, res, next)
+        {
+            // mark the request body as already having been parsed so it's ignored by
+            // other body parser middlewares
+            req._body = true;
+            req.rawBody = '';
+            req.on('data', function(data) {
+                return req.rawBody += data;
+            });
+            req.on('end', function() {
+                try {
+                    req.body = JSON.parse(req.rawBody);
+                } catch (error) {
+                    req.body = {};
+                }
+                next();
+            });
+        });
 		self.express.set('views', path.join(__dirname,'views'));
 		self.express.set('view engine', 'ejs');
 
