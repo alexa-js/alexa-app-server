@@ -6,6 +6,7 @@
   "author": "Matt Kruse",
   "dependencies": {
     "alexa-app": "^2.1.0",
+    "alexa-verifier": "0.0.5",
     "bluebird": "^2.9.34",
     "body-parser": "~1.0.1",
     "ejs": "~0.7.1",

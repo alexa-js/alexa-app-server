@@ -5,6 +5,7 @@ var http = require('http');
 var https = require('https');
 var express = require('express');
 var alexa = require('alexa-app');
+var verifier = require('alexa-verifier');
 var bodyParser = require('body-parser');
 var Promise = require('bluebird');
 
@@ -35,7 +36,7 @@ var appServer = function(config) {
 		  return fs.readdirSync(srcpath).filter(function(file) {
 			return fs.statSync(path.join(srcpath, file)).isDirectory();
 		  });
-		}
+		};
 		app_directories(app_dir).forEach(function(dir) {
 			var package_json = path.join(app_dir,dir,"/package.json");
 			if (!fs.existsSync(package_json) || !fs.statSync(package_json).isFile()) { 
@@ -69,7 +70,50 @@ var appServer = function(config) {
 				// The express() function in alexa-app doesn't play nicely with hotswap,
 				// so bootstrap manually to express
 				var endpoint = (root||'/') + (app.endpoint || app.name);
+				if (config.verify)
+				{
+					self.express.use(endpoint, function(req, res, next)
+					{
+						req.verified = false;
+                        if (!req.headers.signaturecertchainurl) {
+                            return next();
+                        }
+
+                        // mark the request body as already having been parsed so it's ignored by
+                        // other body parser middlewares
+                        req._body = true;
+                        req.rawBody = '';
+                        req.on('data', function(data) {
+                            return req.rawBody += data;
+                        });
+                        req.on('end', function() {
+                            var cert_url, er, error, requestBody, signature;
+                            try {
+                                req.body = JSON.parse(req.rawBody);
+                            } catch (error) {
+                                er = error;
+                                req.body = {};
+                            }
+                            cert_url = req.headers.signaturecertchainurl;
+                            signature = req.headers.signature;
+                            requestBody = req.rawBody;
+                            verifier(cert_url, signature, requestBody, function(er) {
+                                if (er) {
+                                    console.error('error validating the alexa cert:', er);
+                                    res.status(401).json({ status: 'failure', reason: er });
+                                } else {
+                                	req.verified = true;
+                                    next();
+                                }
+                            });
+                        });
+					});
+				}
 				self.express.post(endpoint,function(req,res) {
+					if (config.verify && !req.verified) {
+                        console.error('Request failed validation');
+                        res.status(401).json({ status: 'failure', reason: er });
+					}
 					var json = req.body, response_json;
 					// preRequest may return altered request JSON, or undefined, or a Promise
 					Promise.resolve( typeof config.preRequest=="function" ? config.preRequest(json,req,res) : json )
