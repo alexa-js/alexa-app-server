@@ -55,6 +55,15 @@ var appServer = function(config) {
 			}
 			try {
 				var app = require(main);
+
+				if (app['customSlotTypes'] === undefined) {
+					app.customSlotTypes = function() {
+						console.log('customSlotTypes():', arguments);
+
+						return null
+					}
+				}
+
 				self.apps[pkg.name] = pkg;
 				self.apps[pkg.name].exports = app;
 				if (typeof app.express!="function") {
