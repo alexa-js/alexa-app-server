@@ -228,6 +228,13 @@ See example application in the "examples" directory.
 
 ## History
 
+- 2.3.1 - Dec 3, 2016
+  - Fixed bug caused by custom slot types call
+
+- 2.3.0 - Nov 28, 2016
+  - added view for custom slot types : https://github.com/matt-kruse/alexa-app-server/pull/2
+  - Add support for alexa-verifier : https://github.com/matt-kruse/alexa-app-server/pull/14
+
 - 2.2.4 - Sep 13, 2015
   - Added HTTPS Support
   
