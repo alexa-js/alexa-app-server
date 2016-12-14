@@ -99,7 +99,7 @@ require('alexa-app-server').start({
     // By default, some information is logged with console.log(), which can be disabled
     log : true,
     
-    // This will add verification for alexa requests as require by the alexa certification
+    // This will add verification for alexa requests as required by the alexa certification
     // process. Provided by alexa-verifier.
     verify: false,
     
