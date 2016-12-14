@@ -74,8 +74,8 @@ var appServer = function(config) {
 				{
 					self.express.use(endpoint, function(req, res, next)
 					{
-                        var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-                        if (ip=="127.0.0.1" || ip=="::ffff:127.0.0.1" || ip=="::1")
+                        var ip = req.connection.remoteAddress;
+                        if (!req.headers['x-forwarded-for'] && (ip=="127.0.0.1" || ip=="::ffff:127.0.0.1" || ip=="::1"))
                         {
                         	//Local request, skipping verification
                             req.verified = true;
