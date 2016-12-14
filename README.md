@@ -100,7 +100,7 @@ require('alexa-app-server').start({
     log : true,
     
     // This will add verification for alexa requests as require by the alexa certification
-    // process. Provied by alexa-verifier
+    // process. Provided by alexa-verifier.
     verify: false,
     
     // The pre() method is called after the express server has been instantiated, 
