@@ -172,7 +172,7 @@ var appServer = function(config) {
 	self.start = function() {
 		// Instantiate up the server
 		self.express = express();
-		self.express.use(bodyParser.urlencoded({ extended: true }));
+		self.express.use("/alexa", bodyParser.urlencoded({ extended: true }));
 
 		//We need the rawBody for request verification
 		self.express.use(function(req, res, next)
