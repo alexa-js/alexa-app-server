@@ -74,15 +74,7 @@ var appServer = function(config) {
 				{
 					self.express.use(endpoint, function(req, res, next)
 					{
-                        var ip = req.connection.remoteAddress;
-                        if (!req.headers['x-forwarded-for'] && (ip=="127.0.0.1" || ip=="::ffff:127.0.0.1" || ip=="::1"))
-                        {
-                        	//Local request, skipping verification
-                            req.verified = true;
-                            return next();
-                        }
-
-                        req.verified = false;
+						req.verified = false;
 						if (!req.headers.signaturecertchainurl) {
 							return next();
 						}
