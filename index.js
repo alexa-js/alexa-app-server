@@ -94,7 +94,8 @@ var appServer = function(config) {
 				}
 				self.express.post(endpoint,function(req,res) {
 					if (config.verify && !req.verified) {
-						res.status(401).json({ status: 'failure', reason: er });
+						res.status(401).json({ status: 'failure', reason: "Failed to authenticate" });
+						return;
 					}
 					var json = req.body, response_json;
 					// preRequest may return altered request JSON, or undefined, or a Promise
@@ -163,7 +164,7 @@ var appServer = function(config) {
 	self.start = function() {
 		// Instantiate up the server
 		self.express = express();
-		self.express.use(bodyParser.urlencoded({ extended: true }));
+		self.express.use("/alexa", bodyParser.urlencoded({ extended: true }));
 
 		//We need the rawBody for request verification
 		self.express.use(function(req, res, next)
