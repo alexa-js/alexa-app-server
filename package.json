@@ -11,6 +11,9 @@
     "bugs": {
         "url": "https://github.com/matt-kruse/alexa-app-server/issues"
     },
+    "scripts": {
+        "test": "./node_modules/.bin/mocha"
+    },
     "license": "MIT",
     "dependencies": {
         "alexa-app": "^2.4.0",
@@ -22,6 +25,10 @@
         "hotswap": "^1.1.0"
     },
     "devDependencies": {
-        "supervisor": "^0.6.0"
+        "supervisor": "^0.6.0",
+        "mocha": "^2.3.4",
+        "chai": "^3.4.1",
+        "supertest": "^2.0.1",
+        "supertest-as-promised": "^4.0.2"
     }
 }

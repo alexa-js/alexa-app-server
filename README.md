@@ -2,6 +2,8 @@
 
 An Alexa App (Skill) Server module using Node.js and the [alexa-app](https://www.npmjs.com/package/alexa-app) module.
 
+[![Build Status](https://travis-ci.org/matt-kruse/alexa-app-server.svg?branch=master)](https://travis-ci.org/matt-kruse/alexa-app-server)
+
 ## Installation
 
 ```
