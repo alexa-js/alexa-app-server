@@ -2,6 +2,9 @@
 
 ### 2.3.2 (Next)
 
+* [#23](https://github.com/matt-kruse/alexa-app-server/pull/23): Added `server.stop()` - [@dblock](https://github.com/dblock).
+* [#23](https://github.com/matt-kruse/alexa-app-server/pull/23): Added LICENSE - [@dblock](https://github.com/dblock).
+* [#23](https://github.com/matt-kruse/alexa-app-server/pull/23): Added tests - [@dblock](https://github.com/dblock).
 * Your contribution here.
 
 ### 2.3.1 (Dec 3, 2016)

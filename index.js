@@ -252,7 +252,7 @@ var appServer = function(config) {
         }
         // Start the server listening
         config.port = config.port || process.env.port || 80;
-        var instance = self.express.listen(config.port);
+        self.instance = self.express.listen(config.port);
         self.log("Listening on HTTP port " + config.port);
 
         // Run the post() method if defined
@@ -260,7 +260,11 @@ var appServer = function(config) {
             config.post(self);
         }
 
-        return instance;
+        return this.instance;
+    };
+
+    self.stop = function() {
+    	self.instance.close();
     };
 
     return self;

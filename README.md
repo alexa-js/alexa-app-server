@@ -14,13 +14,16 @@ npm install alexa-app-server --save
 
 ```javascript
 var AlexaAppServer = require('alexa-app-server');
-AlexaAppServer.start({
+
+var instance = AlexaAppServer.start({
 	server_root:__dirname,     // Path to root
 	public_html:"public_html", // Static content
 	app_dir:"apps",            // Where alexa-app modules are stored
 	app_root:"/alexa/",        // Service root
 	port:80                    // What port to use, duh
 });
+
+instance.stop();             // Stop the server
 ```
 
 ## Summary
