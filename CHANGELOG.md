@@ -2,9 +2,10 @@
 
 ### 2.3.2 (Next)
 
-* [#23](https://github.com/matt-kruse/alexa-app-server/pull/23): Added `server.stop()` - [@dblock](https://github.com/dblock).
-* [#23](https://github.com/matt-kruse/alexa-app-server/pull/23): Added LICENSE - [@dblock](https://github.com/dblock).
-* [#23](https://github.com/matt-kruse/alexa-app-server/pull/23): Added tests - [@dblock](https://github.com/dblock).
+* [#28](https://github.com/alexa-js/alexa-app-server/pull/28): Moved to the [alexa-js organization](https://github.com/alexa-js) - [@dblock](https://github.com/dblock).
+* [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added `server.stop()` - [@dblock](https://github.com/dblock).
+* [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added LICENSE - [@dblock](https://github.com/dblock).
+* [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added tests - [@dblock](https://github.com/dblock).
 * Your contribution here.
 
 ### 2.3.1 (Dec 3, 2016)
@@ -13,12 +14,12 @@
 
 ### 2.3.0 (Nov 28, 2016)
 
-* [#2](https://github.com/matt-kruse/alexa-app-server/pull/2): Added view for custom slot types - [@rickwargo](https://github.com/rickwargo).
-* [#14](https://github.com/matt-kruse/alexa-app-server/pull/2): Added support for alexa-verifier - [@TomMettam](https://github.com/TomMettam).
+* [#2](https://github.com/alexa-js/alexa-app-server/pull/2): Added view for custom slot types - [@rickwargo](https://github.com/rickwargo).
+* [#14](https://github.com/alexa-js/alexa-app-server/pull/2): Added support for alexa-verifier - [@TomMettam](https://github.com/TomMettam).
 
 ### 2.2.4 (Sep 13, 2015)
 
-* [#1](https://github.com/matt-kruse/alexa-app-server/pull/1): Added HTTPS Support - [@parisbutterfield](https://github.com/parisbutterfield).
+* [#1](https://github.com/alexa-js/alexa-app-server/pull/1): Added HTTPS Support - [@parisbutterfield](https://github.com/parisbutterfield).
 
 ### 2.2.3 (Aug 19, 2015)
 
