@@ -7,6 +7,7 @@
 * [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added LICENSE - [@dblock](https://github.com/dblock).
 * [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added tests - [@dblock](https://github.com/dblock).
 * [#29](https://github.com/alexa-js/alexa-app-server/pull/29): Added code coverage - [@dblock](https://github.com/dblock).
+* [#27](https://github.com/alexa-js/alexa-app-server/pull/27): Added Danger, PR linter - [@dblock](https://github.com/dblock).
 * Your contribution here.
 
 ### 2.3.1 (Dec 3, 2016)
