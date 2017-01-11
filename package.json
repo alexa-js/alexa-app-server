@@ -6,10 +6,10 @@
     "author": "Matt Kruse",
     "repository": {
         "type": "git",
-        "url": "https://github.com/matt-kruse/alexa-app-server.git"
+        "url": "https://github.com/alexa-js/alexa-app-server.git"
     },
     "bugs": {
-        "url": "https://github.com/matt-kruse/alexa-app-server/issues"
+        "url": "https://github.com/alexa-js/alexa-app-server/issues"
     },
     "scripts": {
         "test": "./node_modules/.bin/mocha"
