@@ -92,7 +92,7 @@ var appServer = function(config) {
                 }
                 self.express.post(endpoint, function(req, res) {
                     if (config.verify && !req.verified) {
-                        res.status(401).json({ status: 'failure', reason: er });
+                        res.status(401).json({ status: 'failure', reason: 'Unauthorized' });
                     }
                     var json = req.body,
                         response_json;
