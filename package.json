@@ -13,7 +13,8 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha",
-    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- -R spec"
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- -R spec",
+    "danger": "./node_modules/.bin/danger"
   },
   "license": "MIT",
   "dependencies": {
@@ -32,6 +33,7 @@
     "supertest": "^2.0.1",
     "supertest-as-promised": "^4.0.2",
     "istanbul": "0.4.5",
-    "coveralls": "^2.11.15"
+    "coveralls": "^2.11.15",
+    "danger": "0.8.0"
   }
 }
