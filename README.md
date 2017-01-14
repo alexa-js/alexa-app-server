@@ -145,7 +145,7 @@ require('alexa-app-server').start({
 	httpsPort: 443,
 
 	// privateKey filename. This file must reside in the sslcert folder under the root of the project. Must be set if httpsEnable = true
-	privateKey: 'private-key.key',
+	privateKey: 'private-key.pem',
 
 	// certificate filename. This file must reside in the sslcert folder under the root of the project. Must be set if httpsEnable = true
 	certificate: 'cert.cer'
@@ -161,7 +161,7 @@ Generate a x509 SSL Certificate using the following:
 
 ```
 openssl genrsa -out private-key.pem 1024
-openssl req -new -x509 -key private-key.pem -out cert.cer -days 365 --generates the certificate
+openssl req -new -x509 -key private-key.pem -out cert.cer -days 365
 ```
 
 Then add the following properties the to config (currently in server.js) that creates the server. Place the two generated files in the sslcert directory.
