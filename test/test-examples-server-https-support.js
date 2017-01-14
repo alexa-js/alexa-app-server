@@ -13,7 +13,7 @@ describe("Alexa App Server with Examples & HTTPS support", function() {
       port: 3000,
       server_root: 'examples',
       httpsEnabled: true,
-      httpsPort: 443,
+      httpsPort: 6000,
       privateKey: 'private-key.pem',
       certificate: 'cert.cer'
     });

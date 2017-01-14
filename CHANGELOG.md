@@ -2,6 +2,7 @@
 
 ### 2.3.2 (Next)
 
+* [#32](https://github.com/alexa-js/alexa-app-server/pull/32): group of bug fixes and more testing/coverage - [@tejashah88](https://github.com/tejashah88)
 * [#28](https://github.com/alexa-js/alexa-app-server/pull/28): Moved to the [alexa-js organization](https://github.com/alexa-js) - [@dblock](https://github.com/dblock).
 * [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added `server.stop()` - [@dblock](https://github.com/dblock).
 * [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added LICENSE - [@dblock](https://github.com/dblock).
