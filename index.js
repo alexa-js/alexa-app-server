@@ -5,9 +5,8 @@ var http = require('http');
 var https = require('https');
 var express = require('express');
 var alexa = require('alexa-app');
-var verifier = require('alexa-verifier');
 var bodyParser = require('body-parser');
-var avm = require('alexa-verifier-middleware');
+var alexaVerifierMiddleware = require('alexa-verifier-middleware');
 var Promise = require('bluebird');
 
 var appServer = function(config) {
@@ -24,7 +23,7 @@ var appServer = function(config) {
     self.error = function(msg) { console.log(msg); };
 
     // Configure hotswap to watch for changes and swap out module code
-    var swapCallback = function(filename) {
+    var hotswapCallback = function(filename) {
         self.log("hotswap reloaded " + filename);
     };
 
@@ -32,7 +31,7 @@ var appServer = function(config) {
         self.log("-----\nhotswap error: " + e + "\n-----\n");
     };
 
-    hotswap.on('swap', swapCallback);
+    hotswap.on('swap', hotswapCallback);
     hotswap.on('error', errorCallback);
 
     // Load application modules
@@ -76,7 +75,7 @@ var appServer = function(config) {
                 // so bootstrap manually to express
                 var endpoint = (root || '/') + (app.endpoint || app.name);
                 if (config.verify) {
-                    self.express.use(endpoint, avm());
+                    self.express.use(endpoint, alexaVerifierMiddleware());
                 }
                 self.express.post(endpoint, function(req, res) {
                     var json = req.body,
@@ -257,7 +256,7 @@ var appServer = function(config) {
         }
 
         // deactivate all hotswap listener
-        hotswap.removeListener('swap', swapCallback);
+        hotswap.removeListener('swap', hotswapCallback);
         hotswap.removeListener('error', errorCallback);
     };
 

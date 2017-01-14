@@ -2,7 +2,12 @@
 
 ### 2.3.2 (Next)
 
-* [#32](https://github.com/alexa-js/alexa-app-server/pull/32): group of bug fixes and more testing/coverage - [@tejashah88](https://github.com/tejashah88)
+* [#32](https://github.com/alexa-js/alexa-app-server/pull/32): Bug fixes and more testing/coverage - [@tejashah88](https://github.com/tejashah88)
+  * added testing for request verification, HTTPS support, and POST-based routes
+  * fixed potential memory leaks from not closing the HTTPS server instance and not removing the hotswap listeners
+  * now using alexa-verifier-middleware for request verification
+  * changed loading location of contents of 'sslcert' folder (should be part of 'examples' folder)
+  * fixed documentation for generating the SSL certificate
 * [#28](https://github.com/alexa-js/alexa-app-server/pull/28): Moved to the [alexa-js organization](https://github.com/alexa-js) - [@dblock](https://github.com/dblock).
 * [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added `server.stop()` - [@dblock](https://github.com/dblock).
 * [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added LICENSE - [@dblock](https://github.com/dblock).
@@ -31,4 +36,3 @@
 ### 2.2.2 (Aug 18, 2015)
 
 * Changed `preRequest()` and `postRequest()` to allow them to return a `Promise` if they perform async operations - [@matt-kruse](https://github.com/matt-kruse).
-

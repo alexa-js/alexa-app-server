@@ -145,7 +145,7 @@ require('alexa-app-server').start({
 	httpsPort: 443,
 
 	// privateKey filename. This file must reside in the sslcert folder under the root of the project. Must be set if httpsEnable = true
-	privateKey: 'private-key.key',
+	privateKey: 'private-key.pem',
 
 	// certificate filename. This file must reside in the sslcert folder under the root of the project. Must be set if httpsEnable = true
 	certificate: 'cert.cer'
