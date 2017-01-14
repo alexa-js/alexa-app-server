@@ -7,6 +7,7 @@ var express = require('express');
 var alexa = require('alexa-app');
 var verifier = require('alexa-verifier');
 var bodyParser = require('body-parser');
+var avm = require('alexa-verifier-middleware');
 var Promise = require('bluebird');
 
 var appServer = function(config) {
@@ -23,12 +24,16 @@ var appServer = function(config) {
     self.error = function(msg) { console.log(msg); };
 
     // Configure hotswap to watch for changes and swap out module code
-    hotswap.on('swap', function(filename) {
+    var swapCallback = function(filename) {
         self.log("hotswap reloaded " + filename);
-    });
-    hotswap.on('error', function(e) {
+    };
+
+    var errorCallback = function(e) {
         self.log("-----\nhotswap error: " + e + "\n-----\n");
-    });
+    };
+
+    hotswap.on('swap', swapCallback);
+    hotswap.on('error', errorCallback);
 
     // Load application modules
     self.load_apps = function(app_dir, root) {
@@ -71,29 +76,9 @@ var appServer = function(config) {
                 // so bootstrap manually to express
                 var endpoint = (root || '/') + (app.endpoint || app.name);
                 if (config.verify) {
-                    self.express.use(endpoint, function(req, res, next) {
-                        req.verified = false;
-                        if (!req.headers.signaturecertchainurl) {
-                            return next();
-                        }
-
-                        var cert_url = req.headers.signaturecertchainurl;
-                        var signature = req.headers.signature;
-                        var requestBody = req.rawBody;
-                        verifier(cert_url, signature, requestBody, function(er) {
-                            if (er) {
-                                res.status(401).json({ status: 'failure', reason: er });
-                            } else {
-                                req.verified = true;
-                                next();
-                            }
-                        });
-                    });
+                    self.express.use(endpoint, avm());
                 }
                 self.express.post(endpoint, function(req, res) {
-                    if (config.verify && !req.verified) {
-                        res.status(401).json({ status: 'failure', reason: 'Unauthorized' });
-                    }
                     var json = req.body,
                         response_json;
                     // preRequest may return altered request JSON, or undefined, or a Promise
@@ -230,7 +215,7 @@ var appServer = function(config) {
                         var credentials = { key: privateKey, cert: certificate };
 
                         try { //The line below can fail it the certs were generated incorrectly. But we can continue startup without HTTPS
-                            https.createServer(credentials, self.express).listen(config.httpsPort); //create the HTTPS server
+                            self.httpsInstance = https.createServer(credentials, self.express).listen(config.httpsPort); //create the HTTPS server
                             self.log("Listening on HTTPS port " + config.httpsPort);
                         } catch (error) {
                             self.log("Failed to listen via HTTPS Error: " + error);
@@ -252,7 +237,7 @@ var appServer = function(config) {
         }
         // Start the server listening
         config.port = config.port || process.env.port || 80;
-        self.instance = self.express.listen(config.port);
+        self.httpInstance = self.express.listen(config.port);
         self.log("Listening on HTTP port " + config.port);
 
         // Run the post() method if defined
@@ -264,7 +249,16 @@ var appServer = function(config) {
     };
 
     self.stop = function() {
-    	self.instance.close();
+        // close all server instances
+        self.httpInstance.close();
+
+        if (typeof self.httpsInstance !== "undefined") {
+            self.httpsInstance.close();
+        }
+
+        // deactivate all hotswap listener
+        hotswap.removeListener('swap', swapCallback);
+        hotswap.removeListener('error', errorCallback);
     };
 
     return self;
