@@ -104,9 +104,9 @@ var appServer = function(config) {
                 // Configure GET requests to run a debugger UI
                 if (false !== config.debug) {
                     self.express.get(endpoint, function(req, res) {
-                        if (typeof req.param('schema') != "undefined") {
+                        if (typeof req.params['schema'] != "undefined") {
                             res.set('Content-Type', 'text/plain').send(app.schema());
-                        } else if (typeof req.param('utterances') != "undefined") {
+                        } else if (typeof req.params['utterances'] != "undefined") {
                             res.set('Content-Type', 'text/plain').send(app.utterances());
                         } else {
                             res.render('test', { "app": app, "schema": app.schema(), "customSlotTypes": (app.customSlotTypes ? app.customSlotTypes() : ""), "utterances": app.utterances(), "intents": app.intents });
