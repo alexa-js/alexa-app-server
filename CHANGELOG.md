@@ -2,13 +2,13 @@
 
 ### 2.3.2 (Next)
 
-* [#33](https://github.com/alexa-js/alexa-app-server/pull/33): Updated dependencies + Avoided expressjs deprecation warning - [@tejashah88](https://github.com/tejashah88)
-* [#32](https://github.com/alexa-js/alexa-app-server/pull/32): Bug fixes and more testing/coverage - [@tejashah88](https://github.com/tejashah88)
-  * added testing for request verification, HTTPS support, and POST-based routes
-  * fixed potential memory leaks from not closing the HTTPS server instance and not removing the hotswap listeners
-  * now using alexa-verifier-middleware for request verification
-  * changed loading location of contents of 'sslcert' folder (should be part of 'examples' folder)
-  * fixed documentation for generating the SSL certificate
+* [#33](https://github.com/alexa-js/alexa-app-server/pull/33): Updated dependencies - [@tejashah88](https://github.com/tejashah88).
+* [#33](https://github.com/alexa-js/alexa-app-server/pull/33): Fix: expressjs deprecation warning - [@tejashah88](https://github.com/tejashah88).
+* [#32](https://github.com/alexa-js/alexa-app-server/pull/32): Added tests for request verification, HTTPS support, and POST-based routes - [@tejashah88](https://github.com/tejashah88).
+* [#32](https://github.com/alexa-js/alexa-app-server/pull/32): Fix: potential memory leaks from not closing the HTTPS server instance and not removing the hotswap listeners - [@tejashah88](https://github.com/tejashah88).
+* [#32](https://github.com/alexa-js/alexa-app-server/pull/32): Use alexa-verifier-middleware for request verification - [@tejashah88](https://github.com/tejashah88).
+* [#32](https://github.com/alexa-js/alexa-app-server/pull/32): Moved 'sslcert' folder into examples - [@tejashah88](https://github.com/tejashah88).
+* [#32](https://github.com/alexa-js/alexa-app-server/pull/32): Updated documentation for generating the SSL certificate - [@tejashah88](https://github.com/tejashah88).
 * [#28](https://github.com/alexa-js/alexa-app-server/pull/28): Moved to the [alexa-js organization](https://github.com/alexa-js) - [@dblock](https://github.com/dblock).
 * [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added `server.stop()` - [@dblock](https://github.com/dblock).
 * [#23](https://github.com/alexa-js/alexa-app-server/pull/23): Added LICENSE - [@dblock](https://github.com/dblock).
