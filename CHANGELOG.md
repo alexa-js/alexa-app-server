@@ -2,6 +2,7 @@
 
 ### 2.3.2 (Next)
 
+* [#33](https://github.com/alexa-js/alexa-app-server/pull/33): Updated dependencies + Avoided expressjs deprecation warning - [@tejashah88](https://github.com/tejashah88)
 * [#32](https://github.com/alexa-js/alexa-app-server/pull/32): Bug fixes and more testing/coverage - [@tejashah88](https://github.com/tejashah88)
   * added testing for request verification, HTTPS support, and POST-based routes
   * fixed potential memory leaks from not closing the HTTPS server instance and not removing the hotswap listeners
