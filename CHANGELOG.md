@@ -2,6 +2,10 @@
 
 ### 2.3.2 (Next)
 
+* [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Added tests for fail cases and schemas/utterances - [@tejashah88](https://github.com/tejashah88).
+* [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Fixed bug while trying to retrieve schema/utterances with GET request - [@tejashah88](https://github.com/tejashah88).
+* [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Updated messages that display an error to be displayed by `self.error` - [@tejashah88](https://github.com/tejashah88).
+* [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Optimized some tests to not always start a new server instance after every test - [@tejashah88](https://github.com/tejashah88).
 * [#33](https://github.com/alexa-js/alexa-app-server/pull/33): Updated dependencies - [@tejashah88](https://github.com/tejashah88).
 * [#33](https://github.com/alexa-js/alexa-app-server/pull/33): Fix: expressjs deprecation warning - [@tejashah88](https://github.com/tejashah88).
 * [#32](https://github.com/alexa-js/alexa-app-server/pull/32): Added tests for request verification, HTTPS support, and POST-based routes - [@tejashah88](https://github.com/tejashah88).
