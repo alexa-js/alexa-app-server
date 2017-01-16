@@ -1,0 +1,26 @@
+{
+   "intents": [
+      {
+         "intent": "NameIntent",
+         "slots": [
+            {
+               "name": "NAME",
+               "type": "LITERAL"
+            },
+            {
+               "name": "AGE",
+               "type": "NUMBER"
+            }
+         ]
+      },
+      {
+         "intent": "AgeIntent",
+         "slots": [
+            {
+               "name": "AGE",
+               "type": "NUMBER"
+            }
+         ]
+      }
+   ]
+}

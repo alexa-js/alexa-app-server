@@ -20,7 +20,9 @@ var appServer = function(config) {
             console.log(msg);
         }
     };
-    self.error = function(msg) { console.log(msg); };
+    self.error = function(msg) {
+        console.error(msg);
+    };
 
     // Configure hotswap to watch for changes and swap out module code
     var hotswapCallback = function(filename) {
@@ -28,7 +30,7 @@ var appServer = function(config) {
     };
 
     var errorCallback = function(e) {
-        self.log("-----\nhotswap error: " + e + "\n-----\n");
+        self.error("-----\nhotswap error: " + e + "\n-----\n");
     };
 
     hotswap.on('swap', hotswapCallback);
@@ -44,17 +46,17 @@ var appServer = function(config) {
         app_directories(app_dir).forEach(function(dir) {
             var package_json = path.join(app_dir, dir, "/package.json");
             if (!fs.existsSync(package_json) || !fs.statSync(package_json).isFile()) {
-                self.log("   package.json not found in directory " + dir);
+                self.error("   package.json not found in directory " + dir);
                 return;
             }
             var pkg = JSON.parse(fs.readFileSync(package_json, 'utf8'));
             if (!pkg || !pkg.main || !pkg.name) {
-                self.log("   Failed to load " + package_json);
+                self.error("   Failed to load " + package_json);
                 return;
             }
             var main = fs.realpathSync(path.join(app_dir, dir, pkg.main));
             if (!fs.existsSync(main) || !fs.statSync(main).isFile()) {
-                self.log("   main file not found for app [" + pkg.name + "]: " + main);
+                self.error("   main file not found for app [" + pkg.name + "]: " + main);
                 return;
             }
             try {
@@ -62,7 +64,7 @@ var appServer = function(config) {
                 self.apps[pkg.name] = pkg;
                 self.apps[pkg.name].exports = app;
                 if (typeof app.express != "function") {
-                    self.log("   App [" + pkg.name + "] is not an instance of alexa-app");
+                    self.error("   App [" + pkg.name + "] is not an instance of alexa-app");
                     return;
                 }
 
@@ -104,9 +106,9 @@ var appServer = function(config) {
                 // Configure GET requests to run a debugger UI
                 if (false !== config.debug) {
                     self.express.get(endpoint, function(req, res) {
-                        if (typeof req.params['schema'] != "undefined") {
+                        if (typeof req.query['schema'] != "undefined") {
                             res.set('Content-Type', 'text/plain').send(app.schema());
-                        } else if (typeof req.params['utterances'] != "undefined") {
+                        } else if (typeof req.query['utterances'] != "undefined") {
                             res.set('Content-Type', 'text/plain').send(app.utterances());
                         } else {
                             res.render('test', { "app": app, "schema": app.schema(), "customSlotTypes": (app.customSlotTypes ? app.customSlotTypes() : ""), "utterances": app.utterances(), "intents": app.intents });
@@ -116,7 +118,7 @@ var appServer = function(config) {
 
                 self.log("   Loaded app [" + pkg.name + "] at endpoint: " + endpoint);
             } catch (e) {
-                self.log("Error loading app [" + main + "]: " + e);
+                self.error("Error loading app [" + main + "]: " + e);
             }
         });
         return self.apps;
@@ -217,19 +219,19 @@ var appServer = function(config) {
                             self.httpsInstance = https.createServer(credentials, self.express).listen(config.httpsPort); //create the HTTPS server
                             self.log("Listening on HTTPS port " + config.httpsPort);
                         } catch (error) {
-                            self.log("Failed to listen via HTTPS Error: " + error);
+                            self.error("Failed to listen via HTTPS Error: " + error);
                         }
                     } else {
-                        self.log("Failed to load privateKey or certificate from /sslcert. HTTPS will not be enabled");
+                        self.error("Failed to load privateKey or certificate from /sslcert. HTTPS will not be enabled");
 
                     }
 
                 } else {
-                    self.log("privateKey: '" + config.privateKey + "' or certificate: '" + config.certificate + "' do not exist in /sslcert. HTTPS will not be enabled");
+                    self.error("privateKey: '" + config.privateKey + "' or certificate: '" + config.certificate + "' do not exist in /sslcert. HTTPS will not be enabled");
 
                 }
             } else {
-                self.log("privatekey, httpsPort, or certificate paramater not set in config. HTTPS will not be enabled");
+                self.error("privatekey, httpsPort, or certificate paramater not set in config. HTTPS will not be enabled");
 
             }
 
