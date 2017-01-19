@@ -99,8 +99,9 @@ require('alexa-app-server').start({
 	// The port the server should bind to
 	port: 80,
 
-	// By default, GET requests to Alexa App endpoints will show the
-	// debugger UI. This can be disabled.
+	// By default, GET requests to Alexa App endpoints will show the debugger
+	// UI. This can be disabled. If 'verify' is set to true, 'debug' will be
+	// set to false by default.
 	debug: true,
 
 	// By default, some information is logged with console.log(), which can be disabled

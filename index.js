@@ -13,6 +13,11 @@ var appServer = function(config) {
     var self = {};
     config = config || {};
     var server_root = config.server_root || '';
+
+    if (config.verify === true) {
+        config.debug = false;
+    }
+
     self.apps = {};
 
     self.log = function(msg) {

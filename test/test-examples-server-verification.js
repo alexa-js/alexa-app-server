@@ -20,16 +20,16 @@ describe("Alexa App Server with Examples & Verification", function() {
     testServer.stop();
   });
 
-  it("mounts hello world app", function() {
+  it("404s since the debugger should be disabled", function() {
       return request(testServer.express)
         .get('/alexa/helloworld')
-        .expect(200);
+        .expect(404);
   });
 
-  it("mounts number_guessing_game", function() {
+  it("404s since the debugger should be disabled", function() {
       return request(testServer.express)
         .get('/alexa/guessinggame')
-        .expect(200);
+        .expect(404);
   });
 
   it("404s on an invalid app", function() {
