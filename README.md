@@ -18,11 +18,11 @@ npm install alexa-app-server --save
 var AlexaAppServer = require('alexa-app-server');
 
 var instance = AlexaAppServer.start({
-	server_root:__dirname,     // Path to root
-	public_html:"public_html", // Static content
-	app_dir:"apps",            // Where alexa-app modules are stored
-	app_root:"/alexa/",        // Service root
-	port:80                    // What port to use, duh
+	server_root: __dirname,     // Path to root
+	public_html: "public_html", // Static content
+	app_dir: "apps",            // Where alexa-app modules are stored
+	app_root: "/alexa/",        // Service root
+	port: 80                    // What port to use, duh
 });
 
 instance.stop();             // Stop the server
@@ -78,46 +78,46 @@ require('alexa-app-server').start({
 	server_root: __dirname,
 
 	// A directory containing static content to serve as the document root.
-  // This directory is relative to the script using alexa-app-server, not
+	// This directory is relative to the script using alexa-app-server, not
 	// relative to the module directory.
-  public_html: "public_html",
+	public_html: "public_html",
 
-  // A directory containing Alexa Apps. This directory should contain one
+	// A directory containing Alexa Apps. This directory should contain one
 	// or more subdirectories. Each subdirectory is a stand-alone Alexa App
 	// built with the alexa-app framework. These directories are each
 	// processed during server startup and hooked into the server.
-  app_dir: "apps",
+	app_dir: "apps",
 
-  // The prefix to use for all Alexa Apps. For example, you may want all
+	// The prefix to use for all Alexa Apps. For example, you may want all
 	// your Alexa endpoints to be accessed under the "/api/" path off the
 	// root of your web server.
-  app_root: "/alexa/",
+	app_root: "/alexa/",
 
 	// The directory containing server-side processing modules (see below)
 	server_dir: "server",
 
-  // The port the server should bind to
-  port: 80,
+	// The port the server should bind to
+	port: 80,
 
-  // By default, GET requests to Alexa App endpoints will show the
+	// By default, GET requests to Alexa App endpoints will show the
 	// debugger UI. This can be disabled.
-  debug: true,
+	debug: true,
 
-  // By default, some information is logged with console.log(), which can be disabled
-  log: true,
+	// By default, some information is logged with console.log(), which can be disabled
+	log: true,
 
-  // This will add verification for alexa requests as required by the alexa certification
-  // process. Provided by alexa-verifier
-  verify: false,
+	// This will add verification for alexa requests as required by the alexa certification
+	// process. Provided by alexa-verifier-middleware
+	verify: false,
 
-  // The pre() method is called after the express server has been instantiated,
+	// The pre() method is called after the express server has been instantiated,
 	// but before and Alexa Apps have been loaded. It is passed the AlexaAppServer
 	// object itself.
-  pre: function(appServer) { },
+	pre: function(appServer) { },
 
-  // The post() method is called after the server has started and the start() method
+	// The post() method is called after the server has started and the start() method
 	// is ready to exit. It is passed the AlexaAppServer object itself.
-  post: function(appServer) { },
+	post: function(appServer) { },
 
 	// Like pre(), but this function is fired on every request, but before the
 	// application itself gets called. You can use this to load up user details before
@@ -149,7 +149,6 @@ require('alexa-app-server').start({
 
 	// certificate filename. This file must reside in the sslcert folder under the root of the project. Must be set if httpsEnable = true
 	certificate: 'cert.cer'
-
 });
 ```
 
