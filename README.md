@@ -100,15 +100,16 @@ require('alexa-app-server').start({
 	port: 80,
 
 	// By default, GET requests to Alexa App endpoints will show the debugger
-	// UI. This can be disabled. If 'verify' is set to true, 'debug' will be
-	// set to false by default.
+	// UI. This can be disabled. If 'verify' and 'debug' are both set to true,
+	// an error will be thrown.
 	debug: true,
 
 	// By default, some information is logged with console.log(), which can be disabled
 	log: true,
 
 	// This will add verification for alexa requests as required by the alexa certification
-	// process. Provided by alexa-verifier-middleware
+	// process. Provided by alexa-verifier-middleware. If 'verify' and 'debug' are both set
+	// to true, an error will be thrown.
 	verify: false,
 
 	// The pre() method is called after the express server has been instantiated,

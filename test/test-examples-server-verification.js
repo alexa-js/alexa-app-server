@@ -4,12 +4,13 @@ var chai = require("chai");
 var expect = chai.expect;
 chai.config.includeStack = true;
 var request = require("supertest-as-promised");
+var alexaAppServer = require("../index");
 
 describe("Alexa App Server with Examples & Verification", function() {
   var testServer;
 
   before(function() {
-    testServer = require("../index").start({
+    testServer = alexaAppServer.start({
       port: 3000,
       server_root: 'examples',
       verify: true
@@ -20,16 +21,16 @@ describe("Alexa App Server with Examples & Verification", function() {
     testServer.stop();
   });
 
-  it("404s since the debugger should be disabled", function() {
+  it("mounts hello world app", function() {
       return request(testServer.express)
         .get('/alexa/helloworld')
-        .expect(404);
+        .expect(200);
   });
 
-  it("404s since the debugger should be disabled", function() {
+  it("mounts number_guessing_game app", function() {
       return request(testServer.express)
         .get('/alexa/guessinggame')
-        .expect(404);
+        .expect(200);
   });
 
   it("404s on an invalid app", function() {

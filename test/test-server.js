@@ -4,12 +4,13 @@ var chai = require("chai");
 var expect = chai.expect;
 chai.config.includeStack = true;
 var request = require("supertest-as-promised");
+var alexaAppServer = require("../index");
 
 describe("Alexa App Server", function() {
   var testServer;
 
   before(function() {
-    testServer = require("../index").start({
+    testServer = alexaAppServer.start({
       port: 3000
     });
   });

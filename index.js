@@ -14,8 +14,8 @@ var appServer = function(config) {
     config = config || {};
     var server_root = config.server_root || '';
 
-    if (config.verify === true) {
-        config.debug = false;
+    if (config.verify === true && config.debug === true) {
+        throw new Error("Invalid configuration: The verify and debug options cannot be both enabled!");
     }
 
     self.apps = {};
