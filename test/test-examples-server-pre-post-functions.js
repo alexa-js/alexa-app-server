@@ -5,6 +5,7 @@ var expect = chai.expect;
 chai.config.includeStack = true;
 var request = require("supertest-as-promised");
 var fs = require('fs');
+var alexaAppServer = require("../index");
 
 describe("Alexa App Server with Examples & Pre/Post functions", function() {
   var testServer;
@@ -12,7 +13,7 @@ describe("Alexa App Server with Examples & Pre/Post functions", function() {
   var sampleLaunchReq = JSON.parse(fs.readFileSync("test/sample-launch-req.json", 'utf8'));
 
   before(function() {
-    testServer = require("../index").start({
+    testServer = alexaAppServer.start({
       port: 3000,
       server_root: 'examples',
       pre: function(appServer) { console.log("pre function fired!"); },

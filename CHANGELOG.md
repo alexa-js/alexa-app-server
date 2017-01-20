@@ -2,6 +2,7 @@
 
 ### 2.3.2 (Next)
 
+* [#35](https://github.com/alexa-js/alexa-app-server/pull/35): Error occurs when `verify` and `debug` are both set to true - [@tejashah88](https://github.com/tejashah88).
 * [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Added tests for fail cases and schemas/utterances - [@tejashah88](https://github.com/tejashah88).
 * [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Fixed bug while trying to retrieve schema/utterances with GET request - [@tejashah88](https://github.com/tejashah88).
 * [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Updated messages that display an error to be displayed by `self.error` - [@tejashah88](https://github.com/tejashah88).

@@ -4,27 +4,39 @@ var chai = require("chai");
 var expect = chai.expect;
 chai.config.includeStack = true;
 var request = require("supertest-as-promised");
+var alexaAppServer = require("../index");
 
 describe("Alexa App Server with Examples & App loading fail checking", function() {
   var testServer;
 
-  before(function() {
-    testServer = require("../index").start({
-      port: 3000,
-      server_root: 'invalid_examples'
-    });
-  });
-
-  after(function() {
+  afterEach(function() {
     testServer.stop();
   });
 
   it("starts an express instance", function() {
-      return request(testServer.express)
-        .get('/')
-        .expect(200).then(function(response) {
-          expect(response.text).to.contain("alexa-app-server is running");
-        }
-      );
+    testServer = alexaAppServer.start({
+      port: 3000,
+      server_root: 'invalid_examples'
+    });
+
+    return request(testServer.express)
+      .get('/')
+      .expect(200).then(function(response) {
+        expect(response.text).to.contain("alexa-app-server is running");
+      }
+    );
+  });
+
+  it("should throw an error when 'debug' and 'verify' are enabled", function() {
+    var fn = function() {
+      testServer = alexaAppServer.start({
+        port: 3000,
+        server_root: 'invalid_examples',
+        debug: true,
+        verify: true
+      });
+    };
+
+    expect(fn).to.throw(Error);
   });
 });
