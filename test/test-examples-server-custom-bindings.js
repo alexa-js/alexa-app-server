@@ -29,6 +29,7 @@ describe("Alexa App Server with Examples & Custon Server Bindings", function() {
         port: 3000,
         host_address: "127.0.0.1",
         server_root: 'examples',
+        httpsEnabled: true,
         httpsPort: 6000,
         privateKey: 'private-key.pem',
         certificate: 'cert.cer'
