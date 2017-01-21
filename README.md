@@ -93,11 +93,15 @@ require('alexa-app-server').start({
 	// root of your web server.
 	app_root: "/alexa/",
 
-	// The directory containing server-side processing modules (see below)
+	// The directory containing server-side processing modules (see below).
 	server_dir: "server",
 
-	// The port the server should bind to
+	// The port the server should bind to.
 	port: 80,
+
+	// The host address in which the server should bind to. If not specified,
+	// this argument will be ignored.
+	host_address: undefined,
 
 	// By default, GET requests to Alexa App endpoints will show the debugger
 	// UI. This can be disabled. If 'verify' and 'debug' are both set to true,

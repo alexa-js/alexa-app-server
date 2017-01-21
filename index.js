@@ -84,6 +84,7 @@ var appServer = function(config) {
                 if (config.verify) {
                     self.express.use(endpoint, alexaVerifierMiddleware());
                 }
+
                 self.express.post(endpoint, function(req, res) {
                     var json = req.body,
                         response_json;
@@ -126,6 +127,7 @@ var appServer = function(config) {
                 self.error("Error loading app [" + main + "]: " + e);
             }
         });
+        
         return self.apps;
     };
 
@@ -149,11 +151,13 @@ var appServer = function(config) {
 
     self.start = function() {
         // Instantiate up the server
+        //TODO: add i18n support (i18n-node might be a good look)
         self.express = express();
+        //TODO: change this to make sure it doesn't affect other non-Alexa services/apps
         self.express.use(bodyParser.urlencoded({ extended: true }));
 
         //We need the rawBody for request verification
-        self.express.use(function(req, res, next) {
+        self.express.use(function(req, res, next) { //TODO: change code to possibly use bodyParser.json()
             // mark the request body as already having been parsed so it's ignored by
             // other body parser middlewares
             req._body = true;
@@ -220,31 +224,43 @@ var appServer = function(config) {
                     if (privateKey != undefined && certificate != undefined) {
                         var credentials = { key: privateKey, cert: certificate };
 
-                        try { //The line below can fail it the certs were generated incorrectly. But we can continue startup without HTTPS
-                            self.httpsInstance = https.createServer(credentials, self.express).listen(config.httpsPort); //create the HTTPS server
-                            self.log("Listening on HTTPS port " + config.httpsPort);
+                        try { // These two lines below can fail it the certs were generated incorrectly. But we can continue startup without HTTPS
+                            var httpsServer = https.createServer(credentials, self.express); // create the HTTPS server
+
+                            //TODO: write tests to verify bindings to HTTPS port and host address
+                            //TODO: add separate option to specify specific host address for HTTPS server to bind to ???
+                            if (typeof config.host_address === 'string') {
+                                self.httpsInstance = httpsServer.listen(config.httpsPort, config.host_address);
+                                self.log("Listening on HTTPS port " + config.httpsPort + " on address " + config.host_address);
+                            } else {
+                                self.httpsInstance = httpsServer.listen(config.httpsPort);
+                                self.log("Listening on HTTPS port " + config.httpsPort);
+                            }
                         } catch (error) {
                             self.error("Failed to listen via HTTPS Error: " + error);
                         }
                     } else {
                         self.error("Failed to load privateKey or certificate from /sslcert. HTTPS will not be enabled");
-
                     }
-
                 } else {
                     self.error("privateKey: '" + config.privateKey + "' or certificate: '" + config.certificate + "' do not exist in /sslcert. HTTPS will not be enabled");
-
                 }
             } else {
                 self.error("privatekey, httpsPort, or certificate paramater not set in config. HTTPS will not be enabled");
-
             }
-
         }
+
         // Start the server listening
         config.port = config.port || process.env.port || 80;
-        self.httpInstance = self.express.listen(config.port);
-        self.log("Listening on HTTP port " + config.port);
+
+        //TODO: write tests to verify bindings to port and host address
+        if (typeof config.host_address === 'string') {
+            self.httpInstance = self.express.listen(config.port, config.host_address);
+            self.log("Listening on HTTP port " + config.port + " on address " + config.host_address);
+        } else {
+            self.httpInstance = self.express.listen(config.port);
+            self.log("Listening on HTTP port " + config.port);
+        }
 
         // Run the post() method if defined
         if (typeof config.post == "function") {

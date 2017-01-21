@@ -2,6 +2,7 @@
 
 ### 2.3.2 (Next)
 
+* [#36](https://github.com/alexa-js/alexa-app-server/pull/36): Added option to specify host address to bind servers to - [@tejashah88](https://github.com/tejashah88).
 * [#35](https://github.com/alexa-js/alexa-app-server/pull/35): Error occurs when `verify` and `debug` are both set to true - [@tejashah88](https://github.com/tejashah88).
 * [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Added tests for fail cases and schemas/utterances - [@tejashah88](https://github.com/tejashah88).
 * [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Fixed bug while trying to retrieve schema/utterances with GET request - [@tejashah88](https://github.com/tejashah88).
