@@ -227,7 +227,6 @@ var appServer = function(config) {
                         try { // These two lines below can fail it the certs were generated incorrectly. But we can continue startup without HTTPS
                             var httpsServer = https.createServer(credentials, self.express); // create the HTTPS server
 
-                            //TODO: write tests to verify bindings to HTTPS port and host address
                             //TODO: add separate option to specify specific host address for HTTPS server to bind to ???
                             if (typeof config.host_address === 'string') {
                                 self.httpsInstance = httpsServer.listen(config.httpsPort, config.host_address);
@@ -253,7 +252,6 @@ var appServer = function(config) {
         // Start the server listening
         config.port = config.port || process.env.port || 80;
 
-        //TODO: write tests to verify bindings to port and host address
         if (typeof config.host_address === 'string') {
             self.httpInstance = self.express.listen(config.port, config.host_address);
             self.log("Listening on HTTP port " + config.port + " on address " + config.host_address);
