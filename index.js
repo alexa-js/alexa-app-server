@@ -228,9 +228,9 @@ var appServer = function(config) {
                             var httpsServer = https.createServer(credentials, self.express); // create the HTTPS server
 
                             //TODO: add separate option to specify specific host address for HTTPS server to bind to ???
-                            if (typeof config.host_address === 'string') {
-                                self.httpsInstance = httpsServer.listen(config.httpsPort, config.host_address);
-                                self.log("Listening on HTTPS port " + config.httpsPort + " on address " + config.host_address);
+                            if (typeof config.host === 'string') {
+                                self.httpsInstance = httpsServer.listen(config.httpsPort, config.host);
+                                self.log("Listening on https://" + config.host + ":" + config.httpsPort);
                             } else {
                                 self.httpsInstance = httpsServer.listen(config.httpsPort);
                                 self.log("Listening on HTTPS port " + config.httpsPort);
@@ -252,9 +252,9 @@ var appServer = function(config) {
         // Start the server listening
         config.port = config.port || process.env.port || 80;
 
-        if (typeof config.host_address === 'string') {
-            self.httpInstance = self.express.listen(config.port, config.host_address);
-            self.log("Listening on HTTP port " + config.port + " on address " + config.host_address);
+        if (typeof config.host === 'string') {
+            self.httpInstance = self.express.listen(config.port, config.host);
+            self.log("Listening on http://" + config.host + ":" + config.port);
         } else {
             self.httpInstance = self.express.listen(config.port);
             self.log("Listening on HTTP port " + config.port);

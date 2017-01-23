@@ -101,7 +101,7 @@ require('alexa-app-server').start({
 
 	// The host address in which the server should bind to. If not specified,
 	// this argument will be ignored.
-	host_address: undefined,
+	host: undefined,
 
 	// By default, GET requests to Alexa App endpoints will show the debugger
 	// UI. This can be disabled. If 'verify' and 'debug' are both set to true,

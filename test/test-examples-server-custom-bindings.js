@@ -27,7 +27,7 @@ describe("Alexa App Server with Examples & Custon Server Bindings", function() {
   it("mounts hello world app (HTTP & HTTPS)", function() {
       testServer = alexaAppServer.start({
         port: 3000,
-        host_address: "127.0.0.1",
+        host: "127.0.0.1",
         server_root: 'examples',
         httpsEnabled: true,
         httpsPort: 6000,
