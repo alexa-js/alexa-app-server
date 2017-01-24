@@ -151,13 +151,18 @@ var appServer = function(config) {
 
     self.start = function() {
         // Instantiate up the server
-        //TODO: add i18n support (i18n-node might be a good look)
+        // TODO: add i18n support (i18n-node might be a good look)
+        // Issue #12: https://github.com/alexa-js/alexa-app-server/issues/12
         self.express = express();
-        //TODO: change this to make sure it doesn't affect other non-Alexa services/apps
+
+        // TODO: change this to make sure it doesn't affect other non-Alexa services/apps
+        // Issue #35: https://github.com/alexa-js/alexa-app-server/issues/35
         self.express.use(bodyParser.urlencoded({ extended: true }));
 
-        //We need the rawBody for request verification
-        self.express.use(function(req, res, next) { //TODO: change code to possibly use bodyParser.json()
+        // We need the rawBody for request verification
+        // TODO: change code to possibly use bodyParser.json()
+        // Issue #21: https://github.com/alexa-js/alexa-app-server/issues/21
+        self.express.use(function(req, res, next) {
             // mark the request body as already having been parsed so it's ignored by
             // other body parser middlewares
             req._body = true;
@@ -212,11 +217,11 @@ var appServer = function(config) {
         if (config.httpsEnabled == true) {
             self.log("httpsEnabled is true. Reading HTTPS config");
 
-            if (config.privateKey != undefined && config.certificate != undefined && config.httpsPort != undefined) { //Ensure that all of the needed properties are set
+            if (config.privateKey != undefined && config.certificate != undefined && config.httpsPort != undefined) { // Ensure that all of the needed properties are set
                 var privateKeyFile = server_root + '/sslcert/' + config.privateKey;
                 var certificateFile = server_root + '/sslcert/' + config.certificate;
 
-                if (fs.existsSync(privateKeyFile) && fs.existsSync(certificateFile)) { //Make sure the key and cert exist.
+                if (fs.existsSync(privateKeyFile) && fs.existsSync(certificateFile)) { // Make sure the key and cert exist.
 
                     var privateKey = fs.readFileSync(privateKeyFile, 'utf8');
                     var certificate = fs.readFileSync(certificateFile, 'utf8');
@@ -227,7 +232,8 @@ var appServer = function(config) {
                         try { // These two lines below can fail it the certs were generated incorrectly. But we can continue startup without HTTPS
                             var httpsServer = https.createServer(credentials, self.express); // create the HTTPS server
 
-                            //TODO: add separate option to specify specific host address for HTTPS server to bind to ???
+                            // TODO: add separate option to specify specific host address for HTTPS server to bind to ???
+                            // Issue #38: https://github.com/alexa-js/alexa-app-server/issues/38
                             if (typeof config.host === 'string') {
                                 self.httpsInstance = httpsServer.listen(config.httpsPort, config.host);
                                 self.log("Listening on https://" + config.host + ":" + config.httpsPort);
