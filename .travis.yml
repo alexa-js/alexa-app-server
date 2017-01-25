@@ -1,0 +1,26 @@
+language: node_js
+
+node_js:
+  - 6.1
+
+sudo: false
+
+cache:
+  directories:
+    - node_modules
+
+before_install:
+  - npm config set spin false
+
+install:
+  - npm install
+
+script:
+  - npm run-script danger
+  - npm run-script coverage
+
+after_script:
+  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+
+notifications:
+  email: false
