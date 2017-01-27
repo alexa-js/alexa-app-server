@@ -17,30 +17,30 @@ describe("Alexa App Server with Examples & Custom Server Bindings", function() {
   });
 
   it("mounts hello world app (HTTP only) and bind to the specified address", function() {
-      testServer = alexaAppServer.start({
-        port: 3000,
-        host: "127.0.0.1",
-        server_root: 'examples'
-      });
+    testServer = alexaAppServer.start({
+      port: 3000,
+      host: "127.0.0.1",
+      server_root: 'examples'
+    });
 
-      return request("http://127.0.0.1:3000")
-        .get('/alexa/helloworld')
-        .expect(200);
+    return request("http://127.0.0.1:3000")
+      .get('/alexa/helloworld')
+      .expect(200);
   });
 
   it("mounts hello world app (HTTP & HTTPS) and bind to the specified address", function() {
-      testServer = alexaAppServer.start({
-        port: 3000,
-        host: "127.0.0.1",
-        server_root: 'examples',
-        httpsEnabled: true,
-        httpsPort: 6000,
-        privateKey: 'private-key.pem',
-        certificate: 'cert.cer'
-      });
+    testServer = alexaAppServer.start({
+      port: 3000,
+      host: "127.0.0.1",
+      server_root: 'examples',
+      httpsEnabled: true,
+      httpsPort: 6000,
+      privateKey: 'private-key.pem',
+      certificate: 'cert.cer'
+    });
 
-      return request("https://127.0.0.1:6000")
-        .get('/alexa/helloworld')
-        .expect(200);
+    return request("https://127.0.0.1:6000")
+      .get('/alexa/helloworld')
+      .expect(200);
   });
 });
