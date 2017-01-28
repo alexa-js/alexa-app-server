@@ -133,7 +133,7 @@ require('alexa-app-server').start({
 	// If it returns a non-falsy value, the request json is replaced with what was returned.
 	// If it returns a Promise, request processing pauses until the Promise resolves.
 	//    The value passed on by the promise (if any) replaces the request json.
-	preRequest: function(json,request,response) { },
+	preRequest: function(json, request, response) { },
 
 	// Like post(), but this function is fired after every request. It has a final
 	// opportunity to modify the JSON response before it is returned back to the
@@ -142,7 +142,7 @@ require('alexa-app-server').start({
 	// If it returns a non-falsy value, the response json is replaced with what was returned.
 	// If it returns a Promise, response processing pauses until the Promise resolves.
 	//    The value passed on by the promise (if any) replaces the response json.
-	postRequest : function(json,request,response) { },
+	postRequest : function(json, request, response) { },
 
 	// Enables https support. Note httpsPort, privateKey, and certificate are needed.
 	httpsEnabled: true,

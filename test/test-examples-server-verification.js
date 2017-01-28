@@ -22,20 +22,20 @@ describe("Alexa App Server with Examples & Verification", function() {
   });
 
   it("mounts hello world app", function() {
-      return request(testServer.express)
-        .get('/alexa/helloworld')
-        .expect(200);
+    return request(testServer.express)
+      .get('/alexa/helloworld')
+      .expect(200);
   });
 
   it("mounts number_guessing_game app", function() {
-      return request(testServer.express)
-        .get('/alexa/guessinggame')
-        .expect(200);
+    return request(testServer.express)
+      .get('/alexa/guessinggame')
+      .expect(200);
   });
 
   it("404s on an invalid app", function() {
-      return request(testServer.express)
-        .get('/alexa/invalid')
-        .expect(404);
+    return request(testServer.express)
+      .get('/alexa/invalid')
+      .expect(404);
   });
 });
