@@ -1,6 +1,7 @@
 ## Changelog
 
 ### 2.3.2 (Next)
+* [#22](https://github.com/alexa-js/alexa-app-server/pull/22): Adding Context object to request templates - [@pwbrown](https://github.com/pwbrown).
 * [#43](https://github.com/alexa-js/alexa-app-server/pull/43): Test fixes and an actual test for firing pre/post events. - [@dblock](https://github.com/dblock).
 * [#36](https://github.com/alexa-js/alexa-app-server/pull/36): Added option to specify host address to bind servers to - [@tejashah88](https://github.com/tejashah88).
 * [#35](https://github.com/alexa-js/alexa-app-server/pull/35): Error occurs when `verify` and `debug` are both set to true - [@tejashah88](https://github.com/tejashah88).

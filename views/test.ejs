@@ -1,153 +1,153 @@
 <!DOCTYPE html>
 <html ng-app="alexa" ng-controller="AlexaController">
-	<head>
-		<title>Alexa Tester</title>
+  <head>
+    <title>Alexa Tester</title>
 
-		<script type="text/javascript" src="../angular.min.js"></script>
-		<script type="text/javascript" src="../templates.json"></script>
+    <script type="text/javascript" src="../angular.min.js"></script>
+    <script type="text/javascript" src="../templates.json"></script>
 
-		<script>
-			function clone(o) {
-				return JSON.parse(JSON.stringify(o));
-			}
-			
-			// For Angular
-			var app = angular.module('alexa',[]);
-			app.controller('AlexaController',function($scope,$http) {
-				$scope.schema = <%-schema%>;
-				$scope.request = {};
-				$scope.response = null;
-				$scope.requestType = null;
-				$scope.session = {};
-				$scope.intent = null;
+    <script>
+      function clone(o) {
+        return JSON.parse(JSON.stringify(o));
+      }
+      
+      // For Angular
+      var app = angular.module('alexa',[]);
+      app.controller('AlexaController',function($scope,$http) {
+        $scope.schema = <%-schema%>;
+        $scope.request = {};
+        $scope.response = null;
+        $scope.requestType = null;
+        $scope.session = {};
+        $scope.intent = null;
 
-				$scope.changetype = function() {
-					$scope.request = clone($scope.templates[$scope.requestType]);
-					$scope.request.session.attributes = $scope.session;
-					$scope.intent = null;
-				};
+        $scope.changetype = function() {
+          $scope.request = clone($scope.templates[$scope.requestType]);
+          $scope.request.session.attributes = $scope.session;
+          $scope.intent = null;
+        };
 
-				$scope.changeintent = function() {
-					$scope.request = clone($scope.templates['intent']);
-					$scope.request.session.attributes = $scope.session;
-					$scope.request.request.intent.slots={};
-					$scope.request.request.intent.name = $scope.intent;
-				}
+        $scope.changeintent = function() {
+          $scope.request = clone($scope.templates['intent']);
+          $scope.request.session.attributes = $scope.session;
+          $scope.request.request.intent.slots={};
+          $scope.request.request.intent.name = $scope.intent;
+        }
 
-				$scope.post = function() {
-					try {
-						$http.post(location.href, $scope.request).success(function(data) {
-							$scope.response = data;
-							// Copy session variables
-							if ($scope.response && $scope.response.sessionAttributes) {
-								$scope.session = $scope.response.sessionAttributes;
-								$scope.request.session.attributes = $scope.session;
-							}
-						});
-					} catch(e) { alert(e.message); }
-				}
+        $scope.post = function() {
+          try {
+            $http.post(location.href, $scope.request).success(function(data) {
+              $scope.response = data;
+              // Copy session variables
+              if ($scope.response && $scope.response.sessionAttributes) {
+                $scope.session = $scope.response.sessionAttributes;
+                $scope.request.session.attributes = $scope.session;
+              }
+            });
+          } catch(e) { alert(e.message); }
+        }
 
-				$scope.getIntent = function() {
-					try {
-						var intents = $scope.schema.intents;
-						for (var i=0; i<intents.length; i++) {
-							var intent = intents[i];
-							if (intent.intent==$scope.request.request.intent.name) {
-								return intent;
-							}
-						};
-						return null;
-					} catch(e) { return null; }
-				};
+        $scope.getIntent = function() {
+          try {
+            var intents = $scope.schema.intents;
+            for (var i=0; i<intents.length; i++) {
+              var intent = intents[i];
+              if (intent.intent==$scope.request.request.intent.name) {
+                return intent;
+              }
+            };
+            return null;
+          } catch(e) { return null; }
+        };
 
-				$scope.templates = templates;
+        $scope.templates = templates;
 
-				// Extract the applicationId if it exists and update the templates
-				var applicationId = "<%= app.id || "" %>";
-				if (applicationId) {
-					$scope.templates.launch.session.application.applicationId = applicationId;
-					$scope.templates.intent.session.application.applicationId = applicationId;
-					$scope.templates.session_end.session.application.applicationId = applicationId;
-				}
-			});
-		</script>
+        // Extract the applicationId if it exists and update the templates
+        var applicationId = "<%= app.id || "" %>";
+        if (applicationId) {
+          $scope.templates.launch.session.application.applicationId = applicationId;
+          $scope.templates.intent.session.application.applicationId = applicationId;
+          $scope.templates.session_end.session.application.applicationId = applicationId;
+        }
+      });
+    </script>
 
-		<style>
-		.code { 
-			white-space:pre;
-			font-family:monospace;
-			border:1px solid #666;
-			display:inline-block;
-			padding:5px;
-			min-width:400px;
-			min-height:25px;
-		}
-		</style>
-	</head>
+    <style>
+    .code {
+      white-space:pre;
+      font-family:monospace;
+      border:1px solid #666;
+      display:inline-block;
+      padding:5px;
+      min-width:400px;
+      min-height:25px;
+    }
+    </style>
+  </head>
 
-	<body>
-		This is a simple testing utility to POST to your endpoint and simulate an Alexa request
+  <body>
+    This is a simple testing utility to POST to your endpoint and simulate an Alexa request
 
-		<h2>Request</h2>
-		<div>
-			Type:
-			<select id="template" ng-model="requestType" ng-change="changetype()">
-				<option value=""></option>
-				<option value="launch">LaunchRequest</option>
-				<option value="intent">IntentRequest</option>
-				<option value="session_end">SessionEndedRequest</option>
-			</select>
+    <h2>Request</h2>
+    <div>
+      Type:
+      <select id="template" ng-model="requestType" ng-change="changetype()">
+        <option value=""></option>
+        <option value="launch">LaunchRequest</option>
+        <option value="intent">IntentRequest</option>
+        <option value="session_end">SessionEndedRequest</option>
+      </select>
 
-			<div id="intent" ng-show="requestType=='intent'">
-				Intent:
-				<select id="intent_select" ng-change="changeintent()" ng-model="intent">
-					<option value="">
-					<% for (name in intents) { %>
-						<option value="<%=name%>"><%=name%>
-					<% } %>
-				</select>
-			</div>
+      <div id="intent" ng-show="requestType=='intent'">
+        Intent:
+        <select id="intent_select" ng-change="changeintent()" ng-model="intent">
+          <option value="">
+          <% for (name in intents) { %>
+            <option value="<%=name%>"><%=name%>
+          <% } %>
+        </select>
+      </div>
 
-			<div id="slots" ng-show="getIntent().slots.length">
-				Slot Values: <br>
-				<div id="slotvalues" style="margin:5px;border:1px solid #ccc;display:inline-block;">
-					<div ng-repeat="slot in getIntent().slots">
-						{{slot.name}} : <input ng-change="request.request.intent.slots[slot.name].name=slot.name" ng-model="request.request.intent.slots[slot.name].value" style="width:100px;">
-					</div>
-				</div>
-			</div>
-		</div>
+      <div id="slots" ng-show="getIntent().slots.length">
+        Slot Values: <br>
+        <div id="slotvalues" style="margin:5px;border:1px solid #ccc;display:inline-block;">
+          <div ng-repeat="slot in getIntent().slots">
+            {{slot.name}} : <input ng-change="request.request.intent.slots[slot.name].name=slot.name" ng-model="request.request.intent.slots[slot.name].value" style="width:100px;">
+          </div>
+        </div>
+      </div>
+    </div>
 
-		<div>
-			<div id="request" class="code" contenteditable="true">{{request|json}}</div>
-		</div>
-		<div>
-			<input type="button" value="Send Request" ng-click="post()">
-		</div>
+    <div>
+      <div id="request" class="code" contenteditable="true">{{request|json}}</div>
+    </div>
+    <div>
+      <input type="button" value="Send Request" ng-click="post()">
+    </div>
 
-		<h2>Session</h2>
-		<div ng-show="session">
-			<div id="session" class="code">{{session|json}}</div>
-		</div>
+    <h2>Session</h2>
+    <div ng-show="session">
+      <div id="session" class="code">{{session|json}}</div>
+    </div>
 
-		<h2>Response</h2>
-		<div ng-show="response">
-			<div id="response" class="code">{{response|json}}</div>
-		</div>
+    <h2>Response</h2>
+    <div ng-show="response">
+      <div id="response" class="code">{{response|json}}</div>
+    </div>
 
-		<h2>Schema</h2>
-		<div>
-			<div id="schema" class="code">{{schema|json}}</div>
-		</div>
+    <h2>Schema</h2>
+    <div>
+      <div id="schema" class="code">{{schema|json}}</div>
+    </div>
 
-		<h2>Custom Slot Types</h2>
-		<div>
-			<div id="customSlotTypes" class="code" style="max-height:500px;overflow:auto;"><%=customSlotTypes%></div>
-		</div>
+    <h2>Custom Slot Types</h2>
+    <div>
+      <div id="customSlotTypes" class="code" style="max-height:500px;overflow:auto;"><%=customSlotTypes%></div>
+    </div>
 
-		<h2>Utterances</h2>
-		<div>
-			<div id="utterances" class="code" style="max-height:500px;overflow:auto;"><%=utterances%></div>
-		</div>
-	</body>
+    <h2>Utterances</h2>
+    <div>
+      <div id="utterances" class="code" style="max-height:500px;overflow:auto;"><%=utterances%></div>
+    </div>
+  </body>
 </html>
