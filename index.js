@@ -181,6 +181,7 @@ var appServer = function(config) {
         });
         self.express.set('views', path.join(__dirname, 'views'));
         self.express.set('view engine', 'ejs');
+        self.express.use(express.static(path.join(__dirname, 'views')));
 
         // Run the pre() method if defined
         if (typeof config.pre == "function") {
