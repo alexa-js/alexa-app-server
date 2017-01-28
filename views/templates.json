@@ -1,5 +1,4 @@
 templates = {
-	// LaunchRequest template
 	"launch": {
 		"version": "1.0",
 		"session": {
@@ -38,7 +37,6 @@ templates = {
 			"timestamp": "2015-05-13T12:34:56Z"
 		}
 	},
-	// IntentRequest template
 	"intent": {
 		"version": "1.0",
 		"session": {
@@ -81,7 +79,6 @@ templates = {
 			}
 		}
 	},
-	// SessionEndedRequest template
 	"session_end": {
 		"version": "1.0",
 		"session": {
