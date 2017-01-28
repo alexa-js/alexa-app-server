@@ -20,8 +20,8 @@ describe("Alexa App Server", function() {
   });
 
   it("starts an express instance", function() {
-      return request(testServer.express)
-        .get('/')
-        .expect(404);
+    return request(testServer.express)
+      .get('/')
+      .expect(404);
   });
 });
