@@ -6,17 +6,21 @@ chai.config.includeStack = true;
 var request = require("supertest-as-promised");
 var alexaAppServer = require("../index");
 
-// used so that testing https requests will work properly
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 describe("Alexa App Server with Examples & Custom Server Bindings", function() {
   var testServer;
+  var default_NODE_TLS_REJECT_UNAUTHORIZED = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+
+  beforeEach(function() {
+    // used so that testing https requests will work properly
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  });
 
   afterEach(function() {
     testServer.stop();
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = default_NODE_TLS_REJECT_UNAUTHORIZED;
   });
 
-  it("mounts hello world app (HTTP only) and bind to the specified address", function() {
+  it("mounts the hello world app (HTTP only) and bind to the specified address", function() {
     testServer = alexaAppServer.start({
       port: 3000,
       host: "127.0.0.1",
@@ -28,7 +32,7 @@ describe("Alexa App Server with Examples & Custom Server Bindings", function() {
       .expect(200);
   });
 
-  it("mounts hello world app (HTTP & HTTPS) and bind to the specified address", function() {
+  it("mounts the hello world app (HTTP & HTTPS) (CA chain file not included) and bind to the specified address", function() {
     testServer = alexaAppServer.start({
       port: 3000,
       host: "127.0.0.1",
@@ -36,7 +40,26 @@ describe("Alexa App Server with Examples & Custom Server Bindings", function() {
       httpsEnabled: true,
       httpsPort: 6000,
       privateKey: 'private-key.pem',
-      certificate: 'cert.cer'
+      certificate: 'cert.cer',
+      passphrase: 'test123'
+    });
+
+    return request("https://127.0.0.1:6000")
+      .get('/alexa/helloworld')
+      .expect(200);
+  });
+
+  it("mounts the hello world app (HTTP & HTTPS) (CA chain file included) and bind to the specified address", function() {
+    testServer = alexaAppServer.start({
+      port: 3000,
+      host: "127.0.0.1",
+      server_root: 'examples',
+      httpsEnabled: true,
+      httpsPort: 6000,
+      privateKey: 'private-key.pem',
+      certificate: 'cert.cer',
+      chain: 'cert.ca_bundle',
+      passphrase: 'test123'
     });
 
     return request("https://127.0.0.1:6000")

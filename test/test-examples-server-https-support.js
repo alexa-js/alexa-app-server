@@ -16,7 +16,9 @@ describe("Alexa App Server with Examples & HTTPS support", function() {
       httpsEnabled: true,
       httpsPort: 6000,
       privateKey: 'private-key.pem',
-      certificate: 'cert.cer'
+      certificate: 'cert.cer',
+      chain: 'cert.ca_bundle',
+      passphrase: "test123"
     });
   });
 

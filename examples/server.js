@@ -1,5 +1,6 @@
 var AlexaAppServer = require("../index.js");
 AlexaAppServer.start( {
+	server_root: './',
 	port:8080
 	// Use preRequest to load user data on each request and add it to the request json.
 	// In reality, this data would come from a db or files, etc.
