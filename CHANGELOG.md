@@ -1,10 +1,8 @@
 ## Changelog
 
 ### 2.3.2 (Next)
-* [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added support for ca chain certificates (#17) - [@tejashah88](https://github.com/tejashah88).
+* [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added support for ca chain certificates [#17](https://github.com/alexa-js/alexa-app-server/pull/17) - [@tejashah88](https://github.com/tejashah88).
 * [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added option to specify passphrase for unlocking specified SSL files - [@tejashah88](https://github.com/tejashah88).
-* [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Modified tests to include new SSL handling features - [@tejashah88](https://github.com/tejashah88).
-* [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Upgraded alexa-verifier-middleware to 0.1.8 from 0.1.4 - [@tejashah88](https://github.com/tejashah88).
 * [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added npm command to examine test coverage locally - [@tejashah88](https://github.com/tejashah88).
 * [#22](https://github.com/alexa-js/alexa-app-server/pull/22): Adding Context object to request templates + Refactored debugger files - [@pwbrown](https://github.com/pwbrown).
 * [#43](https://github.com/alexa-js/alexa-app-server/pull/43): Test fixes and an actual test for firing pre/post events. - [@dblock](https://github.com/dblock).
