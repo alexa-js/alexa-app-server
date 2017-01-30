@@ -154,7 +154,15 @@ require('alexa-app-server').start({
 	privateKey: 'private-key.pem',
 
 	// certificate filename. This file must reside in the sslcert folder under the root of the project. Must be set if httpsEnable = true
-	certificate: 'cert.cer'
+	certificate: 'cert.cer',
+
+	// chain bundle filename. This is an optional file that would reside in the sslcert folder under the root of the project. Used if present when httpsEnable = true
+	chain: 'cert.ca_bundle',
+
+	// passphrase: used to validate certificate and key files. This is optional but should be included if you get a "bad password read" error.
+	// For best practice, don't put the password directly in your source code, especially if it's going to be on GitHub, and instead, load it
+	// from an external file. That file should be included in the .gitignore list.
+	passphrase: 'passphrase'
 });
 ```
 
@@ -164,9 +172,15 @@ You can enable HTTPS support for the app-server using the instructions below.
 
 Generate a x509 SSL Certificate using the following:
 
-```
+```bash
 openssl genrsa -out private-key.pem 1024
 openssl req -new -x509 -key private-key.pem -out cert.cer -days 365
+```
+
+To make sure the certificate is verified, use the following:
+
+```bash
+openssl x509 -noout -text -in cert.cer
 ```
 
 Then add the following properties the to config (currently in server.js) that creates the server. Place the two generated files in the sslcert directory.

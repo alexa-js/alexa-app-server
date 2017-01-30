@@ -9,13 +9,13 @@ var alexaAppServer = require("../index");
 describe("Alexa App Server", function() {
   var testServer;
 
-  before(function() {
+  beforeEach(function() {
     testServer = alexaAppServer.start({
       port: 3000
     });
   });
 
-  after(function() {
+  afterEach(function() {
     testServer.stop();
   });
 
