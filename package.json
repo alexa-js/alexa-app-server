@@ -34,6 +34,6 @@
     "supertest": "^3.0.0",
     "istanbul": "0.4.5",
     "coveralls": "^2.11.15",
-    "danger": "0.8.0"
+    "danger": "0.11.2"
   }
 }
