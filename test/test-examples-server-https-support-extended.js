@@ -60,13 +60,13 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
   });
 
   describe("No specific address given", function() {
-    it("should only have the HTTP server instance running", function(done) {
+    it("should only have the HTTP server instance running", function() {
       testServer = alexaAppServer.start({
         port: 3000,
         server_root: 'examples'
       });
 
-      request(testServer.express)
+      return request(testServer.express)
         .get('/alexa/helloworld')
         .expect(200).then(function(response) {
           // First, check that the actual server instances exist or not
@@ -81,13 +81,12 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
             isPortTaken({ port: 6000 }, function(err, result) {
               expect(err).to.not.exist;
               expect(result).to.be.false;
-              done();
             });
           });
         });
     });
 
-    it("should have the HTTP and HTTPS server instances running", function(done) {
+    it("should have the HTTP and HTTPS server instances running", function() {
       testServer = alexaAppServer.start({
         port: 3000,
         server_root: 'examples',
@@ -99,7 +98,7 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
         passphrase: "test123"
       });
 
-      request(testServer.express)
+      return request(testServer.express)
         .get('/alexa/helloworld')
         .expect(200).then(function(response) {
           // First, check that the actual server instances exist or not
@@ -114,7 +113,6 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
             isPortTaken({ port: 3000 }, function(err, result) {
               expect(err).to.not.exist;
               expect(result).to.be.true;
-              done();
             });
           });
         });
@@ -122,14 +120,14 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
   });
 
   describe("Specific address given (127.0.0.1)", function() {
-    it("should only have the HTTP server instance running", function(done) {
+    it("should only have the HTTP server instance running", function() {
       testServer = alexaAppServer.start({
         port: 3000,
         host: '127.0.0.1',
         server_root: 'examples'
       });
 
-      request(testServer.express)
+      return request(testServer.express)
         .get('/alexa/helloworld')
         .expect(200).then(function(response) {
           // First, check that the actual server instances exist or not
@@ -144,13 +142,12 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
             isPortTaken({ port: 6000, host: '127.0.0.1' }, function(err, result) {
               expect(err).to.not.exist;
               expect(result).to.be.false;
-              done();
             });
           });
         });
     });
 
-    it("should have the HTTP and HTTPS server instances running", function(done) {
+    it("should have the HTTP and HTTPS server instances running", function() {
       testServer = alexaAppServer.start({
         port: 3000,
         host: '127.0.0.1',
@@ -163,7 +160,7 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
         passphrase: "test123"
       });
 
-      request(testServer.express)
+      return request(testServer.express)
         .get('/alexa/helloworld')
         .expect(200).then(function(response) {
           // First, check that the actual server instances exist or not
@@ -178,7 +175,6 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
             isPortTaken({ port: 3000, host: '127.0.0.1' }, function(err, result) {
               expect(err).to.not.exist;
               expect(result).to.be.true;
-              done();
             });
           });
         });
