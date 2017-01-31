@@ -1,8 +1,9 @@
 ## Changelog
 
 ### 2.3.2 (Next)
-* [#48](https://github.com/alexa-js/alexa-app-server/pull/46): Removed deprecated dependency 'supertest-as-promised' - [@tejashah88](https://github.com/tejashah88).
-* [#48](https://github.com/alexa-js/alexa-app-server/pull/46): Added tests to verify that server does not always bind to both HTTP and HTTPS ports [#46](https://github.com/alexa-js/alexa-app-server/issues/46) - [@tejashah88](https://github.com/tejashah88).
+* [#48](https://github.com/alexa-js/alexa-app-server/pull/48): Added more node versions to run mocha tests - [@tejashah88](https://github.com/tejashah88).
+* [#48](https://github.com/alexa-js/alexa-app-server/pull/48): Removed deprecated dependency 'supertest-as-promised' - [@tejashah88](https://github.com/tejashah88).
+* [#48](https://github.com/alexa-js/alexa-app-server/pull/48): Added tests to verify that server does not always bind to both HTTP and HTTPS ports [#46](https://github.com/alexa-js/alexa-app-server/issues/46) - [@tejashah88](https://github.com/tejashah88).
 * [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added support for ca chain certificates [#17](https://github.com/alexa-js/alexa-app-server/issues/17) - [@tejashah88](https://github.com/tejashah88).
 * [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added option to specify passphrase for unlocking specified SSL files - [@tejashah88](https://github.com/tejashah88).
 * [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added npm command to examine test coverage locally - [@tejashah88](https://github.com/tejashah88).
