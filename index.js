@@ -82,7 +82,7 @@ var appServer = function(config) {
                 // so bootstrap manually to express
                 var endpoint = (root || '/') + (app.endpoint || app.name);
                 if (config.verify) {
-                    self.express.use(endpoint, alexaVerifierMiddleware());
+                    self.express.use(endpoint, alexaVerifierMiddleware({ strictHeaderCheck: true }));
                 }
 
                 self.express.post(endpoint, function(req, res) {
