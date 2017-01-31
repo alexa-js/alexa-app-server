@@ -3,15 +3,13 @@
 var chai = require("chai");
 var expect = chai.expect;
 chai.config.includeStack = true;
-var request = require("supertest-as-promised");
-var fs = require('fs');
+var request = require("supertest");
 var alexaAppServer = require("../index");
+var fs = require("fs");
 
 describe("Alexa App Server with Examples & Pre/Post functions", function() {
-  var testServer;
-  var fired;
-
-  var sampleLaunchReq = JSON.parse(fs.readFileSync("test/sample-launch-req.json", 'utf8'));
+  var testServer, fired;
+  var sampleLaunchReq;
 
   before(function() {
     fired = {};
@@ -31,6 +29,8 @@ describe("Alexa App Server with Examples & Pre/Post functions", function() {
         fired.postRequest = true;
       }
     });
+
+    sampleLaunchReq = JSON.parse(fs.readFileSync("test/sample-launch-req.json", 'utf8'));
   });
 
   after(function() {
