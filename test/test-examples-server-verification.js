@@ -25,17 +25,18 @@ describe("Alexa App Server with Examples & Verification", function() {
     testServer.stop();
   });
 
+  describe("GET requests", function() {
+    it("mounts hello world app", function() {
+      return request(testServer.express)
+        .get('/alexa/helloworld')
+        .expect(401);
+    });
 
-  it("mounts hello world app", function() {
-    return request(testServer.express)
-      .get('/alexa/helloworld')
-      .expect(401);
-  });
-
-  it("mounts number_guessing_game app", function() {
-    return request(testServer.express)
-      .get('/alexa/guessinggame')
-      .expect(401);
+    it("mounts number_guessing_game app", function() {
+      return request(testServer.express)
+        .get('/alexa/guessinggame')
+        .expect(401);
+    });
   });
 
   describe("POST requests", function() {
@@ -43,21 +44,14 @@ describe("Alexa App Server with Examples & Verification", function() {
       return request(testServer.express)
         .post('/alexa/helloworld')
         .send(sampleLaunchReq)
-        .expect(200);
+        .expect(401);
     });
 
     it("mounts number_guessing_game", function() {
       return request(testServer.express)
         .post('/alexa/guessinggame')
         .send(sampleLaunchReq)
-        .expect(200);
-    });
-
-    it("404s on an invalid app", function() {
-      return request(testServer.express)
-        .post('/alexa/invalid')
-        .send(sampleLaunchReq)
-        .expect(404);
+        .expect(401);
     });
   });
 });
