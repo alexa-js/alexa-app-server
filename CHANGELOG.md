@@ -1,6 +1,10 @@
 ## Changelog
 
 ### 2.3.2 (Next)
+
+enabled strictHeaderCheck
+
+* [#51](https://github.com/alexa-js/alexa-app-server/pull/51): Enable `strictHeaderCheck` in verifier middleware [#50](https://github.com/alexa-js/alexa-app-server/issues/50) - [@mreinstein](https://github.com/mreinstein).
 * [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added support for ca chain certificates [#17](https://github.com/alexa-js/alexa-app-server/pull/17) - [@tejashah88](https://github.com/tejashah88).
 * [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added option to specify passphrase for unlocking specified SSL files - [@tejashah88](https://github.com/tejashah88).
 * [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added npm command to examine test coverage locally - [@tejashah88](https://github.com/tejashah88).
