@@ -24,13 +24,13 @@ describe("Alexa App Server with Examples & Verification", function() {
   it("mounts hello world app", function() {
     return request(testServer.express)
       .get('/alexa/helloworld')
-      .expect(200);
+      .expect(401);
   });
 
   it("mounts number_guessing_game app", function() {
     return request(testServer.express)
       .get('/alexa/guessinggame')
-      .expect(200);
+      .expect(401);
   });
 
   it("404s on an invalid app", function() {
