@@ -3,7 +3,7 @@
 var chai = require("chai");
 var expect = chai.expect;
 chai.config.includeStack = true;
-var request = require("supertest-as-promised");
+var request = require("supertest");
 var alexaAppServer = require("../index");
 
 describe("Alexa App Server with invalid examples", function() {
