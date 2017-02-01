@@ -15,7 +15,7 @@ var appServer = function(config) {
     var server_root = config.server_root || '';
 
     if (config.verify === true && config.debug === true) {
-        throw new Error("Invalid configuration: The verify and debug options cannot be both enabled!");
+        throw new Error("invalid configuration: the verify and debug options cannot be both enabled");
     }
 
     self.apps = {};
@@ -56,7 +56,7 @@ var appServer = function(config) {
             }
             var pkg = JSON.parse(fs.readFileSync(package_json, 'utf8'));
             if (!pkg || !pkg.main || !pkg.name) {
-                self.error("   Failed to load " + package_json);
+                self.error("   failed to load " + package_json);
                 return;
             }
             var main = fs.realpathSync(path.join(app_dir, dir, pkg.main));
@@ -69,7 +69,7 @@ var appServer = function(config) {
                 self.apps[pkg.name] = pkg;
                 self.apps[pkg.name].exports = app;
                 if (typeof app.express != "function") {
-                    self.error("   App [" + pkg.name + "] is not an instance of alexa-app");
+                    self.error("   app [" + pkg.name + "] is not an instance of alexa-app");
                     return;
                 }
 
@@ -128,12 +128,12 @@ var appServer = function(config) {
                     });
                 }
 
-                self.log("   Loaded app [" + pkg.name + "] at endpoint: " + endpoint);
+                self.log("   loaded app [" + pkg.name + "] at endpoint: " + endpoint);
             } catch (e) {
-                self.error("Error loading app [" + main + "]: " + e);
+                self.error("error loading app [" + main + "]: " + e);
             }
         });
-        
+
         return self.apps;
     };
 
@@ -147,7 +147,7 @@ var appServer = function(config) {
         };
         server_files(server_dir).forEach(function(file) {
             file = fs.realpathSync(path.join(server_dir, file));
-            self.log("   Loaded " + file);
+            self.log("   loaded " + file);
             var func = require(file);
             if (typeof func == "function") {
                 func(self.express, self);
@@ -197,34 +197,36 @@ var appServer = function(config) {
         // Serve static content
         var static_dir = path.join(server_root, config.public_html || 'public_html');
         if (fs.existsSync(static_dir) && fs.statSync(static_dir).isDirectory()) {
-            self.log("Serving static content from: " + static_dir);
+            self.log("serving static content from: " + static_dir);
             self.express.use(express.static(static_dir));
         } else {
-            self.log("Not serving static content because directory [" + static_dir + "] does not exist");
+            self.log("not serving static content because directory [" + static_dir + "] does not exist");
         }
 
         // Find any server-side processing modules and let them hook in
         var server_dir = path.join(server_root, config.server_dir || 'server');
         if (fs.existsSync(server_dir) && fs.statSync(server_dir).isDirectory()) {
-            self.log("Loading server-side modules from: " + server_dir);
+            self.log("loading server-side modules from: " + server_dir);
             self.load_server_modules(server_dir);
         } else {
-            self.log("No server modules loaded because directory [" + server_dir + "] does not exist");
+            self.log("no server modules loaded because directory [" + server_dir + "] does not exist");
         }
 
         // Find and load alexa-app modules
         var app_dir = path.join(server_root, config.app_dir || 'apps');
         if (fs.existsSync(app_dir) && fs.statSync(app_dir).isDirectory()) {
-            self.log("Loading apps from: " + app_dir);
+            self.log("loading apps from: " + app_dir);
             self.load_apps(app_dir, config.app_root || '/alexa/');
         } else {
-            self.log("Apps not loaded because directory [" + app_dir + "] does not exist");
+            self.log("apps not loaded because directory [" + app_dir + "] does not exist");
         }
 
-        if (config.httpsEnabled == true) {
-            self.log("httpsEnabled is true. Reading HTTPS config");
+        config.port = config.port || process.env.port || 8080;
 
-            if (config.privateKey != undefined && config.certificate != undefined && config.httpsPort != undefined) { // Ensure that all of the needed properties are set
+        if (config.https == true) {
+            self.log("enabling https");
+
+            if (config.privateKey != undefined && config.certificate != undefined) { // Ensure that all of the needed properties are set
                 var privateKeyFile = server_root + '/sslcert/' + config.privateKey;
                 var certificateFile = server_root + '/sslcert/' + config.certificate;
                 var chainFile = (config.chain != undefined) ? server_root + '/sslcert/' + config.chain : undefined; //optional chain bundle
@@ -238,12 +240,12 @@ var appServer = function(config) {
                         if (fs.existsSync(chainFile)) {
                             chain = fs.readFileSync(chainFile, 'utf8');
                         } else {
-                            self.error("chain: '" + config.chain + "' does not exist in /sslcert.");
+                            self.error("chain: '" + config.chain + "' does not exist in /sslcert");
                         }
                     }
 
                     if (chain == undefined && chainFile != undefined) {
-                        self.error("Failed to load chain from /sslcert. HTTPS will not be enabled");
+                        self.error("failed to load chain from /sslcert, https will not be enabled");
                     } else if (privateKey != undefined && certificate != undefined) {
                         var credentials = {
                             key: privateKey,
@@ -256,7 +258,7 @@ var appServer = function(config) {
 
                         if (chain != undefined) { //if chain is used the add to credentials
                             credentials.ca = chain;
-                            self.log("Using chain certificate from /sslcert.");
+                            self.log("using chain certificate from /sslcert");
                         }
 
                         try { // These two lines below can fail it the certs were generated incorrectly. But we can continue startup without HTTPS
@@ -265,35 +267,32 @@ var appServer = function(config) {
                             // TODO: add separate option to specify specific host address for HTTPS server to bind to???
                             // Issue #38: https://github.com/alexa-js/alexa-app-server/issues/38
                             if (typeof config.host === 'string') {
-                                self.httpsInstance = httpsServer.listen(config.httpsPort, config.host);
-                                self.log("Listening on https://" + config.host + ":" + config.httpsPort);
+                                self.instance = httpsServer.listen(config.port, config.host);
+                                self.log("listening on https://" + config.host + ":" + config.port);
                             } else {
-                                self.httpsInstance = httpsServer.listen(config.httpsPort);
-                                self.log("Listening on HTTPS port " + config.httpsPort);
+                                self.instance = httpsServer.listen(config.port);
+                                self.log("listening on https port " + config.port);
                             }
                         } catch (error) {
-                            self.error("Failed to listen via HTTPS Error: " + error);
+                            self.error("failed to listen via https: " + error);
                         }
                     } else {
-                        self.error("Failed to load privateKey or certificate from /sslcert. HTTPS will not be enabled");
+                        self.error("failed to load privateKey or certificate from /sslcert, https will not be enabled");
                     }
                 } else {
-                    self.error("privateKey: '" + config.privateKey + "' or certificate: '" + config.certificate + "' do not exist in /sslcert. HTTPS will not be enabled");
+                    self.error("privateKey: '" + config.privateKey + "' or certificate: '" + config.certificate + "' do not exist in /sslcert, https will not be enabled");
                 }
             } else {
-                self.error("privatekey, httpsPort, or certificate paramater not set in config. HTTPS will not be enabled");
+                self.error("privatekey or certificate parameter is not set in config, https will not be enabled");
             }
-        }
-
-        // Start the server listening
-        config.port = config.port || process.env.port || 80;
-
-        if (typeof config.host === 'string') {
-            self.httpInstance = self.express.listen(config.port, config.host);
-            self.log("Listening on http://" + config.host + ":" + config.port);
         } else {
-            self.httpInstance = self.express.listen(config.port);
-            self.log("Listening on HTTP port " + config.port);
+            if (typeof config.host === 'string') {
+                self.instance = self.express.listen(config.port, config.host);
+                self.log("listening on http://" + config.host + ":" + config.port);
+            } else {
+                self.instance = self.express.listen(config.port);
+                self.log("listening on http port " + config.port);
+            }
         }
 
         // Run the post() method if defined
@@ -306,10 +305,8 @@ var appServer = function(config) {
 
     self.stop = function() {
         // close all server instances
-        self.httpInstance.close();
-
-        if (typeof self.httpsInstance !== "undefined") {
-            self.httpsInstance.close();
+        if (typeof self.instance !== "undefined") {
+            self.instance.close();
         }
 
         // deactivate all hotswap listener
