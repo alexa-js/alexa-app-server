@@ -4,7 +4,7 @@ var alexa = require('alexa-app');
 module.change_code = 1;
 
 // Define an alexa-app
-var app = new alexa.app('guessinggame');
+var app = new alexa.app('number_guessing_game');
 
 app.launch(function(req,res) {
 	var number = Math.floor(Math.random()*99)+1;
@@ -14,8 +14,8 @@ app.launch(function(req,res) {
 	res.say(prompt).reprompt(prompt).shouldEndSession(false);
 });
 app.intent('GuessIntent',{
-		"slots":{"guess":"NUMBER"}
-		,"utterances":["{1-100|guess}"]
+		"slots": { "guess": "NUMBER" },
+		"utterances": [ "{1-100|guess}" ]
 	},
 	function(req,res) {
 		var guesses = (+req.session('guesses'))+1;

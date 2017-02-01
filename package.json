@@ -19,8 +19,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "alexa-app": "^2.4.0",
-    "alexa-verifier-middleware": "^0.1.8",
+    "alexa-app": "git+https://github.com/mreinstein/alexa-app.git#352f17cf9b8f541d8f32a385bfff61877b60134e",
     "bluebird": "^3.4.7",
     "body-parser": "~1.16.0",
     "ejs": "~2.5.5",

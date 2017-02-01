@@ -4,14 +4,15 @@ var alexa = require('alexa-app');
 module.change_code = 1;
 
 // Define an alexa-app
-var app = new alexa.app('helloworld');
+var app = new alexa.app('hello_world');
 app.launch(function(req,res) {
 	res.say("Hello World!!");
 });
 app.intent('NameIntent', {
-		"slots":{"NAME":"LITERAL","AGE":"NUMBER"}
-		,"utterances":["{My name is|my name's} {matt|bob|bill|jake|nancy|mary|jane|NAME} and I am {1-100|AGE}{ years old|}"]
-	},function(req,res) {
+		"slots": { "NAME": "LITERAL", "AGE": "NUMBER" },
+		"utterances":[ "{My name is|my name's} {matt|bob|bill|jake|nancy|mary|jane|NAME} and I am {1-100|AGE}{ years old|}" ]
+	},
+	function(req,res) {
 		res.say('Your name is '+req.slot('NAME')+' and you are '+req.slot('AGE')+' years old');
 	}
 );

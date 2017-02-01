@@ -6,7 +6,6 @@ var https = require('https');
 var express = require('express');
 var alexa = require('alexa-app');
 var bodyParser = require('body-parser');
-var alexaVerifierMiddleware = require('alexa-verifier-middleware');
 var Promise = require('bluebird');
 
 var appServer = function(config) {
@@ -34,15 +33,22 @@ var appServer = function(config) {
         self.log("hotswap reloaded " + filename);
     };
 
-    var errorCallback = function(e) {
+    var hotswapErrorCallback = function(e) {
         self.error("-----\nhotswap error: " + e + "\n-----\n");
     };
 
     hotswap.on('swap', hotswapCallback);
-    hotswap.on('error', errorCallback);
+    hotswap.on('error', hotswapErrorCallback);
 
     // Load application modules
     self.load_apps = function(app_dir, root) {
+        // set up a router to hang all alexa apps off of
+        var alexaRouter = express.Router()
+
+        var normalizedRoot = root.indexOf('/') === 0 ? root : '/' + root
+        
+        self.express.use(normalizedRoot, alexaRouter)
+
         var app_directories = function(srcpath) {
             return fs.readdirSync(srcpath).filter(function(file) {
                 return fs.statSync(path.join(srcpath, file)).isDirectory();
@@ -64,74 +70,40 @@ var appServer = function(config) {
                 self.error("   main file not found for app [" + pkg.name + "]: " + main);
                 return;
             }
+
+            // TODO: better to just let the server crash. protecting broken code
+            //       enables sloppy behavior and practices.
+
+            // wrapped in a try catch block to avoid crashing the whole app-server
+            var app
             try {
-                var app = require(main);
-                self.apps[pkg.name] = pkg;
-                self.apps[pkg.name].exports = app;
-                if (typeof app.express != "function") {
-                    self.error("   App [" + pkg.name + "] is not an instance of alexa-app");
-                    return;
-                }
-
-                // Extract Alexa-specific attributes from package.json, if they exist
-                if (typeof pkg.alexa == "object") {
-                    app.id = pkg.alexa.applicationId;
-                }
-
-                // The express() function in alexa-app doesn't play nicely with hotswap,
-                // so bootstrap manually to express
-                var endpoint = (root || '/') + (app.endpoint || app.name);
-                if (config.verify) {
-                    self.express.use(endpoint, alexaVerifierMiddleware({ strictHeaderCheck: true }));
-                }
-
-                self.express.post(endpoint, function(req, res) {
-                    var json = req.body,
-                        response_json;
-                    // preRequest may return altered request JSON, or undefined, or a Promise
-                    Promise.resolve(typeof config.preRequest == "function" ? config.preRequest(json, req, res) : json)
-                        .then(function(json_new) {
-                            if (json_new) {
-                                json = json_new;
-                            }
-                            return json;
-                        })
-                        .then(app.request)
-                        .then(function(app_response_json) {
-                            response_json = app_response_json;
-                            return Promise.resolve(typeof config.postRequest == "function" ? config.postRequest(app_response_json, req, res) : app_response_json)
-                        })
-                        .then(function(response_json_new) {
-                            response_json = response_json_new || response_json;
-                            res.json(response_json).send();
-                        })
-                        .catch(function() {
-                            res.status(500).send("Server Error");
-                        });
-                });
-                // Configure GET requests to run a debugger UI
-                if (false !== config.debug) {
-                    self.express.get(endpoint, function(req, res) {
-                        if (typeof req.query['schema'] != "undefined") {
-                            res.set('Content-Type', 'text/plain').send(app.schema());
-                        } else if (typeof req.query['utterances'] != "undefined") {
-                            res.set('Content-Type', 'text/plain').send(app.utterances());
-                        } else {
-                            res.render('test', {
-                                "app": app,
-                                "schema": app.schema(),
-                                "customSlotTypes": (app.customSlotTypes ? app.customSlotTypes() : ""),
-                                "utterances": app.utterances(),
-                                "intents": app.intents
-                            });
-                        }
-                    });
-                }
-
-                self.log("   Loaded app [" + pkg.name + "] at endpoint: " + endpoint);
+                app = require(main);
             } catch (e) {
                 self.error("Error loading app [" + main + "]: " + e);
+                return;
             }
+
+            self.apps[pkg.name] = pkg;
+            self.apps[pkg.name].exports = app;
+            if (typeof app.express != "function") {
+                self.error("   App [" + pkg.name + "] is not an instance of alexa-app");
+                return;
+            }
+
+            // Extract Alexa-specific attributes from package.json, if they exist
+            if (typeof pkg.alexa == "object") {
+                app.id = pkg.alexa.applicationId;
+            }
+
+            // attach the alexa-app instance to the alexa router
+            app.express({
+                expressApp: alexaRouter,
+                router: express.Router(),
+                debug: config.debug,
+                checkCert: config.verify
+            })
+
+            self.log("   Loaded app [" + pkg.name + "] at endpoint: " + normalizedRoot + "/" + pkg.name);
         });
         
         return self.apps;
@@ -156,10 +128,18 @@ var appServer = function(config) {
     };
 
     self.start = function() {
-        // Instantiate up the server
-        // TODO: add i18n support (i18n-node might be a good look)
-        // Issue #12: https://github.com/alexa-js/alexa-app-server/issues/12
         self.express = express();
+
+        // each app is attached to express before any middlewares or routes
+        // this ensures the alexa routers will have middlewares totally separate
+        // from everything else
+        var app_dir = path.join(server_root, config.app_dir || 'apps');
+        if (fs.existsSync(app_dir) && fs.statSync(app_dir).isDirectory()) {
+            self.log("Loading apps from: " + app_dir);
+            self.load_apps(app_dir, config.app_root || '/alexa');
+        } else {
+            self.log("Apps not loaded because directory [" + app_dir + "] does not exist");
+        }
 
         // TODO: change this to make sure it doesn't affect other non-Alexa services/apps
         // Issue #35: https://github.com/alexa-js/alexa-app-server/issues/35
@@ -210,15 +190,6 @@ var appServer = function(config) {
             self.load_server_modules(server_dir);
         } else {
             self.log("No server modules loaded because directory [" + server_dir + "] does not exist");
-        }
-
-        // Find and load alexa-app modules
-        var app_dir = path.join(server_root, config.app_dir || 'apps');
-        if (fs.existsSync(app_dir) && fs.statSync(app_dir).isDirectory()) {
-            self.log("Loading apps from: " + app_dir);
-            self.load_apps(app_dir, config.app_root || '/alexa/');
-        } else {
-            self.log("Apps not loaded because directory [" + app_dir + "] does not exist");
         }
 
         if (config.httpsEnabled == true) {
