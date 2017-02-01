@@ -45,7 +45,8 @@ var appServer = function(config) {
         // set up a router to hang all alexa apps off of
         var alexaRouter = express.Router()
 
-        var normalizedRoot = '/' + root.split('/').join('/')
+        var normalizedRoot = root.indexOf('/') === 0 ? root : '/' + root
+        
         self.express.use(normalizedRoot, alexaRouter)
 
         var app_directories = function(srcpath) {
