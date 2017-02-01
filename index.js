@@ -42,6 +42,10 @@ var appServer = function(config) {
 
     // Load application modules
     self.load_apps = function(app_dir, root) {
+        // set up a router to hang all alexa apps off of
+        var alexaRouter = express.router()
+        self.express.use(root, alexaRouter)
+
         var app_directories = function(srcpath) {
             return fs.readdirSync(srcpath).filter(function(file) {
                 return fs.statSync(path.join(srcpath, file)).isDirectory();
@@ -88,15 +92,15 @@ var appServer = function(config) {
                 app.id = pkg.alexa.applicationId;
             }
 
-            // attach the alexa-app instance to express
+            // attach the alexa-app instance to the alexa router
             app.express({
-                expressApp: self.express,
+                expressApp: alexaRouter,
                 router: express.Router(),
                 debug: config.debug,
                 checkCert: config.verify
             })
 
-            self.log("   Loaded app [" + pkg.name + "] at endpoint: /" + pkg.name);
+            self.log("   Loaded app [" + pkg.name + "] at endpoint: /" + root + "/" + pkg.name);
         });
         
         return self.apps;
@@ -129,7 +133,7 @@ var appServer = function(config) {
         var app_dir = path.join(server_root, config.app_dir || 'apps');
         if (fs.existsSync(app_dir) && fs.statSync(app_dir).isDirectory()) {
             self.log("Loading apps from: " + app_dir);
-            self.load_apps(app_dir, config.app_root || '/alexa/');
+            self.load_apps(app_dir, config.app_root || '/alexa');
         } else {
             self.log("Apps not loaded because directory [" + app_dir + "] does not exist");
         }
