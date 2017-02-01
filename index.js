@@ -44,7 +44,9 @@ var appServer = function(config) {
     self.load_apps = function(app_dir, root) {
         // set up a router to hang all alexa apps off of
         var alexaRouter = express.Router()
-        self.express.use(root, alexaRouter)
+
+        var normalizedRoot = '/' + root.split('/').join('/')
+        self.express.use(normalizedRoot, alexaRouter)
 
         var app_directories = function(srcpath) {
             return fs.readdirSync(srcpath).filter(function(file) {
@@ -100,7 +102,7 @@ var appServer = function(config) {
                 checkCert: config.verify
             })
 
-            self.log("   Loaded app [" + pkg.name + "] at endpoint: /" + root + "/" + pkg.name);
+            self.log("   Loaded app [" + pkg.name + "] at endpoint: " + normalizedRoot + "/" + pkg.name);
         });
         
         return self.apps;
