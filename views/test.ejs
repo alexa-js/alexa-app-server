@@ -10,7 +10,7 @@
       function clone(o) {
         return JSON.parse(JSON.stringify(o));
       }
-      
+
       // For Angular
       var app = angular.module('alexa', []);
       app.controller('AlexaController', function($scope, $http) {
@@ -51,7 +51,7 @@
                 }
               })
               .catch(function onError(error) {
-                alert(error.message);
+                alert(error.message || "Unexpected error.");
               });
             } else {
               alert("Error: Cannot send an empty request object. Please select a request type.");
@@ -61,8 +61,8 @@
         $scope.getIntent = function() {
           try {
             var intents = $scope.schema.intents;
-            for (var i = 0; i < intents.length; i++) {
-              var intent = intents[i];
+            for (var i = 0; i < json.intents.length; i++) {
+              var intent = json.intents[i];
               if (intent.intent == $scope.request.request.intent.name) {
                 return intent;
               }
@@ -74,7 +74,7 @@
         $scope.templates = templates;
 
         // Extract the applicationId if it exists and update the templates
-        var applicationId = "<%= app.id || "" %>";
+        var applicationId = "<%= json.id || "" %>";
         if (applicationId) {
           $scope.templates.launch.session.application.applicationId = applicationId;
           $scope.templates.intent.session.application.applicationId = applicationId;
@@ -113,7 +113,7 @@
         Intent:
         <select id="intent_select" ng-change="changeintent()" ng-model="intent">
           <option value="">
-          <% for (name in intents) { %>
+          <% for (name in json.intents) { %>
             <option value="<%=name%>"><%=name%>
           <% } %>
         </select>
@@ -153,12 +153,12 @@
 
     <h2>Custom Slot Types</h2>
     <div>
-      <div id="customSlotTypes" class="code" style="max-height:500px;overflow:auto;"><%=customSlotTypes%></div>
+      <div id="customSlotTypes" class="code" style="max-height:500px;overflow:auto;"><%=json.customSlotTypes%></div>
     </div>
 
     <h2>Utterances</h2>
     <div>
-      <div id="utterances" class="code" style="max-height:500px;overflow:auto;"><%=utterances%></div>
+      <div id="utterances" class="code" style="max-height:500px;overflow:auto;"><%=json.utterances%></div>
     </div>
   </body>
 </html>

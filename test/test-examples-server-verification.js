@@ -28,13 +28,13 @@ describe("Alexa App Server with Examples & Verification", function() {
   describe("GET requests", function() {
     it("mounts hello world app", function() {
       return request(testServer.express)
-        .get('/alexa/helloworld')
+        .get('/alexa/hello_world')
         .expect(401);
     });
 
     it("mounts number_guessing_game app", function() {
       return request(testServer.express)
-        .get('/alexa/guessinggame')
+        .get('/alexa/number_guessing_game')
         .expect(401);
     });
   });
@@ -42,14 +42,14 @@ describe("Alexa App Server with Examples & Verification", function() {
   describe("POST requests", function() {
     it("mounts hello world app", function() {
       return request(testServer.express)
-        .post('/alexa/helloworld')
+        .post('/alexa/hello_world')
         .send(sampleLaunchReq)
         .expect(401);
     });
 
     it("mounts number_guessing_game", function() {
       return request(testServer.express)
-        .post('/alexa/guessinggame')
+        .post('/alexa/number_guessing_game')
         .send(sampleLaunchReq)
         .expect(401);
     });

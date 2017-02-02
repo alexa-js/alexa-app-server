@@ -28,7 +28,7 @@ describe("Alexa App Server with Examples & Custom Server Bindings", function() {
     });
 
     return request("http://127.0.0.1:3000")
-      .get('/alexa/helloworld')
+      .get('/alexa/hello_world')
       .expect(200);
   });
 
@@ -44,7 +44,7 @@ describe("Alexa App Server with Examples & Custom Server Bindings", function() {
     });
 
     return request("https://127.0.0.1:6000")
-      .get('/alexa/helloworld')
+      .get('/alexa/hello_world')
       .expect(200);
   });
 
@@ -61,7 +61,7 @@ describe("Alexa App Server with Examples & Custom Server Bindings", function() {
     });
 
     return request("https://127.0.0.1:6000")
-      .get('/alexa/helloworld')
+      .get('/alexa/hello_world')
       .expect(200);
   });
 });

@@ -28,7 +28,7 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
       });
 
       return request(testServer.express)
-        .get('/alexa/helloworld')
+        .get('/alexa/hello_world')
         .expect(200).then(function(response) {
           expect(testServer.instance).to.exist;
           return tcpPortUsed.check(3000).then(function(inUse) {
@@ -49,7 +49,7 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
       });
 
       return request(testServer.express)
-        .get('/alexa/helloworld')
+        .get('/alexa/hello_world')
         .expect(200).then(function(response) {
           expect(testServer.instance).to.exist;
           return tcpPortUsed.check(3000).then(function(inUse) {
@@ -68,7 +68,7 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
       });
 
       return request(testServer.express)
-        .get('/alexa/helloworld')
+        .get('/alexa/hello_world')
         .expect(200).then(function(response) {
           expect(testServer.instance).to.exist;
           return tcpPortUsed.check(3000).then(function(inUse) {
@@ -90,7 +90,7 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
       });
 
       return request(testServer.express)
-        .get('/alexa/helloworld')
+        .get('/alexa/hello_world')
         .expect(200).then(function(response) {
           expect(testServer.instance).to.exist;
           return tcpPortUsed.check(6000).then(function(inUse) {
