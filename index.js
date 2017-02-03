@@ -8,18 +8,31 @@ var alexa = require('alexa-app');
 var bodyParser = require('body-parser');
 var alexaVerifierMiddleware = require('alexa-verifier-middleware');
 var Promise = require('bluebird');
+var defaults = require("lodash.defaults");
 
 var appServer = function(config) {
     var self = {};
     config = config || {};
-    var server_root = config.server_root || '';
+
+    var defaultOptions = {
+        port: process.env.port || 8080,
+        httpEnabled: true,
+        httpsEnabled: false,
+        server_root: ''
+    };
+
+    config = defaults(config, defaultOptions);
 
     if (config.verify === true && config.debug === true) {
         throw new Error("invalid configuration: the verify and debug options cannot be both enabled");
     }
 
-    if (config.httpEnabled === false && config.httpsEnabled === false) {
+    if (config.httpEnabled == false && config.httpsEnabled == false) {
         throw new Error("invalid configuration: either http or https must be enabled");
+    }
+
+    if (config.httpEnabled && config.httpsEnabled && config.port == config.httpsPort) {
+        throw new Error("invalid configuration: http and https ports must be different");
     }
 
     self.apps = {};
@@ -199,7 +212,7 @@ var appServer = function(config) {
         }
 
         // Serve static content
-        var static_dir = path.join(server_root, config.public_html || 'public_html');
+        var static_dir = path.join(config.server_root, config.public_html || 'public_html');
         if (fs.existsSync(static_dir) && fs.statSync(static_dir).isDirectory()) {
             self.log("serving static content from: " + static_dir);
             self.express.use(express.static(static_dir));
@@ -208,7 +221,7 @@ var appServer = function(config) {
         }
 
         // Find any server-side processing modules and let them hook in
-        var server_dir = path.join(server_root, config.server_dir || 'server');
+        var server_dir = path.join(config.server_root, config.server_dir || 'server');
         if (fs.existsSync(server_dir) && fs.statSync(server_dir).isDirectory()) {
             self.log("loading server-side modules from: " + server_dir);
             self.load_server_modules(server_dir);
@@ -217,7 +230,7 @@ var appServer = function(config) {
         }
 
         // Find and load alexa-app modules
-        var app_dir = path.join(server_root, config.app_dir || 'apps');
+        var app_dir = path.join(config.server_root, config.app_dir || 'apps');
         if (fs.existsSync(app_dir) && fs.statSync(app_dir).isDirectory()) {
             self.log("loading apps from: " + app_dir);
             self.load_apps(app_dir, config.app_root || '/alexa/');
@@ -229,9 +242,9 @@ var appServer = function(config) {
             self.log("enabling https");
 
             if (config.privateKey != undefined && config.certificate != undefined && config.httpsPort != undefined) { // Ensure that all of the needed properties are set
-                var privateKeyFile = server_root + '/sslcert/' + config.privateKey;
-                var certificateFile = server_root + '/sslcert/' + config.certificate;
-                var chainFile = (config.chain != undefined) ? server_root + '/sslcert/' + config.chain : undefined; //optional chain bundle
+                var privateKeyFile = config.server_root + '/sslcert/' + config.privateKey;
+                var certificateFile = config.server_root + '/sslcert/' + config.certificate;
+                var chainFile = (config.chain != undefined) ? config.server_root + '/sslcert/' + config.chain : undefined; //optional chain bundle
 
                 if (fs.existsSync(privateKeyFile) && fs.existsSync(certificateFile)) { // Make sure the key and cert exist.
                     var privateKey = fs.readFileSync(privateKeyFile, 'utf8');
@@ -289,9 +302,7 @@ var appServer = function(config) {
             }
         }
 
-        if (config.httpEnabled !== false) {
-            config.port = config.port || process.env.port || 8080;
-
+        if (config.httpEnabled) {
             if (typeof config.host === 'string') {
                 self.instance = self.express.listen(config.port, config.host);
                 self.log("listening on http://" + config.host + ":" + config.port);

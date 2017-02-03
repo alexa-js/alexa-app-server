@@ -21,7 +21,22 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
   });
 
   describe("no specific address given", function() {
-    it("has the HTTP server instance running", function() {
+    it("has the HTTP server instance running on default port 8080", function() {
+      testServer = alexaAppServer.start({
+        server_root: 'examples'
+      });
+
+      return request(testServer.express)
+        .get('/alexa/helloworld')
+        .expect(200).then(function(response) {
+          expect(testServer.instance).to.exist;
+          return tcpPortUsed.check(8080).then(function(inUse) {
+            expect(inUse).to.equal(true);
+          });
+        });
+    });
+
+    it("has the HTTP server instance running on configured port 3000", function() {
       testServer = alexaAppServer.start({
         port: 3000,
         server_root: 'examples'

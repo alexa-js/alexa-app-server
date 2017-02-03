@@ -28,4 +28,31 @@ describe("Alexa App Server with Examples & App loading fail checking", function(
 
     expect(fn).to.throw(Error, /either http or https must be enabled/);
   });
+
+  it("throws an error when 'port' and 'httpsPort' are both the same and http and https are enabled", function() {
+    var fn = function() {
+      alexaAppServer.start({
+        port: 3000,
+        httpsPort: 3000,
+        httpEnabled: true,
+        httpsEnabled: true
+      });
+    };
+
+    expect(fn).to.throw(Error, /http and https ports must be different/);
+  });
+
+  it("no errors when 'port' and 'httpsPort' are both the same and either is enabled", function() {
+    var testServer;
+    var fn = function() {
+      testServer = alexaAppServer.start({
+        port: 3000,
+        httpsPort: 3000
+      });
+    };
+
+    expect(fn).to.not.throw(Error);
+
+    testServer.stop();
+  });
 });
