@@ -2,6 +2,7 @@
 
 ### 2.3.2 (Next)
 
+* [#21](https://github.com/alexa-js/alexa-app-server/issues/21), [52](https://github.com/alexa-js/alexa-app-server/issues/52): Setting `verify: true` hangs for requests with signature - [@mreinstein](https://github.com/mreinstein), [@dblock](https://github.com/dblock).
 * [#61](https://github.com/alexa-js/alexa-app-server/pull/61): Fix: error occurs if HTTP and HTTPs ports specified are the same - [@dblock](https://github.com/dblock).
 * [#60](https://github.com/alexa-js/alexa-app-server/pull/60): Added `httpEnabled` that disables HTTP - [@dblock](https://github.com/dblock).
 * [#48](https://github.com/alexa-js/alexa-app-server/pull/48): Added more node versions to run mocha tests on Travis-CI - [@tejashah88](https://github.com/tejashah88).
