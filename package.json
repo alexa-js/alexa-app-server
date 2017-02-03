@@ -19,8 +19,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "alexa-app": "^2.4.0",
-    "alexa-verifier-middleware": "^0.1.8",
+    "alexa-app": "alexa-js/alexa-app",
     "bluebird": "^3.4.7",
     "body-parser": "~1.16.0",
     "ejs": "~2.5.5",

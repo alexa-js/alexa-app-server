@@ -39,7 +39,7 @@ describe("Alexa App Server with Examples & Pre/Post functions", function() {
 
   it("mounts hello world app (GET)", function() {
     return request(testServer.express)
-      .get('/alexa/helloworld')
+      .get('/alexa/hello_world')
       .expect(200).then(function(response) {
         expect(fired.pre).to.equal(true);
         expect(fired.post).to.equal(true);
@@ -51,7 +51,7 @@ describe("Alexa App Server with Examples & Pre/Post functions", function() {
 
   it("mounts hello world app (POST)", function() {
     return request(testServer.express)
-      .post('/alexa/helloworld')
+      .post('/alexa/hello_world')
       .send(sampleLaunchReq)
       .expect(200).then(function(response) {
         expect(fired.pre).to.equal(true);
