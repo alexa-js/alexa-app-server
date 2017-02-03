@@ -300,7 +300,7 @@ var appServer = function(config) {
             config.post(self);
         }
 
-        return this.instance;
+        return this;
     };
 
     self.stop = function() {
