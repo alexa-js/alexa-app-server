@@ -97,6 +97,9 @@ require('alexa-app-server').start({
   // The directory containing server-side processing modules (see below).
   server_dir: "server",
 
+  // Enables http support, default is true.
+  httpEnabled: true,
+
   // The port the server should bind to. Defaults to 8080.
   port: 8080,
 

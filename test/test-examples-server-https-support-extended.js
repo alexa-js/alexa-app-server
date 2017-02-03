@@ -20,8 +20,8 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
     testServer.stop();
   });
 
-  describe("No specific address given", function() {
-    it("should only have the HTTP server instance running", function() {
+  describe("no specific address given", function() {
+    it("has the HTTP server instance running", function() {
       testServer = alexaAppServer.start({
         port: 3000,
         server_root: 'examples'
@@ -37,9 +37,9 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
         });
     });
 
-    it("should have an HTTPS server instances running", function() {
+    it("has the HTTPS server instances running", function() {
       testServer = alexaAppServer.start({
-        httpsPort: 3000,
+        httpsPort: 6000,
         server_root: 'examples',
         httpsEnabled: true,
         privateKey: 'private-key.pem',
@@ -53,15 +53,15 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
         .expect(200).then(function(response) {
           expect(testServer.instance).to.exist;
           expect(testServer.httpsInstance).to.exist;
-          return tcpPortUsed.check(3000).then(function(inUse) {
+          return tcpPortUsed.check(6000).then(function(inUse) {
             expect(inUse).to.equal(true);
           });
         });
     });
   });
 
-  describe("Specific address given (127.0.0.1)", function() {
-    it("should only have the HTTP server instance running", function() {
+  describe("on 127.0.0.1", function() {
+    it("has the HTTP server instance running", function() {
       testServer = alexaAppServer.start({
         port: 3000,
         host: '127.0.0.1',
@@ -79,7 +79,7 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
         });
     });
 
-    it("should have both an HTTP and HTTPS server instances running", function() {
+    it("has both an HTTP and HTTPS server instances running", function() {
       testServer = alexaAppServer.start({
         port: 3000,
         httpsPort: 6000,
@@ -101,6 +101,34 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
             expect(inUse).to.equal(true);
             return tcpPortUsed.check(3000).then(function(inUse) {
               expect(inUse).to.equal(true);
+            });
+          });
+        });
+    });
+
+    it("with httpEnabled = false only starts an HTTPs instance", function() {
+      testServer = alexaAppServer.start({
+        httpEnabled: false,
+        port: 3000,
+        httpsPort: 6000,
+        host: '127.0.0.1',
+        server_root: 'examples',
+        httpsEnabled: true,
+        privateKey: 'private-key.pem',
+        certificate: 'cert.cer',
+        chain: 'cert.ca_bundle',
+        passphrase: "test123"
+      });
+
+      return request(testServer.express)
+        .get('/alexa/helloworld')
+        .expect(200).then(function(response) {
+          expect(testServer.instance).to.not.exist;
+          expect(testServer.httpsInstance).to.exist;
+          return tcpPortUsed.check(6000).then(function(inUse) {
+            expect(inUse).to.equal(true);
+            return tcpPortUsed.check(3000).then(function(inUse) {
+              expect(inUse).to.equal(false);
             });
           });
         });

@@ -2,6 +2,7 @@
 
 ### 2.3.2 (Next)
 
+* [#60](https://github.com/alexa-js/alexa-app-server/pull/60): Added `httpEnabled` that disables HTTP - [@dblock](https://github.com/dblock).
 * [#48](https://github.com/alexa-js/alexa-app-server/pull/48): Added more node versions to run mocha tests on Travis-CI - [@tejashah88](https://github.com/tejashah88).
 * [#48](https://github.com/alexa-js/alexa-app-server/pull/48): Removed deprecated dependency 'supertest-as-promised' - [@tejashah88](https://github.com/tejashah88).
 * [#48](https://github.com/alexa-js/alexa-app-server/pull/48): Added tests to verify that server does not always bind to both HTTP and HTTPS ports [#46](https://github.com/alexa-js/alexa-app-server/issues/46) - [@tejashah88](https://github.com/tejashah88).

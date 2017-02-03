@@ -285,14 +285,16 @@ var appServer = function(config) {
             }
         }
 
-        config.port = config.port || process.env.port || 8080;
+        if (config.httpEnabled !== false) {
+            config.port = config.port || process.env.port || 8080;
 
-        if (typeof config.host === 'string') {
-            self.instance = self.express.listen(config.port, config.host);
-            self.log("listening on http://" + config.host + ":" + config.port);
-        } else {
-            self.instance = self.express.listen(config.port);
-            self.log("listening on http port " + config.port);
+            if (typeof config.host === 'string') {
+                self.instance = self.express.listen(config.port, config.host);
+                self.log("listening on http://" + config.host + ":" + config.port);
+            } else {
+                self.instance = self.express.listen(config.port);
+                self.log("listening on http port " + config.port);
+            }
         }
 
         // Run the post() method if defined
