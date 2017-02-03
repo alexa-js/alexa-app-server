@@ -118,7 +118,9 @@ var appServer = function(config) {
                 expressApp: alexaRouter,
                 router: express.Router(),
                 debug: config.debug,
-                checkCert: config.verify
+                checkCert: config.verify,
+                preRequest: config.preRequest,
+                postRequest: config.postRequest
             });
 
             self.log("   loaded app [" + pkg.name + "] at endpoint: " + normalizedRoot + "/" + pkg.name);
