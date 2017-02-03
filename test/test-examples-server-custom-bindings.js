@@ -34,10 +34,11 @@ describe("Alexa App Server with Examples & Custom Server Bindings", function() {
 
   it("mounts the hello world app (HTTP & HTTPS) (CA chain file not included) and bind to the specified address", function() {
     testServer = alexaAppServer.start({
-      port: 6000,
+      port: 3000,
       host: "127.0.0.1",
       server_root: 'examples',
-      https: true,
+      httpsEnabled: true,
+      httpsPort: 6000,
       privateKey: 'private-key.pem',
       certificate: 'cert.cer',
       passphrase: 'test123'
@@ -50,10 +51,11 @@ describe("Alexa App Server with Examples & Custom Server Bindings", function() {
 
   it("mounts the hello world app (HTTP & HTTPS) (CA chain file included) and bind to the specified address", function() {
     testServer = alexaAppServer.start({
-      port: 6000,
+      port: 3000,
       host: "127.0.0.1",
       server_root: 'examples',
-      https: true,
+      httpsEnabled: true,
+      httpsPort: 6000,
       privateKey: 'private-key.pem',
       certificate: 'cert.cer',
       chain: 'cert.ca_bundle',
