@@ -15,6 +15,9 @@ var appServer = function(config) {
     config = config || {};
 
     var defaultOptions = {
+        log: true,
+        debug: true,
+        verify: false,
         port: process.env.port || 8080,
         httpEnabled: true,
         httpsEnabled: false,
@@ -23,7 +26,7 @@ var appServer = function(config) {
 
     config = defaults(config, defaultOptions);
 
-    if (config.verify === true && config.debug === true) {
+    if (config.verify && config.debug) {
         throw new Error("invalid configuration: the verify and debug options cannot be both enabled");
     }
 
@@ -38,7 +41,7 @@ var appServer = function(config) {
     self.apps = {};
 
     self.log = function(msg) {
-        if (config.log !== false) {
+        if (config.log) {
             console.log(msg);
         }
     };
@@ -127,7 +130,7 @@ var appServer = function(config) {
                         });
                 });
                 // Configure GET requests to run a debugger UI
-                if (false !== config.debug) {
+                if (config.debug) {
                     self.express.get(endpoint, function(req, res) {
                         if (typeof req.query['schema'] != "undefined") {
                             res.set('Content-Type', 'text/plain').send(app.schema());

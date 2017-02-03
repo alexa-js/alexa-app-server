@@ -15,6 +15,7 @@ describe("Alexa App Server with Examples & Verification", function() {
     testServer = alexaAppServer.start({
       port: 3000,
       server_root: 'examples',
+      debug: false,
       verify: true
     });
 
