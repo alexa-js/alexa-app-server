@@ -18,6 +18,10 @@ var appServer = function(config) {
         throw new Error("invalid configuration: the verify and debug options cannot be both enabled");
     }
 
+    if (config.httpEnabled === false && config.httpsEnabled === false) {
+        throw new Error("invalid configuration: either http or https must be enabled");
+    }
+
     self.apps = {};
 
     self.log = function(msg) {

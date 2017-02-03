@@ -10,13 +10,22 @@ describe("Alexa App Server with Examples & App loading fail checking", function(
   it("throws an error when 'debug' and 'verify' are enabled", function() {
     var fn = function() {
       alexaAppServer.start({
-        port: 3000,
-        server_root: 'invalid_examples',
         debug: true,
         verify: true
       });
     };
 
-    expect(fn).to.throw(Error);
+    expect(fn).to.throw(Error, /verify and debug options cannot be both enabled/);
+  });
+
+  it("throws an error when 'httpEnabled' and 'httpsEnabled' are both false", function() {
+    var fn = function() {
+      alexaAppServer.start({
+        httpEnabled: false,
+        httpsEnabled: false
+      });
+    };
+
+    expect(fn).to.throw(Error, /either http or https must be enabled/);
   });
 });
