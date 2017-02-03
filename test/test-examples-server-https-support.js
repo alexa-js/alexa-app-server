@@ -13,9 +13,10 @@ describe("Alexa App Server with Examples & HTTPS support", function() {
 
   before(function() {
     testServer = alexaAppServer.start({
-      port: 6000,
+      port: 3000,
       server_root: 'examples',
-      https: true,
+      httpsEnabled: true,
+      httpsPort: 6000,
       privateKey: 'private-key.pem',
       certificate: 'cert.cer',
       chain: 'cert.ca_bundle',

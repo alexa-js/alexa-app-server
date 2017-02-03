@@ -30,25 +30,24 @@ instance.stop();             // Stop the server
 
 ## Summary
 
-The alexa-app-server module offers a stand-alone web server to host Alexa Apps (Skills). Think of it as a simple "container" that allows you to easily publish multiple Alexa Apps with one server. This module does not help you write the Alexa Apps (Skills) themselves, as apps are independent modules, written using the [alexa-app](https://www.npmjs.com/package/alexa-app) framework.
+The alexa-app-server module offers a stand-alone web server to host Alexa Apps (Skills). Think of it as a simple "container" that allows you to easily publish multiple Alexa Apps with one server. This module does not help you write the Alexa Apps (Skills) themselves, as apps themselves are independent modules, written using the [alexa-app](https://www.npmjs.com/package/alexa-app) framework.
 
-The server can also serve static website content, and offers a built-in Alexa App debugger/simulator. This allows you to test your skill using a web browser and view the responses, without actually using an Amazon Echo.
+The server can also serve static web site content, and offers a built-in Alexa App debugger/simulator. This allows you to test your skill using a web browser and view the responses, without actually using an Amazon Echo.
 
-## Key Features
+## Key Points
 
 - Multiple apps can be hosted on a single server
   - Apps are stored in the /apps directory by default
   - Each app is a stand-alone Node module, built using the alexa-app framework
   - Each app must export its alexa-app instance to be loaded into the server
   - package.json contains information about the app, including (optionally) the appId
-  - The hotswap module reloads code changes to apps, if they set `module.change_code = 1`
+  - The hotswap module reloads code changes to apps, if they set `module.change_code=1`
 - Built-in Echo Simulator
   - Debug apps by issuing a GET request to the app endpoints
   - Send simulated requests to your app, view the JSON response
   - Session variables are automatically maintained between requests
   - Send intent requests and set slot values
   - View generated schema and utterances
-- Supports HTTPs
 
 ## Starting The Server
 
@@ -75,7 +74,7 @@ require('alexa-app-server').start({
 
 	// In order to start the server from a working directory other than
 	// where your server.js file, you need to provide Node the full path
-	// to your server's root directory. The easiest way is to use __dirname
+	// to your server's root directory. The easiest way is to use  __dirname
 	server_root: __dirname,
 
 	// A directory containing static content to serve as the document root.
@@ -97,31 +96,33 @@ require('alexa-app-server').start({
 	// The directory containing server-side processing modules (see below).
 	server_dir: "server",
 
-	// The port the server should bind to. Defaults to 8080.
-	port: 8080,
+	// The port the server should bind to.
+	port: 80,
 
 	// The host address in which the server should bind to. If not specified,
-	// this argument will be ignored. Default is 'undefined'.
-	host: 'localhost',
+	// this argument will be ignored.
+	host: undefined,
 
 	// By default, GET requests to Alexa App endpoints will show the debugger
-	// UI. This can be disabled. The 'verify' and 'debug' options cannot be used
-  // together.
+	// UI. This can be disabled. If 'verify' and 'debug' are both set to true,
+	// an error will be thrown.
 	debug: true,
 
-	// By default, some information is logged with console.log(), which can be disabled.
+	// By default, some information is logged with console.log(), which can be disabled
 	log: true,
 
-	// This will insert alexa-verifier-middleware and add verification for Alexa requests
-  // as required by the Alexa certification process. Default is 'false'.
+	// This will add verification for alexa requests as required by the alexa certification
+	// process. Provided by alexa-verifier-middleware. If 'verify' and 'debug' are both set
+	// to true, an error will be thrown.
 	verify: false,
 
-	// The pre() method is called after the express server has been instantiated, but
-	// before any Alexa Apps have been loaded. It is passed the AlexaAppServer object itself.
+	// The pre() method is called after the express server has been instantiated,
+	// but before and Alexa Apps have been loaded. It is passed the AlexaAppServer
+	// object itself.
 	pre: function(appServer) { },
 
 	// The post() method is called after the server has started and the start() method
-	// is ready to exit. It's passed the AlexaAppServer object itself.
+	// is ready to exit. It is passed the AlexaAppServer object itself.
 	post: function(appServer) { },
 
 	// Like pre(), but this function is fired on every request, but before the
@@ -131,7 +132,7 @@ require('alexa-app-server').start({
 	// If it returns a falsy value, the request json is not changed.
 	// If it returns a non-falsy value, the request json is replaced with what was returned.
 	// If it returns a Promise, request processing pauses until the Promise resolves.
-	// The value passed on by the promise (if any) replaces the request json.
+	//    The value passed on by the promise (if any) replaces the request json.
 	preRequest: function(json, request, response) { },
 
 	// Like post(), but this function is fired after every request. It has a final
@@ -140,35 +141,34 @@ require('alexa-app-server').start({
 	// If it returns a falsy value, the response json is not changed.
 	// If it returns a non-falsy value, the response json is replaced with what was returned.
 	// If it returns a Promise, response processing pauses until the Promise resolves.
-	// The value passed on by the promise (if any) replaces the response json.
+	//    The value passed on by the promise (if any) replaces the response json.
 	postRequest : function(json, request, response) { },
 
-	// Enables https support. Note privateKey, and certificate are required.
-	https: true,
+	// Enables https support. Note httpsPort, privateKey, and certificate are needed.
+	httpsEnabled: true,
 
-	// Specifies the private key filename. This file must reside in the sslcert folder under the
-  // root of the project.
+	// The https port the server will bind to. No default. Must be set if httpsEnable = true
+	httpsPort: 443,
+
+	// privateKey filename. This file must reside in the sslcert folder under the root of the project. Must be set if httpsEnable = true
 	privateKey: 'private-key.pem',
 
-	// The certificate filename. This file must reside in the sslcert folder under the root of the
-  // project.
+	// certificate filename. This file must reside in the sslcert folder under the root of the project. Must be set if httpsEnable = true
 	certificate: 'cert.cer',
 
-	// The certificate chain bundle filename. This is an optional file that must reside in the
-  // sslcert folder under the root of the project.
+	// chain bundle filename. This is an optional file that would reside in the sslcert folder under the root of the project. Used if present when httpsEnable = true
 	chain: 'cert.ca_bundle',
 
-	// An optional passphrase used to validate certificate and key files. For best practice, don't
-  // put the password directly in your source code, especially if it's going to be on GitHub, and
-  // instead, load it from process.env or a file included in the .gitignore list.
+	// passphrase: used to validate certificate and key files. This is optional but should be included if you get a "bad password read" error.
+	// For best practice, don't put the password directly in your source code, especially if it's going to be on GitHub, and instead, load it
+	// from an external file. That file should be included in the .gitignore list.
 	passphrase: 'passphrase'
-
 });
 ```
 
 ## Enabling HTTPS
 
-You can enable HTTPS support using the instructions below.
+You can enable HTTPS support for the app-server using the instructions below.
 
 Generate a x509 SSL Certificate using the following:
 
@@ -183,14 +183,12 @@ To make sure the certificate is verified, use the following:
 openssl x509 -noout -text -in cert.cer
 ```
 
-Place the two generated files in the sslcert directory.
-
-Add the following properties the to config that creates the server.
+Then add the following properties the to config (currently in server.js) that creates the server. Place the two generated files in the sslcert directory.
 
 ```javascript
 AlexaAppServer.start({
-	port: 443,
-	https: true,
+	httpsPort: 443,
+	httpsEnabled: true,
 	privateKey: 'private-key.pem',
 	certificate: 'cert.cer'
 });
@@ -212,23 +210,23 @@ GET /your/app/endpoint?utterances
 
 ## Dynamic Server-side Functionality
 
-Most servers will need some server-side processing logic, such as handling logins, or processing forms. You can specify a directory containing files that define server-side functionality by hooking into Express. These files are stand-alone modules that export a single function that the framework calls. An example is below and in the "examples/server" directory.
+Most servers will need some server-side processing logic. For example, to handle logins, or process forms, etc. You can specify a directory containing files that define server-side functionality by hooking into express. These files are stand-alone modules that export a single function that the framework calls. An example is below and in the "examples/server/" directory.
 
-The default directory used to hold these modules is "server" but you can change this by using the "server_dir" configuration parameter, as shown above.
+The default directory used to hold these modules is "server/" but you can change this by using the "server_dir" configuration parameter, as shown above.
 
-For example, [examples/server/login.js](examples/server/login.js):
+examples/server/login.js
 
 ```javascript
-module.exports = function(express, alexaAppServerObject) {
+module.exports = function(express,alexaAppServerObject) {
 	express.use('/login', function(req, res) {
-		res.send("imagine this is a dynamic server-side login action");
+		res.send("Imagine this is a dynamic server-side login action");
 	});
 };
 ```
 
-## Sample App Structure
+## Example App Structure
 
-This is a sample directory structure of what a complete app server might look like.
+This is an example directory structure of what a complete app server might look like.
 
 ```
 .
@@ -257,6 +255,6 @@ See [CHANGELOG](CHANGELOG.md) for details.
 
 # License
 
-Copyright (c) 2016-2017 Matt Kruse
+Copyright (c) 2016 Matt Kruse
 
 MIT License, see [LICENSE](LICENSE.md) for details.
