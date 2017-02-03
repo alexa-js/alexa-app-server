@@ -221,12 +221,10 @@ var appServer = function(config) {
             self.log("apps not loaded because directory [" + app_dir + "] does not exist");
         }
 
-        config.port = config.port || process.env.port || 8080;
-
-        if (config.https == true) {
+        if (config.httpsEnabled == true) {
             self.log("enabling https");
 
-            if (config.privateKey != undefined && config.certificate != undefined) { // Ensure that all of the needed properties are set
+            if (config.privateKey != undefined && config.certificate != undefined && config.httpsPort != undefined) { // Ensure that all of the needed properties are set
                 var privateKeyFile = server_root + '/sslcert/' + config.privateKey;
                 var certificateFile = server_root + '/sslcert/' + config.certificate;
                 var chainFile = (config.chain != undefined) ? server_root + '/sslcert/' + config.chain : undefined; //optional chain bundle
@@ -267,11 +265,11 @@ var appServer = function(config) {
                             // TODO: add separate option to specify specific host address for HTTPS server to bind to???
                             // Issue #38: https://github.com/alexa-js/alexa-app-server/issues/38
                             if (typeof config.host === 'string') {
-                                self.instance = httpsServer.listen(config.port, config.host);
-                                self.log("listening on https://" + config.host + ":" + config.port);
+                                self.httpsInstance = httpsServer.listen(config.httpsPort, config.host);
+                                self.log("listening on https://" + config.host + ":" + config.httpsPort);
                             } else {
-                                self.instance = httpsServer.listen(config.port);
-                                self.log("listening on https port " + config.port);
+                                self.httpsInstance = httpsServer.listen(config.httpsPort);
+                                self.log("listening on https port " + config.httpsPort);
                             }
                         } catch (error) {
                             self.error("failed to listen via https: " + error);
@@ -283,16 +281,18 @@ var appServer = function(config) {
                     self.error("privateKey: '" + config.privateKey + "' or certificate: '" + config.certificate + "' do not exist in /sslcert, https will not be enabled");
                 }
             } else {
-                self.error("privatekey or certificate parameter is not set in config, https will not be enabled");
+                self.error("httpsPort, privateKey or certificate parameter is not set in config, https will not be enabled");
             }
+        }
+
+        config.port = config.port || process.env.port || 8080;
+
+        if (typeof config.host === 'string') {
+            self.instance = self.express.listen(config.port, config.host);
+            self.log("listening on http://" + config.host + ":" + config.port);
         } else {
-            if (typeof config.host === 'string') {
-                self.instance = self.express.listen(config.port, config.host);
-                self.log("listening on http://" + config.host + ":" + config.port);
-            } else {
-                self.instance = self.express.listen(config.port);
-                self.log("listening on http port " + config.port);
-            }
+            self.instance = self.express.listen(config.port);
+            self.log("listening on http port " + config.port);
         }
 
         // Run the post() method if defined
@@ -307,6 +307,10 @@ var appServer = function(config) {
         // close all server instances
         if (typeof self.instance !== "undefined") {
             self.instance.close();
+        }
+
+        if (typeof self.httpsInstance !== "undefined") {
+            self.httpsInstance.close();
         }
 
         // deactivate all hotswap listener

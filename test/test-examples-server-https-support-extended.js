@@ -39,9 +39,9 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
 
     it("should have an HTTPS server instances running", function() {
       testServer = alexaAppServer.start({
-        port: 3000,
+        httpsPort: 3000,
         server_root: 'examples',
-        https: true,
+        httpsEnabled: true,
         privateKey: 'private-key.pem',
         certificate: 'cert.cer',
         chain: 'cert.ca_bundle',
@@ -52,6 +52,7 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
         .get('/alexa/helloworld')
         .expect(200).then(function(response) {
           expect(testServer.instance).to.exist;
+          expect(testServer.httpsInstance).to.exist;
           return tcpPortUsed.check(3000).then(function(inUse) {
             expect(inUse).to.equal(true);
           });
@@ -71,18 +72,20 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
         .get('/alexa/helloworld')
         .expect(200).then(function(response) {
           expect(testServer.instance).to.exist;
+          expect(testServer.httpsInstance).to.not.exist;
           return tcpPortUsed.check(3000).then(function(inUse) {
             expect(inUse).to.equal(true);
           });
         });
     });
 
-    it("should have an HTTPS server instances running", function() {
+    it("should have both an HTTP and HTTPS server instances running", function() {
       testServer = alexaAppServer.start({
-        port: 6000,
+        port: 3000,
+        httpsPort: 6000,
         host: '127.0.0.1',
         server_root: 'examples',
-        https: true,
+        httpsEnabled: true,
         privateKey: 'private-key.pem',
         certificate: 'cert.cer',
         chain: 'cert.ca_bundle',
@@ -93,8 +96,12 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
         .get('/alexa/helloworld')
         .expect(200).then(function(response) {
           expect(testServer.instance).to.exist;
+          expect(testServer.httpsInstance).to.exist;
           return tcpPortUsed.check(6000).then(function(inUse) {
             expect(inUse).to.equal(true);
+            return tcpPortUsed.check(3000).then(function(inUse) {
+              expect(inUse).to.equal(true);
+            });
           });
         });
     });
