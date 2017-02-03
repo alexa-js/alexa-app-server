@@ -1,4 +1,5 @@
 var AlexaAppServer = require("../index.js");
+
 AlexaAppServer.start({
   server_root: './',
   port: 8080,

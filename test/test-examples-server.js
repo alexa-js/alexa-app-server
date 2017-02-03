@@ -37,13 +37,13 @@ describe("Alexa App Server with Examples", function() {
   describe("GET requests", function() {
     it("mounts hello world app", function() {
       return request(testServer.express)
-        .get('/alexa/helloworld')
+        .get('/alexa/hello_world')
         .expect(200);
     });
 
     it("mounts number_guessing_game", function() {
       return request(testServer.express)
-        .get('/alexa/guessinggame')
+        .get('/alexa/number_guessing_game')
         .expect(200);
     });
 
@@ -57,14 +57,14 @@ describe("Alexa App Server with Examples", function() {
   describe("POST requests", function() {
     it("mounts hello world app", function() {
       return request(testServer.express)
-        .post('/alexa/helloworld')
+        .post('/alexa/hello_world')
         .send(sampleLaunchReq)
         .expect(200);
     });
 
     it("mounts number_guessing_game", function() {
       return request(testServer.express)
-        .post('/alexa/guessinggame')
+        .post('/alexa/number_guessing_game')
         .send(sampleLaunchReq)
         .expect(200);
     });
@@ -80,7 +80,7 @@ describe("Alexa App Server with Examples", function() {
   describe("schema and utterances", function() {
     it("returns the schema of the hello world app", function() {
       return request(testServer.express)
-        .get('/alexa/helloworld?schema')
+        .get('/alexa/hello_world?schema')
         .expect(200).then(function(res) {
           expect(res.text).to.equal.sampleSchema;
         });
@@ -88,7 +88,7 @@ describe("Alexa App Server with Examples", function() {
 
     it("returns the utterances of the hello world app", function() {
       return request(testServer.express)
-        .get('/alexa/helloworld?utterances')
+        .get('/alexa/hello_world?utterances')
         .expect(200).then(function(res) {
           expect(res.text).to.equal.sampleUtterances;
         });
