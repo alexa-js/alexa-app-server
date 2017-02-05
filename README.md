@@ -172,9 +172,11 @@ require('alexa-app-server').start({
 });
 ```
 
-## Enabling HTTPS
+## Enabling HTTPs
 
-You can enable HTTPS support using the instructions below.
+You can use a PaaS, such as Heroku, which comes with SSL enabled out-of-the-box.
+
+Alternatively, you can enable HTTPs support using the instructions below.
 
 Generate a x509 SSL Certificate using the following:
 
@@ -216,7 +218,7 @@ GET /your/app/endpoint?schema
 GET /your/app/endpoint?utterances
 ```
 
-## Dynamic Server-side Functionality
+## Dynamic Server-Side Functionality
 
 Most servers will need some server-side processing logic, such as handling logins, or processing forms. You can specify a directory containing files that define server-side functionality by hooking into Express. These files are stand-alone modules that export a single function that the framework calls. An example is below and in the "examples/server" directory.
 
@@ -252,6 +254,14 @@ This is a sample directory structure of what a complete app server might look li
 +--- public_html
      +--- index.html
 ```
+
+## Running in Production
+
+While individual `alexa-app` functions can be deployed to AWS Lambda, the `alexa-app-server` module can be used in both development and production for multiple applications. It will work with the Alexa Service Simulator on [developer.amazon.com](https://developer.amazon.com), a real Echo device, etc.
+
+Choose `HTTPs` in _Service Endpoint Type_ in the Alexa app configuration on [developer.amazon.com](https://developer.amazon.com) and point to one of your apps. For example, [alexa-app-server-hello-world](https://github.com/dblock/alexa-app-server-hello-world) is available at `https://alexa-app-server-hello-world.herokuapp.com/alexa/hello_world`.
+
+Make sure to set `verify: true` and `debug: false` in production environments.
 
 ## Examples
 
