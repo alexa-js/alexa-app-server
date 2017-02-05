@@ -7,6 +7,9 @@ var express = require('express');
 var alexa = require('alexa-app');
 var Promise = require('bluebird');
 var defaults = require("lodash.defaults");
+var startsWith = require("lodash.startswith");
+var endsWith = require("lodash.endswith");
+console.log(process.version);
 
 var appServer = function(config) {
   var self = {};
@@ -64,8 +67,8 @@ var appServer = function(config) {
     // set up a router to hang all alexa apps off of
     var alexaRouter = express.Router();
 
-    var normalizedRoot = root.startsWith('/') ? root : '/' + root;
-    normalizedRoot = normalizedRoot.endsWith('/') ? normalizedRoot.slice(0, -1) : normalizedRoot;
+    var normalizedRoot = startsWith(root, '/') ? root : '/' + root;
+    normalizedRoot = endsWith(normalizedRoot, '/') ? normalizedRoot.slice(0, -1) : normalizedRoot;
     self.express.use(normalizedRoot, alexaRouter);
 
     var app_directories = function(srcpath) {

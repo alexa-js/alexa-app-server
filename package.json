@@ -26,7 +26,9 @@
     "ejs": "~2.5.5",
     "express": "~4.14.1",
     "hotswap": "^1.1.0",
-    "lodash.defaults": "^4.2.0"
+    "lodash.defaults": "^4.2.0",
+    "lodash.endswith": "^4.2.1",
+    "lodash.startswith": "^4.2.1"
   },
   "devDependencies": {
     "mocha": "^3.2.0",
