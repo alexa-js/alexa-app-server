@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "alexa-app": "alexa-js/alexa-app",
-    "alexa-verifier-middleware": "^0.1.8",
+    "alexa-verifier-middleware": "^0.1.9",
     "bluebird": "^3.4.7",
     "body-parser": "~1.16.0",
     "ejs": "~2.5.5",
@@ -29,12 +29,12 @@
     "lodash.defaults": "^4.2.0"
   },
   "devDependencies": {
-    "mocha": "^2.3.4",
-    "chai": "^3.4.1",
-    "supertest": "^2.0.1",
+    "mocha": "^3.2.0",
+    "chai": "^3.5.0",
+    "supertest": "^3.0.0",
     "istanbul": "0.4.5",
     "coveralls": "^2.11.15",
-    "danger": "0.11.2",
+    "danger": "0.11.4",
     "tcp-port-used": "0.1.2"
   }
 }
