@@ -5,7 +5,6 @@ var http = require('http');
 var https = require('https');
 var express = require('express');
 var alexa = require('alexa-app');
-var bodyParser = require('body-parser');
 var Promise = require('bluebird');
 var defaults = require("lodash.defaults");
 
@@ -152,10 +151,6 @@ var appServer = function(config) {
     // TODO: add i18n support (i18n-node might be a good look)
     // Issue #12: https://github.com/alexa-js/alexa-app-server/issues/12
     self.express = express();
-
-    // TODO: change this to make sure it doesn't affect other non-Alexa services/apps
-    // Issue #35: https://github.com/alexa-js/alexa-app-server/issues/35
-    self.express.use(bodyParser.urlencoded({ extended: true }));
 
     self.express.set('views', path.join(__dirname, 'views'));
     self.express.set('view engine', 'ejs');
