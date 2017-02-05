@@ -8,13 +8,13 @@
 * [#60](https://github.com/alexa-js/alexa-app-server/pull/60): Added `httpEnabled` that disables HTTP - [@dblock](https://github.com/dblock).
 * [#48](https://github.com/alexa-js/alexa-app-server/pull/48): Removed deprecated dependency `supertest-as-promised` - [@tejashah88](https://github.com/tejashah88).
 * [#51](https://github.com/alexa-js/alexa-app-server/pull/51): Enable `strictHeaderCheck` in verifier middleware [#50](https://github.com/alexa-js/alexa-app-server/issues/50) - [@mreinstein](https://github.com/mreinstein).
-* [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added support for CA chain certificates [#17](https://github.com/alexa-js/alexa-app-server/pull/17) - [@tejashah88](https://github.com/tejashah88).
+* [#45](https://github.com/alexa-js/alexa-app-server/pull/45), [#17](https://github.com/alexa-js/alexa-app-server/pull/17): Added support for CA chain certificates - [@tejashah88](https://github.com/tejashah88).
 * [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added option to specify passphrase for unlocking specified SSL files - [@tejashah88](https://github.com/tejashah88).
 * [#45](https://github.com/alexa-js/alexa-app-server/pull/45): Added npm command to examine test coverage locally - [@tejashah88](https://github.com/tejashah88).
 * [#22](https://github.com/alexa-js/alexa-app-server/pull/22): Adding context object to request templates - [@pwbrown](https://github.com/pwbrown).
 * [#43](https://github.com/alexa-js/alexa-app-server/pull/43): Test fixes and an actual test for firing pre/post events. - [@dblock](https://github.com/dblock).
-* [#36](https://github.com/alexa-js/alexa-app-server/pull/36): Added option to specify host address to bind servers to - [@tejashah88](https://github.com/tejashah88).
-* [#35](https://github.com/alexa-js/alexa-app-server/pull/35): Error occurs when `verify` and `debug` are both set to true - [@tejashah88](https://github.com/tejashah88).
+* [#37](https://github.com/alexa-js/alexa-app-server/pull/37): Added `host` option to specify host address to bind servers to - [@tejashah88](https://github.com/tejashah88).
+* [#36](https://github.com/alexa-js/alexa-app-server/pull/36): Error occurs when `verify` and `debug` are both set to true - [@tejashah88](https://github.com/tejashah88).
 * [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Added tests for fail cases and schemas/utterances - [@tejashah88](https://github.com/tejashah88).
 * [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Fixed bug while trying to retrieve schema/utterances with GET request - [@tejashah88](https://github.com/tejashah88).
 * [#34](https://github.com/alexa-js/alexa-app-server/pull/34): Updated messages that display an error to be displayed by `self.error` - [@tejashah88](https://github.com/tejashah88).
