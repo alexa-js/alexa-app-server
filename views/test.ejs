@@ -10,7 +10,7 @@
       function clone(o) {
         return JSON.parse(JSON.stringify(o));
       }
-      
+
       // For Angular
       var app = angular.module('alexa', []);
       app.controller('AlexaController', function($scope, $http) {
@@ -113,7 +113,7 @@
         Intent:
         <select id="intent_select" ng-change="changeintent()" ng-model="intent">
           <option value="">
-          <% for (name in intents) { %>
+          <% for (name in app.intents) { %>
             <option value="<%=name%>"><%=name%>
           <% } %>
         </select>
@@ -149,11 +149,6 @@
     <h2>Schema</h2>
     <div>
       <div id="schema" class="code">{{schema|json}}</div>
-    </div>
-
-    <h2>Custom Slot Types</h2>
-    <div>
-      <div id="customSlotTypes" class="code" style="max-height:500px;overflow:auto;"><%=customSlotTypes%></div>
     </div>
 
     <h2>Utterances</h2>

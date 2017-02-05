@@ -54,5 +54,23 @@ describe("Alexa App Server with Examples & Verification", function() {
         .send(sampleLaunchReq)
         .expect(401);
     });
+
+    it("invokes verifier number_guessing_game", function() {
+      return request(testServer.express)
+        .post('/alexa/number_guessing_game')
+        .set('signaturecertchainurl', 'dummy-signature-chain-url')
+        .set('signature', 'dummy-signature')
+        .send(sampleLaunchReq)
+        .expect(401);
+    });
+
+    it("invokes verifier number_guessing_game", function() {
+      return request(testServer.express)
+        .post('/alexa/number_guessing_game')
+        .set('signaturecertchainurl', 'dummy-signature-chain-url')
+        .set('signature', 'dummy-signature')
+        .send(sampleLaunchReq)
+        .expect(401);
+    });
   });
 });
