@@ -1,6 +1,6 @@
 ## Changelog
 
-### 2.3.2 (Next)
+### 2.4.0 (Next)
 
 * [#61](https://github.com/alexa-js/alexa-app-server/pull/61): Fix: error occurs if HTTP and HTTPs ports specified are the same - [@dblock](https://github.com/dblock).
 * [#60](https://github.com/alexa-js/alexa-app-server/pull/60): Added `httpEnabled` that disables HTTP - [@dblock](https://github.com/dblock).
