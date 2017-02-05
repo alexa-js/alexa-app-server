@@ -1,5 +1,5 @@
 ## Upgrading
 
-### Upgrading to >= Next
+### Upgrading to >= 2.4.0
 
 TODO

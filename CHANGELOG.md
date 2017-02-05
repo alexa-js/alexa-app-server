@@ -1,6 +1,6 @@
 ## Changelog
 
-### 2.3.2 (Next)
+### 2.4.0 (Next)
 
 * [#35](https://github.com/alexa-js/alexa-app-server/issues/35): Removed `body-parser`, properly mounted by `alexa-app` - [@dblock](https://github.com/dblock).
 * [#21](https://github.com/alexa-js/alexa-app-server/issues/21), [52](https://github.com/alexa-js/alexa-app-server/issues/52): Setting `verify: true` hangs for requests with signature - [@mreinstein](https://github.com/mreinstein), [@dblock](https://github.com/dblock).
