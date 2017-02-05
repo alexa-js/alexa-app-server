@@ -2,9 +2,23 @@ language: node_js
 
 sudo: false
 
+matrix:
+  include:
+    - node_js: 7
+      script:
+        - npm run-script danger
+        - npm run-script coverage
+      after_script:
+        - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+
 node_js:
-- '6'
-- '7'
+  - 0.12
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
 
 cache:
   directories:
@@ -12,16 +26,6 @@ cache:
 
 before_install:
   - npm config set spin false
-
-install:
-  - npm install
-
-script:
-  - npm run-script danger
-  - npm run-script coverage
-
-after_script:
-  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
 notifications:
   email: false
