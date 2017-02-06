@@ -73,7 +73,7 @@ describe("Alexa App Server", function() {
         .expect(404);
     });
 
-    it("defaults host to undefined, all IPs", function() {
+    it("defaults host to undefined (binds to any available IP)", function() {
       expect(testServer.config.host).to.be.undefined;
     });
 

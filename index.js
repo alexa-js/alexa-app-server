@@ -52,7 +52,7 @@ var appServer = function(config) {
     console.error(msg);
   };
 
-  // Configure hotswap to watch for changes and swap out module code
+  // configure hotswap to watch for changes and swap out module code
   var hotswapCallback = function(filename) {
     self.log("hotswap reloaded " + filename);
   };
@@ -64,7 +64,7 @@ var appServer = function(config) {
   hotswap.on('swap', hotswapCallback);
   hotswap.on('error', errorCallback);
 
-  // Load application modules
+  // load application modules
   self.load_apps = function(app_dir, root) {
     // set up a router to hang all alexa apps off of
     var alexaRouter = express.Router();
@@ -112,7 +112,7 @@ var appServer = function(config) {
         return;
       }
 
-      // Extract Alexa-specific attributes from package.json, if they exist
+      // extract Alexa-specific attributes from package.json, if they exist
       if (typeof pkg.alexa == "object") {
         app.id = pkg.alexa.applicationId;
       }
@@ -133,8 +133,7 @@ var appServer = function(config) {
     return self.apps;
   };
 
-  // Load server modules. For example, code the process forms, etc. Anything that
-  // wants to hook into express
+  // load server modules, eg. code that processes forms, anything that wants to hook into express
   self.load_server_modules = function(server_dir) {
     var server_files = function(srcpath) {
       return fs.readdirSync(srcpath).filter(function(file) {
@@ -151,23 +150,19 @@ var appServer = function(config) {
     });
   };
 
+  // start the server
   self.start = function() {
-    // Start the server
-
-    // TODO: add i18n support (i18n-node might be a good look)
-    // Issue #12: https://github.com/alexa-js/alexa-app-server/issues/12
     self.express = express();
 
     self.express.set('views', path.join(__dirname, 'views'));
     self.express.set('view engine', 'ejs');
     self.express.use(express.static(path.join(__dirname, 'views')));
 
-    // Run the pre() method if defined
     if (typeof self.config.pre == "function") {
       self.config.pre(self);
     }
 
-    // Serve static content
+    // serve static content
     var static_dir = path.join(self.config.server_root, self.config.public_html);
     if (fs.existsSync(static_dir) && fs.statSync(static_dir).isDirectory()) {
       self.log("serving static content from: " + static_dir);
@@ -176,7 +171,7 @@ var appServer = function(config) {
       self.log("not serving static content because directory [" + static_dir + "] does not exist");
     }
 
-    // Find any server-side processing modules and let them hook in
+    // find any server-side processing modules and let them hook in
     var server_dir = path.join(self.config.server_root, self.config.server_dir);
     if (fs.existsSync(server_dir) && fs.statSync(server_dir).isDirectory()) {
       self.log("loading server-side modules from: " + server_dir);
@@ -185,7 +180,7 @@ var appServer = function(config) {
       self.log("no server modules loaded because directory [" + server_dir + "] does not exist");
     }
 
-    // Find and load alexa-app modules
+    // find and load alexa-app modules
     var app_dir = path.join(self.config.server_root, self.config.app_dir);
     if (fs.existsSync(app_dir) && fs.statSync(app_dir).isDirectory()) {
       self.log("loading apps from: " + app_dir);
@@ -197,13 +192,13 @@ var appServer = function(config) {
     if (self.config.httpsEnabled == true) {
       self.log("enabling https");
 
-      if (self.config.privateKey != undefined && self.config.certificate != undefined && self.config.httpsPort != undefined) { // Ensure that all of the needed properties are set
+      if (self.config.privateKey != undefined && self.config.certificate != undefined && self.config.httpsPort != undefined) {
         var sslCertRoot = path.join(self.config.server_root, 'sslcert');
         var privateKeyFile = path.join(sslCertRoot, self.config.privateKey);
         var certificateFile = path.join(sslCertRoot, self.config.certificate);
-        var chainFile = (self.config.chain != undefined) ? path.join(sslCertRoot, self.config.chain) : undefined; //optional chain bundle
+        var chainFile = (self.config.chain != undefined) ? path.join(sslCertRoot, self.config.chain) : undefined;
 
-        if (fs.existsSync(privateKeyFile) && fs.existsSync(certificateFile)) { // Make sure the key and cert exist.
+        if (fs.existsSync(privateKeyFile) && fs.existsSync(certificateFile)) {
           var privateKey = fs.readFileSync(privateKeyFile, 'utf8');
           var certificate = fs.readFileSync(certificateFile, 'utf8');
 
@@ -228,16 +223,15 @@ var appServer = function(config) {
               credentials.passphrase = self.config.passphrase
             }
 
-            if (chain != undefined) { //if chain is used the add to credentials
+            if (chain != undefined) {
               credentials.ca = chain;
               self.log("using chain certificate from /sslcert");
             }
 
-            try { // These two lines below can fail it the certs were generated incorrectly. But we can continue startup without HTTPS
-              var httpsServer = https.createServer(credentials, self.express); // create the HTTPS server
+            try {
+              // this can fail it the certs were generated incorrectly
+              var httpsServer = https.createServer(credentials, self.express);
 
-              // TODO: add separate option to specify specific host address for HTTPS server to bind to???
-              // Issue #38: https://github.com/alexa-js/alexa-app-server/issues/38
               if (typeof config.host === 'string') {
                 self.httpsInstance = httpsServer.listen(self.config.httpsPort, self.config.host);
                 self.log("listening on https://" + self.config.host + ":" + self.config.httpsPort);
@@ -269,7 +263,6 @@ var appServer = function(config) {
       }
     }
 
-    // Run the post() method if defined
     if (typeof self.config.post == "function") {
       self.config.post(self);
     }
@@ -277,8 +270,8 @@ var appServer = function(config) {
     return this;
   };
 
+  // close all server instances
   self.stop = function() {
-    // close all server instances
     if (typeof self.instance !== "undefined") {
       self.instance.close();
     }
@@ -295,7 +288,7 @@ var appServer = function(config) {
   return self;
 };
 
-// A shortcut start(config) method to avoid creating an instance if not needed
+// a shortcut start(config) method to avoid creating an instance if not needed
 appServer.start = function(config) {
   var appServerInstance = new appServer(config);
   appServerInstance.start();
