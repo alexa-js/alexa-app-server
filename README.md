@@ -79,12 +79,13 @@ require('alexa-app-server').start({
 
   // In order to start the server from a working directory other than
   // where your server.js file, you need to provide Node the full path
-  // to your server's root directory. The easiest way is to use __dirname
+  // to your server's root directory. The easiest way is to use __dirname.
+  // Default is '.'.
   server_root: __dirname,
 
   // A directory containing static content to serve as the document root.
   // This directory is relative to the script using alexa-app-server, not
-  // relative to the module directory.
+  // relative to the module directory. Default is 'public_html'.
   public_html: "public_html",
 
   // A directory containing Alexa Apps. This directory should contain one
@@ -95,31 +96,32 @@ require('alexa-app-server').start({
 
   // The prefix to use for all Alexa Apps. For example, you may want all
   // your Alexa endpoints to be accessed under the "/api/" path off the
-  // root of your web server.
-  app_root: "/alexa/",
+  // root of your web server. Default is 'alexa'.
+  // Default is '.'.
+  app_root: "alexa",
 
-  // The directory containing server-side processing modules (see below).
+  // The directory containing server-side processing modules. Default is 'server'.
   server_dir: "server",
 
-  // Enables http support, default is true.
+  // Enable http support, default is true.
   httpEnabled: true,
 
   // The port the server should bind to. Defaults to 8080.
   port: 8080,
 
-  // The host address in which the server should bind to. If not specified,
-  // this argument will be ignored. Default is 'undefined'.
-  host: 'localhost',
+  // The host address in which the server should bind to.
+  // By default, the host is omitted and the server will accept connections on
+  // any IPv6 address (::) when IPv6 is available, or any IPv4 address (0.0.0.0) otherwise.
+  host: '127.0.0.1',
 
-  // By default, GET requests to Alexa App endpoints will show the debugger
-  // UI. This can be disabled. The 'verify' and 'debug' options cannot be used
-  // together.
+  // Show debugger UI with GET requests to Alexa App endpoints. Default is 'true'.
+  // Note that the 'verify' and 'debug' options cannot be used together.
   debug: true,
 
-  // By default, some information is logged with console.log(), which can be disabled.
+  // Log useful information with console.log(). Default is true.
   log: true,
 
-  // This will insert alexa-verifier-middleware and add verification for Alexa requests
+  // Insert alexa-verifier-middleware and add verification for Alexa requests
   // as required by the Alexa certification process. Default is 'false'.
   verify: false,
 
@@ -150,27 +152,30 @@ require('alexa-app-server').start({
   // The value passed on by the promise (if any) replaces the response json.
   postRequest : function(json, request, response) { },
 
-  // Enables https support. Note httpsPort, privateKey, and certificate are required.
+  // Enable https support. Note httpsPort, privateKey, and certificate are required.
+  // Default is 'false'.
   httpsEnabled: true,
 
   // The https port the server will bind to. Required for httpsEnabled support.
+  // Default is undefined.
   httpsPort: 443,
 
-  // Specifies the private key filename. This file must reside in the sslcert folder under the
-  // root of the project.
+  // The private key filename. This file must reside in the sslcert folder under the
+  // root of the project. Default is undefined.
   privateKey: 'private-key.pem',
 
   // The certificate filename. This file must reside in the sslcert folder under the root of the
-  // project.
+  // project. Default is undefined.
   certificate: 'cert.cer',
 
   // The certificate chain bundle filename. This is an optional file that must reside in the
-  // sslcert folder under the root of the project.
+  // sslcert folder under the root of the project. Default is undefined.
   chain: 'cert.ca_bundle',
 
   // An optional passphrase used to validate certificate and key files. For best practice, don't
   // put the password directly in your source code, especially if it's going to be on GitHub, and
-  // instead, load it from process.env or a file included in the .gitignore list.
+  // instead, load it from process.env or a file included in the .gitignore list. Default is
+  // undefined.
   passphrase: 'passphrase'
 
 });
