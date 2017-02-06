@@ -6,7 +6,7 @@ chai.config.includeStack = true;
 var request = require("supertest");
 var alexaAppServer = require("../index");
 
-describe("Alexa App Server with Examples & App loading fail checking", function() {
+describe("Alexa App Server", function() {
   it("throws an error when 'debug' and 'verify' are enabled", function() {
     var fn = function() {
       alexaAppServer.start({
@@ -54,5 +54,61 @@ describe("Alexa App Server with Examples & App loading fail checking", function(
     expect(fn).to.not.throw(Error);
 
     testServer.stop();
+  });
+
+  describe("with defaults", function() {
+    var testServer;
+
+    beforeEach(function() {
+      testServer = alexaAppServer.start();
+    });
+
+    afterEach(function() {
+      testServer.stop();
+    });
+
+    it("starts an express instance", function() {
+      return request(testServer.express)
+        .get('/')
+        .expect(404);
+    });
+
+    it("defaults host to undefined, all IPs", function() {
+      expect(testServer.config.host).to.be.undefined;
+    });
+
+    it("defaults port to 8080", function() {
+      expect(testServer.config.port).to.equal(8080);
+    });
+
+    it("has no defaults for httpsPort", function() {
+      expect(testServer.config.httpsPort).to.be.undefined;
+    });
+
+    it("defaults serverRoot to .", function() {
+      expect(testServer.config.port).to.equal(8080);
+    });
+  });
+
+  describe("with no host specified", function() {
+    var testServer;
+
+    beforeEach(function() {
+      testServer = alexaAppServer.start({ host: '127.0.0.1' });
+    });
+
+    afterEach(function() {
+      testServer.stop();
+    });
+
+    it("starts an express instance", function() {
+      return request(testServer.express)
+        .get('/')
+        .expect(404);
+    });
+
+    it("connects to 127.0.0.1 only", function() {
+      expect(testServer.config.host).to.equal('127.0.0.1');
+    });
   });
 });
