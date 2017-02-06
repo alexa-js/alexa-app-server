@@ -6,6 +6,10 @@ An Alexa App (Skill) Server module using Node.js and the [alexa-app](https://www
 [![Build Status](https://travis-ci.org/alexa-js/alexa-app-server.svg?branch=master)](https://travis-ci.org/alexa-js/alexa-app-server)
 [![Coverage Status](https://coveralls.io/repos/github/alexa-js/alexa-app-server/badge.svg?branch=master)](https://coveralls.io/github/alexa-js/alexa-app-server?branch=master)
 
+## Stable Release
+
+You're reading the documentation for the stable release of alexa-app-server, 3.0.0. Please see [CHANGELOG](CHANGELOG.md) and make sure to read [UPGRADING](UPGRADING.md) when upgrading from a previous version.
+
 ## Installation
 
 ```
@@ -20,12 +24,12 @@ var AlexaAppServer = require('alexa-app-server');
 var instance = AlexaAppServer.start({
   server_root: __dirname,     // Path to root
   public_html: "public_html", // Static content
-  app_dir: "apps",            // Where alexa-app modules are stored
+  app_dir: "apps",            // Location of alexa-app modules
   app_root: "/alexa/",        // Service root
-  port: 80                    // What port to use, duh
+  port: 8080                  // Port to use
 });
 
-instance.stop();             // Stop the server
+instance.stop();              // Stop the server
 ```
 
 ## Summary
