@@ -1,5 +1,9 @@
 ## Changelog
 
+### 3.0.1 (Next)
+
+* Your contribution here.
+
 ### 3.0.0 (February 6, 2017)
 
 * [#35](https://github.com/alexa-js/alexa-app-server/issues/35): Removed `body-parser`, properly mounted by `alexa-app` - [@dblock](https://github.com/dblock).
