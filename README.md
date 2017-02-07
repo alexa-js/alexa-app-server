@@ -6,6 +6,10 @@ An Alexa App (Skill) Server module using Node.js and the [alexa-app](https://www
 [![Build Status](https://travis-ci.org/alexa-js/alexa-app-server.svg?branch=master)](https://travis-ci.org/alexa-js/alexa-app-server)
 [![Coverage Status](https://coveralls.io/repos/github/alexa-js/alexa-app-server/badge.svg?branch=master)](https://coveralls.io/github/alexa-js/alexa-app-server?branch=master)
 
+## Stable Release
+
+You're reading the documentation for the next release of alexa-app-server. Please see [CHANGELOG](CHANGELOG.md) and make sure to read [UPGRADING](UPGRADING.md) when upgrading from a previous version. The current stable release is [3.0.0](https://github.com/alexa-js/alexa-app-server/tree/v3.0.0).
+
 ## Installation
 
 ```
@@ -20,12 +24,12 @@ var AlexaAppServer = require('alexa-app-server');
 var instance = AlexaAppServer.start({
   server_root: __dirname,     // Path to root
   public_html: "public_html", // Static content
-  app_dir: "apps",            // Where alexa-app modules are stored
+  app_dir: "apps",            // Location of alexa-app modules
   app_root: "/alexa/",        // Service root
-  port: 80                    // What port to use, duh
+  port: 8080                  // Port to use
 });
 
-instance.stop();             // Stop the server
+instance.stop();              // Stop the server
 ```
 
 ## Summary
@@ -75,12 +79,13 @@ require('alexa-app-server').start({
 
   // In order to start the server from a working directory other than
   // where your server.js file, you need to provide Node the full path
-  // to your server's root directory. The easiest way is to use __dirname
+  // to your server's root directory. The easiest way is to use __dirname.
+  // Default is '.'.
   server_root: __dirname,
 
   // A directory containing static content to serve as the document root.
   // This directory is relative to the script using alexa-app-server, not
-  // relative to the module directory.
+  // relative to the module directory. Default is 'public_html'.
   public_html: "public_html",
 
   // A directory containing Alexa Apps. This directory should contain one
@@ -91,31 +96,32 @@ require('alexa-app-server').start({
 
   // The prefix to use for all Alexa Apps. For example, you may want all
   // your Alexa endpoints to be accessed under the "/api/" path off the
-  // root of your web server.
-  app_root: "/alexa/",
+  // root of your web server. Default is 'alexa'.
+  // Default is '.'.
+  app_root: "alexa",
 
-  // The directory containing server-side processing modules (see below).
+  // The directory containing server-side processing modules. Default is 'server'.
   server_dir: "server",
 
-  // Enables http support, default is true.
+  // Enable http support, default is true.
   httpEnabled: true,
 
   // The port the server should bind to. Defaults to 8080.
   port: 8080,
 
-  // The host address in which the server should bind to. If not specified,
-  // this argument will be ignored. Default is 'undefined'.
-  host: 'localhost',
+  // The host address in which the server should bind to.
+  // By default, the host is omitted and the server will accept connections on
+  // any IPv6 address (::) when IPv6 is available, or any IPv4 address (0.0.0.0) otherwise.
+  host: '127.0.0.1',
 
-  // By default, GET requests to Alexa App endpoints will show the debugger
-  // UI. This can be disabled. The 'verify' and 'debug' options cannot be used
-  // together.
+  // Show debugger UI with GET requests to Alexa App endpoints. Default is 'true'.
+  // Note that the 'verify' and 'debug' options cannot be used together.
   debug: true,
 
-  // By default, some information is logged with console.log(), which can be disabled.
+  // Log useful information with console.log(). Default is true.
   log: true,
 
-  // This will insert alexa-verifier-middleware and add verification for Alexa requests
+  // Insert alexa-verifier-middleware and add verification for Alexa requests
   // as required by the Alexa certification process. Default is 'false'.
   verify: false,
 
@@ -146,35 +152,40 @@ require('alexa-app-server').start({
   // The value passed on by the promise (if any) replaces the response json.
   postRequest : function(json, request, response) { },
 
-  // Enables https support. Note httpsPort, privateKey, and certificate are required.
+  // Enable https support. Note httpsPort, privateKey, and certificate are required.
+  // Default is 'false'.
   httpsEnabled: true,
 
   // The https port the server will bind to. Required for httpsEnabled support.
+  // Default is undefined.
   httpsPort: 443,
 
-  // Specifies the private key filename. This file must reside in the sslcert folder under the
-  // root of the project.
+  // The private key filename. This file must reside in the sslcert folder under the
+  // root of the project. Default is undefined.
   privateKey: 'private-key.pem',
 
   // The certificate filename. This file must reside in the sslcert folder under the root of the
-  // project.
+  // project. Default is undefined.
   certificate: 'cert.cer',
 
   // The certificate chain bundle filename. This is an optional file that must reside in the
-  // sslcert folder under the root of the project.
+  // sslcert folder under the root of the project. Default is undefined.
   chain: 'cert.ca_bundle',
 
   // An optional passphrase used to validate certificate and key files. For best practice, don't
   // put the password directly in your source code, especially if it's going to be on GitHub, and
-  // instead, load it from process.env or a file included in the .gitignore list.
+  // instead, load it from process.env or a file included in the .gitignore list. Default is
+  // undefined.
   passphrase: 'passphrase'
 
 });
 ```
 
-## Enabling HTTPS
+## Enabling HTTPs
 
-You can enable HTTPS support using the instructions below.
+You can use a PaaS, such as Heroku, which comes with SSL enabled out-of-the-box.
+
+Alternatively, you can enable HTTPs support using the instructions below.
 
 Generate a x509 SSL Certificate using the following:
 
@@ -216,7 +227,7 @@ GET /your/app/endpoint?schema
 GET /your/app/endpoint?utterances
 ```
 
-## Dynamic Server-side Functionality
+## Dynamic Server-Side Functionality
 
 Most servers will need some server-side processing logic, such as handling logins, or processing forms. You can specify a directory containing files that define server-side functionality by hooking into Express. These files are stand-alone modules that export a single function that the framework calls. An example is below and in the "examples/server" directory.
 
@@ -252,6 +263,14 @@ This is a sample directory structure of what a complete app server might look li
 +--- public_html
      +--- index.html
 ```
+
+## Running in Production
+
+While individual `alexa-app` functions can be deployed to AWS Lambda, the `alexa-app-server` module can be used in both development and production for multiple applications. It will work with the Alexa Service Simulator on [developer.amazon.com](https://developer.amazon.com), a real Echo device, etc.
+
+Choose `HTTPs` in _Service Endpoint Type_ in the Alexa app configuration on [developer.amazon.com](https://developer.amazon.com) and point to one of your apps. For example, [alexa-app-server-hello-world](https://github.com/dblock/alexa-app-server-hello-world) is available at `https://alexa-app-server-hello-world.herokuapp.com/alexa/hello_world`.
+
+Make sure to set `verify: true` and `debug: false` in production environments.
 
 ## Examples
 

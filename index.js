@@ -19,35 +19,40 @@ var appServer = function(config) {
     port: process.env.port || 8080,
     httpEnabled: true,
     httpsEnabled: false,
-    server_root: ''
+    public_html: 'public_html',
+    server_dir: 'server',
+    server_root: '.',
+    app_root: 'alexa',
+    app_dir: 'apps'
   };
 
-  config = utils.defaults(config, defaultOptions);
+  self.config = utils.defaults(config, defaultOptions);
 
-  if (config.verify && config.debug) {
+  if (self.config.verify && self.config.debug) {
     throw new Error("invalid configuration: the verify and debug options cannot be both enabled");
   }
 
-  if (!config.httpEnabled && !config.httpsEnabled) {
+  if (!self.config.httpEnabled && !self.config.httpsEnabled) {
     throw new Error("invalid configuration: either http or https must be enabled");
   }
 
-  if (config.httpEnabled && config.httpsEnabled && config.port == config.httpsPort) {
+  if (self.config.httpEnabled && self.config.httpsEnabled && self.config.port == self.config.httpsPort) {
     throw new Error("invalid configuration: http and https ports must be different");
   }
 
   self.apps = {};
 
   self.log = function(msg) {
-    if (config.log) {
+    if (self.config.log) {
       console.log(msg);
     }
   };
+
   self.error = function(msg) {
     console.error(msg);
   };
 
-  // Configure hotswap to watch for changes and swap out module code
+  // configure hotswap to watch for changes and swap out module code
   var hotswapCallback = function(filename) {
     self.log("hotswap reloaded " + filename);
   };
@@ -59,7 +64,7 @@ var appServer = function(config) {
   hotswap.on('swap', hotswapCallback);
   hotswap.on('error', errorCallback);
 
-  // Load application modules
+  // load application modules
   self.load_apps = function(app_dir, root) {
     // set up a router to hang all alexa apps off of
     var alexaRouter = express.Router();
@@ -107,7 +112,7 @@ var appServer = function(config) {
         return;
       }
 
-      // Extract Alexa-specific attributes from package.json, if they exist
+      // extract Alexa-specific attributes from package.json, if they exist
       if (typeof pkg.alexa == "object") {
         app.id = pkg.alexa.applicationId;
       }
@@ -116,10 +121,10 @@ var appServer = function(config) {
       app.express({
         expressApp: alexaRouter,
         router: express.Router(),
-        debug: config.debug,
-        checkCert: config.verify,
-        preRequest: config.preRequest,
-        postRequest: config.postRequest
+        debug: self.config.debug,
+        checkCert: self.config.verify,
+        preRequest: self.config.preRequest,
+        postRequest: self.config.postRequest
       });
 
       var endpoint = path.posix.join(normalizedRoot, pkg.name);
@@ -129,8 +134,7 @@ var appServer = function(config) {
     return self.apps;
   };
 
-  // Load server modules. For example, code the process forms, etc. Anything that
-  // wants to hook into express
+  // load server modules, eg. code that processes forms, anything that wants to hook into express
   self.load_server_modules = function(server_dir) {
     var server_files = function(srcpath) {
       return fs.readdirSync(srcpath).filter(function(file) {
@@ -147,23 +151,20 @@ var appServer = function(config) {
     });
   };
 
+  // start the server
   self.start = function() {
-    // Instantiate up the server
-    // TODO: add i18n support (i18n-node might be a good look)
-    // Issue #12: https://github.com/alexa-js/alexa-app-server/issues/12
     self.express = express();
 
     self.express.set('views', path.join(__dirname, 'views'));
     self.express.set('view engine', 'ejs');
     self.express.use(express.static(path.join(__dirname, 'views')));
 
-    // Run the pre() method if defined
-    if (typeof config.pre == "function") {
-      config.pre(self);
+    if (typeof self.config.pre == "function") {
+      self.config.pre(self);
     }
 
-    // Serve static content
-    var static_dir = path.join(config.server_root, config.public_html || 'public_html');
+    // serve static content
+    var static_dir = path.join(self.config.server_root, self.config.public_html);
     if (utils.isValidDirectory(static_dir)) {
       self.log("serving static content from: " + static_dir);
       self.express.use(express.static(static_dir));
@@ -171,8 +172,8 @@ var appServer = function(config) {
       self.log("not serving static content because directory [" + static_dir + "] does not exist");
     }
 
-    // Find any server-side processing modules and let them hook in
-    var server_dir = path.join(config.server_root, config.server_dir || 'server');
+    // find any server-side processing modules and let them hook in
+    var server_dir = path.join(self.config.server_root, self.config.server_dir);
     if (utils.isValidDirectory(server_dir)) {
       self.log("loading server-side modules from: " + server_dir);
       self.load_server_modules(server_dir);
@@ -180,25 +181,25 @@ var appServer = function(config) {
       self.log("no server modules loaded because directory [" + server_dir + "] does not exist");
     }
 
-    // Find and load alexa-app modules
-    var app_dir = path.join(config.server_root, config.app_dir || 'apps');
+    // find and load alexa-app modules
+    var app_dir = path.join(self.config.server_root, self.config.app_dir);
     if (utils.isValidDirectory(app_dir)) {
       self.log("loading apps from: " + app_dir);
-      self.load_apps(app_dir, config.app_root || '/alexa');
+      self.load_apps(app_dir, self.config.app_root);
     } else {
       self.log("apps not loaded because directory [" + app_dir + "] does not exist");
     }
 
-    if (config.httpsEnabled) {
+    if (self.config.httpsEnabled) {
       self.log("enabling https");
 
-      if (config.privateKey != undefined && config.certificate != undefined && config.httpsPort != undefined) { // Ensure that all of the needed properties are set
-        var sslcert_root = path.join(config.server_root, 'sslcert');
-        var privateKeyFile = path.join(sslcert_root, config.privateKey);
-        var certificateFile = path.join(sslcert_root, config.certificate);
-        var chainFile = (config.chain != undefined) ? path.join(sslcert_root, config.chain) : undefined; //optional chain bundle
+      if (self.config.privateKey != undefined && self.config.certificate != undefined && self.config.httpsPort != undefined) {
+        var sslCertRoot = path.join(self.config.server_root, 'sslcert');
+        var privateKeyFile = path.join(sslCertRoot, self.config.privateKey);
+        var certificateFile = path.join(sslCertRoot, self.config.certificate);
+        var chainFile = (self.config.chain != undefined) ? path.join(sslCertRoot, self.config.chain) : undefined;
 
-        if (utils.isValidFile(privateKeyFile) && utils.isValidFile(certificateFile)) { // Make sure the key and cert exist.
+        if (utils.isValidFile(privateKeyFile) && utils.isValidFile(certificateFile)) {
           var privateKey = utils.readFile(privateKeyFile, 'utf8');
           var certificate = utils.readFile(certificateFile, 'utf8');
 
@@ -207,7 +208,7 @@ var appServer = function(config) {
             if (utils.isValidFile(chainFile)) {
               chain = utils.readFile(chainFile, 'utf8');
             } else {
-              self.error("chain: '" + config.chain + "' does not exist in " + sslcert_root);
+              self.error("chain: '" + self.config.chain + "' does not exist in " + sslcert_root);
             }
           }
 
@@ -219,26 +220,25 @@ var appServer = function(config) {
               cert: certificate
             };
 
-            if (config.passphrase != undefined) {
-              credentials.passphrase = config.passphrase
+            if (self.config.passphrase != undefined) {
+              credentials.passphrase = self.config.passphrase
             }
 
-            if (chain != undefined) { //if chain is used the add to credentials
+            if (chain != undefined) {
               credentials.ca = chain;
               self.log("using chain certificate from " + sslcert_root);
             }
 
-            try { // These two lines below can fail it the certs were generated incorrectly. But we can continue startup without HTTPS
-              var httpsServer = https.createServer(credentials, self.express); // create the HTTPS server
+            try {
+              // this can fail it the certs were generated incorrectly
+              var httpsServer = https.createServer(credentials, self.express);
 
-              // TODO: add separate option to specify specific host address for HTTPS server to bind to???
-              // Issue #38: https://github.com/alexa-js/alexa-app-server/issues/38
               if (typeof config.host === 'string') {
-                self.httpsInstance = httpsServer.listen(config.httpsPort, config.host);
-                self.log("listening on https://" + config.host + ":" + config.httpsPort);
+                self.httpsInstance = httpsServer.listen(self.config.httpsPort, self.config.host);
+                self.log("listening on https://" + self.config.host + ":" + self.config.httpsPort);
               } else {
-                self.httpsInstance = httpsServer.listen(config.httpsPort);
-                self.log("listening on https port " + config.httpsPort);
+                self.httpsInstance = httpsServer.listen(self.config.httpsPort);
+                self.log("listening on https port " + self.config.httpsPort);
               }
             } catch (error) {
               self.error("failed to listen via https: " + error);
@@ -247,33 +247,32 @@ var appServer = function(config) {
             self.error("failed to load privateKey or certificate from " + sslcert_root + ", https will not be enabled");
           }
         } else {
-          self.error("privateKey: '" + config.privateKey + "' or certificate: '" + config.certificate + "' do not exist in " + sslcert_root + ", https will not be enabled");
+          self.error("privateKey: '" + self.config.privateKey + "' or certificate: '" + self.config.certificate + "' do not exist in " + sslcert_root + ", https will not be enabled");
         }
       } else {
         self.error("httpsPort, privateKey or certificate parameter is not set in config, https will not be enabled");
       }
     }
 
-    if (config.httpEnabled) {
+    if (self.config.httpEnabled) {
       if (typeof config.host === 'string') {
-        self.instance = self.express.listen(config.port, config.host);
-        self.log("listening on http://" + config.host + ":" + config.port);
+        self.instance = self.express.listen(self.config.port, self.config.host);
+        self.log("listening on http://" + self.config.host + ":" + self.config.port);
       } else {
-        self.instance = self.express.listen(config.port);
-        self.log("listening on http port " + config.port);
+        self.instance = self.express.listen(self.config.port);
+        self.log("listening on http port " + self.config.port);
       }
     }
 
-    // Run the post() method if defined
-    if (typeof config.post == "function") {
-      config.post(self);
+    if (typeof self.config.post == "function") {
+      self.config.post(self);
     }
 
     return this;
   };
 
+  // close all server instances
   self.stop = function() {
-    // close all server instances
     if (typeof self.instance !== "undefined") {
       self.instance.close();
     }
@@ -290,7 +289,7 @@ var appServer = function(config) {
   return self;
 };
 
-// A shortcut start(config) method to avoid creating an instance if not needed
+// a shortcut start(config) method to avoid creating an instance if not needed
 appServer.start = function(config) {
   var appServerInstance = new appServer(config);
   appServerInstance.start();
