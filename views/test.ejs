@@ -20,11 +20,13 @@
         $scope.requestType = null;
         $scope.session = {};
         $scope.intent = null;
+        $scope.locale = 'en-US';
 
         $scope.changetype = function() {
           if ($scope.requestType !== '') {
             $scope.request = clone($scope.templates[$scope.requestType]);
             $scope.request.session.attributes = $scope.session;
+            $scope.request.request.locale = $scope.locale;
           } else {
             $scope.request = {};
           }
@@ -32,11 +34,16 @@
           $scope.intent = null;
         };
 
+        $scope.changelocale = function() {
+          $scope.request.request.locale = $scope.locale;
+        };
+
         $scope.changeintent = function() {
           $scope.request = clone($scope.templates['intent']);
           $scope.request.session.attributes = $scope.session;
           $scope.request.request.intent.slots = {};
           $scope.request.request.intent.name = $scope.intent;
+          $scope.request.request.locale = $scope.locale;
         }
 
         $scope.post = function() {
@@ -116,6 +123,15 @@
           <% for (name in app.intents) { %>
             <option value="<%=name%>"><%=name%>
           <% } %>
+        </select>
+      </div>
+
+      <div id="locale">
+        Locale:
+        <select id="locale" ng-model="locale" ng-change="changelocale()">
+          <option value="en-US">en-US</option>
+          <option value="en-GB">en-GB</option>
+          <option value="de-DE">de-DE</option>
         </select>
       </div>
 

@@ -3,6 +3,7 @@
 ### 3.0.1 (Next)
 
 * [#72](https://github.com/alexa-js/alexa-app-server/pull/72): Use `path.join` for constructing relative paths - [@dblock](https://github.com/dblock).
+* [#74](https://github.com/alexa-js/alexa-app-server/pull/74): Added locale selector to test page - [@siedi](https://github.com/siedi).
 * Your contribution here.
 
 ### 3.0.0 (February 6, 2017)
