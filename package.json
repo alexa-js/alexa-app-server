@@ -20,15 +20,12 @@
   "license": "MIT",
   "dependencies": {
     "alexa-app": "^3.0.0",
-    "alexa-verifier-middleware": "^0.1.9",
     "bluebird": "^3.4.7",
     "body-parser": "~1.16.0",
     "ejs": "~2.5.5",
     "express": "~4.14.1",
     "hotswap": "^1.1.0",
-    "lodash.defaults": "^4.2.0",
-    "lodash.endswith": "^4.2.1",
-    "lodash.startswith": "^4.2.1"
+    "lodash.defaults": "^4.2.0"
   },
   "devDependencies": {
     "mocha": "^3.2.0",

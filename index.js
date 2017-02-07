@@ -6,6 +6,7 @@ var https = require('https');
 var express = require('express');
 var alexa = require('alexa-app');
 var Promise = require('bluebird');
+var defaults = require("lodash.defaults");
 var utils = require("./utils");
 
 var appServer = function(config) {
@@ -26,7 +27,7 @@ var appServer = function(config) {
     app_dir: 'apps'
   };
 
-  self.config = utils.defaults(config, defaultOptions);
+  self.config = defaults(config, defaultOptions);
 
   if (self.config.verify && self.config.debug) {
     throw new Error("invalid configuration: the verify and debug options cannot be both enabled");
@@ -91,7 +92,7 @@ var appServer = function(config) {
         return;
       }
 
-      var main = path.join(__dirname, app_dir, dir, pkg.main);
+      var main = fs.realpathSync(path.join(app_dir, dir, pkg.main));
       if (!utils.isValidFile(main)) {
         self.error("   main file not found for app [" + pkg.name + "]: " + main);
         return;
@@ -142,7 +143,7 @@ var appServer = function(config) {
       });
     };
     server_files(server_dir).forEach(function(file) {
-      file = path.join(__dirname, server_dir, file);
+      file = fs.realpathSync(path.join(server_dir, file));
       self.log("   loaded " + file);
       var func = require(file);
       if (typeof func == "function") {
@@ -200,20 +201,20 @@ var appServer = function(config) {
         var chainFile = (self.config.chain != undefined) ? path.join(sslCertRoot, self.config.chain) : undefined;
 
         if (utils.isValidFile(privateKeyFile) && utils.isValidFile(certificateFile)) {
-          var privateKey = utils.readFile(privateKeyFile, 'utf8');
-          var certificate = utils.readFile(certificateFile, 'utf8');
+          var privateKey = utils.readFile(privateKeyFile);
+          var certificate = utils.readFile(certificateFile);
 
           var chain = undefined;
           if (chainFile != undefined) {
             if (utils.isValidFile(chainFile)) {
-              chain = utils.readFile(chainFile, 'utf8');
+              chain = utils.readFile(chainFile);
             } else {
-              self.error("chain: '" + self.config.chain + "' does not exist in " + sslcert_root);
+              self.error("chain: '" + self.config.chain + "' does not exist in " + sslCertRoot);
             }
           }
 
           if (chain == undefined && chainFile != undefined) {
-            self.error("failed to load chain from " + sslcert_root + ", https will not be enabled");
+            self.error("failed to load chain from " + sslCertRoot + ", https will not be enabled");
           } else if (privateKey != undefined && certificate != undefined) {
             var credentials = {
               key: privateKey,
@@ -226,7 +227,7 @@ var appServer = function(config) {
 
             if (chain != undefined) {
               credentials.ca = chain;
-              self.log("using chain certificate from " + sslcert_root);
+              self.log("using chain certificate from " + sslCertRoot);
             }
 
             try {
@@ -244,10 +245,10 @@ var appServer = function(config) {
               self.error("failed to listen via https: " + error);
             }
           } else {
-            self.error("failed to load privateKey or certificate from " + sslcert_root + ", https will not be enabled");
+            self.error("failed to load privateKey or certificate from " + sslCertRoot + ", https will not be enabled");
           }
         } else {
-          self.error("privateKey: '" + self.config.privateKey + "' or certificate: '" + self.config.certificate + "' do not exist in " + sslcert_root + ", https will not be enabled");
+          self.error("privateKey: '" + self.config.privateKey + "' or certificate: '" + self.config.certificate + "' do not exist in " + sslCertRoot + ", https will not be enabled");
         }
       } else {
         self.error("httpsPort, privateKey or certificate parameter is not set in config, https will not be enabled");

@@ -31,7 +31,7 @@ describe("Alexa App Server with Examples & Pre/Post functions", function() {
       }
     });
 
-    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json", 'utf8');
+    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json");
   });
 
   after(function() {

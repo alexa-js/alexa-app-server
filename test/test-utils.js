@@ -5,17 +5,8 @@ var expect = chai.expect;
 chai.config.includeStack = true;
 var utils = require("../utils");
 
-describe("Utilities testing", function() {
-  it("checks the integrity of the utilities", function() {
-    expect(utils).to.be.an('object');
-    expect(utils).to.have.all.keys([
-      'isValidDirectory', 'isValidFile',
-      'readFile', 'readJsonFile',
-      'defaults', 'normalizeApiPath'
-    ]);
-  });
-
-  describe("File verification tests", function() {
+describe("Utils", function() {
+  describe("#isValidFile", function() {
     it("verifies that 'README.md' does exists and is a file", function() {
       expect(utils.isValidFile('README.md')).to.be.true;
     });
@@ -29,7 +20,7 @@ describe("Utilities testing", function() {
     });
   });
 
-  describe("Directory verification tests", function() {
+  describe("#isValidDirectory", function() {
     it("verifies that 'examples' does exists and is a directory", function() {
       expect(utils.isValidDirectory('examples')).to.be.true;
     });
@@ -43,7 +34,7 @@ describe("Utilities testing", function() {
     });
   });
 
-  describe("Read operations of files", function() {
+  describe("#readFile", function() {
     it("successfully reads 'example.txt'", function() {
       expect(utils.readFile('test/example.txt')).to.equal("The quick brown fox jumps over the lazy dog");
     });
@@ -53,7 +44,9 @@ describe("Utilities testing", function() {
         utils.readFile('test/example.text');
       }).to.throw(Error);
     });
+  });
 
+  describe("#readJsonFile", function() {
     it("successfully reads 'example.json'", function() {
       expect(utils.readJsonFile('test/example.json')).to.deep.equal({
         "pangram": "The quick brown fox jumps over the lazy dog"
@@ -67,7 +60,7 @@ describe("Utilities testing", function() {
     });
   });
 
-  describe("Normalized API paths", function() {
+  describe("#normalizeApiPath", function() {
     var tests = [
       { original: "alexa",       final: "/alexa" },
       { original: "/alexa",      final: "/alexa" },

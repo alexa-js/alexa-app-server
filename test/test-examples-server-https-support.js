@@ -24,7 +24,7 @@ describe("Alexa App Server with Examples & HTTPS support", function() {
       passphrase: "test123"
     });
 
-    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json", 'utf8');
+    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json");
   });
 
   after(function() {

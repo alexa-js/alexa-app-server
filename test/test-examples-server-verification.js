@@ -20,7 +20,7 @@ describe("Alexa App Server with Examples & Verification", function() {
       verify: true
     });
 
-    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json", 'utf8');
+    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json");
   });
 
   after(function() {

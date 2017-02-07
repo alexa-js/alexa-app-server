@@ -14,7 +14,7 @@ describe("Alexa App Server with Examples & more HTTPS support", function() {
   var sampleLaunchReq;
 
   before(function() {
-    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json", 'utf8');
+    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json");
   });
 
   afterEach(function() {

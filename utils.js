@@ -1,9 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 
-var defaults = require("lodash.defaults");
-
-// Utility functions
 var isValidDirectory = function(dir) {
   return fs.existsSync(dir) && fs.statSync(dir).isDirectory();
 };
@@ -29,6 +26,5 @@ module.exports = {
   isValidFile       : isValidFile,
   readFile          : readFile,
   readJsonFile      : readJsonFile,
-  defaults          : defaults,
   normalizeApiPath  : normalizeApiPath
 };

@@ -18,9 +18,9 @@ describe("Alexa App Server with Examples", function() {
       server_root: 'examples'
     });
 
-    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json", 'utf8');
-    sampleUtterances = utils.readFile("test/sample-utterances.txt", 'utf8');
-    sampleSchema = utils.readFile("test/sample-schema.txt", 'utf8');
+    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json");
+    sampleUtterances = utils.readFile("test/sample-utterances.txt");
+    sampleSchema = utils.readFile("test/sample-schema.txt");
   });
 
   after(function() {
