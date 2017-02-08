@@ -6,6 +6,7 @@ chai.config.includeStack = true;
 var request = require("supertest");
 var alexaAppServer = require("../index");
 var fs = require("fs");
+var utils = require("../utils");
 
 describe("Alexa App Server with Examples", function() {
   var testServer;
@@ -17,9 +18,9 @@ describe("Alexa App Server with Examples", function() {
       server_root: 'examples'
     });
 
-    sampleLaunchReq = JSON.parse(fs.readFileSync("test/sample-launch-req.json", 'utf8'));
-    sampleUtterances = fs.readFileSync("test/sample-utterances.txt", 'utf8');
-    sampleSchema = fs.readFileSync("test/sample-schema.txt", 'utf8');
+    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json");
+    sampleUtterances = utils.readFile("test/sample-utterances.txt");
+    sampleSchema = utils.readFile("test/sample-schema.txt");
   });
 
   after(function() {

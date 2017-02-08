@@ -6,6 +6,7 @@ chai.config.includeStack = true;
 var request = require("supertest");
 var alexaAppServer = require("../index");
 var fs = require("fs");
+var utils = require("../utils");
 
 describe("Alexa App Server with Examples & HTTPS support", function() {
   var testServer;
@@ -13,16 +14,17 @@ describe("Alexa App Server with Examples & HTTPS support", function() {
 
   before(function() {
     testServer = alexaAppServer.start({
-      port: 6000,
+      port: 3000,
       server_root: 'examples',
-      https: true,
+      httpsEnabled: true,
+      httpsPort: 6000,
       privateKey: 'private-key.pem',
       certificate: 'cert.cer',
       chain: 'cert.ca_bundle',
       passphrase: "test123"
     });
 
-    sampleLaunchReq = JSON.parse(fs.readFileSync("test/sample-launch-req.json", 'utf8'));
+    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json");
   });
 
   after(function() {

@@ -7,13 +7,14 @@ var request = require("supertest");
 var alexaAppServer = require("../index");
 var fs = require("fs");
 var tcpPortUsed = require('tcp-port-used');
+var utils = require("../utils");
 
 describe("Alexa App Server with Examples & more HTTPS support", function() {
   var testServer;
   var sampleLaunchReq;
 
   before(function() {
-    sampleLaunchReq = JSON.parse(fs.readFileSync("test/sample-launch-req.json", 'utf8'));
+    sampleLaunchReq = utils.readJsonFile("test/sample-launch-req.json");
   });
 
   afterEach(function() {
