@@ -27,13 +27,13 @@ Modify the "Stable Release" section in [README.md](README.md). Change the text t
 ```
 ## Stable Release
 
-You're reading the documentation for the stable release of alexa-app-server, 2.4.0.
+You're reading the documentation for the stable release of alexa-app-server, 3.0.1.
 ```
 
 Change "Next Release" in [CHANGELOG.md](CHANGELOG.md) to the new version.
 
 ```
-### 2.4.0 (Feb 4, 2017)
+### 3.0.1 (Feb 7, 2017)
 ```
 
 Remove the line with "Your contribution here.", since there will be no more contributions to this release.
@@ -42,13 +42,13 @@ Commit your changes.
 
 ```
 git add README.md CHANGELOG.md
-git commit -m "Preparing for release, 2.4.0."
+git commit -m "Preparing for release, 3.0.1."
 ```
 
 Tag the release.
 
 ```
-git tag v2.4.0
+git tag v3.0.1
 ```
 
 Release.
@@ -70,14 +70,14 @@ Modify the "Stable Release" section in [README.md](README.md). Change the text t
 ```
 ## Stable Release
 
-You're reading the documentation for the next release of alexa-app-server, which should be 2.4.1.
-The current stable release is 2.4.0.
+You're reading the documentation for the next release of alexa-app-server, which should be 3.0.2.
+The current stable release is 3.0.1.
 ```
 
 Add the next release to [CHANGELOG.md](CHANGELOG.md).
 
 ```
-#### 2.4.1 (Next)
+#### 3.0.2 (Next)
 
 * Your contribution here.
 ```
@@ -88,6 +88,6 @@ Commit your changes.
 
 ```
 git add CHANGELOG.md README.md package.json
-git commit -m "Preparing for next development iteration, 2.4.1."
+git commit -m "Preparing for next development iteration, 3.0.2."
 git push origin master
 ```
