@@ -34,7 +34,8 @@ templates = {
 		"request": {
 			"type": "LaunchRequest",
 			"requestId": "amzn1.echo-api.request.9cdaa4db-f20e-4c58-8d01-c75322d6c423",
-			"timestamp": "2015-05-13T12:34:56Z"
+			"timestamp": "2015-05-13T12:34:56Z",
+			"locale": "en-US"
 		}
 	},
 	"intent": {
@@ -73,6 +74,7 @@ templates = {
 			"type": "IntentRequest",
 			"requestId": "amzn1.echo-api.request.6919844a-733e-4e89-893a-fdcb77e2ef0d",
 			"timestamp": "2015-05-13T12:34:56Z",
+			"locale": "en-US",
 			"intent": {
 				"name": "",
 				"slots": {}
@@ -115,6 +117,7 @@ templates = {
 			"type": "SessionEndedRequest",
 			"requestId": "amzn1.echo-api.request.d8c37cd6-0e1c-458e-8877-5bb4160bf1e1",
 			"timestamp": "2015-05-13T12:34:56Z",
+			"locale": "en-US",
 			"reason": "USER_INITIATED"
 		}
 	}
