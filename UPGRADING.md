@@ -6,7 +6,7 @@ This is the first release out of the [alexa-js Github org](https://github.com/al
 
 #### Alexa-app minimum version
 
-A minimum version 2.5.0 of `alexa-app` is now required.
+A minimum version 3.0.0 of `alexa-app` is now required.
 
 See [alexa-app CHANGELOG](https://github.com/alexa-js/alexa-app/blob/master/CHANGELOG.md) and [UPGRADING](https://github.com/alexa-js/alexa-app/blob/master/UPGRADING.md) for more information.
 

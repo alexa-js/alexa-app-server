@@ -1,12 +1,13 @@
 var hotswap = require('hotswap');
 var fs = require('fs');
-var path = path = require('path');
+var path = require('path');
 var http = require('http');
 var https = require('https');
 var express = require('express');
 var alexa = require('alexa-app');
 var Promise = require('bluebird');
-var defaults = require('lodash.defaults');
+var defaults = require("lodash.defaults");
+var utils = require("./utils");
 
 var appServer = function(config) {
   var self = {};
@@ -32,7 +33,7 @@ var appServer = function(config) {
     throw new Error("invalid configuration: the verify and debug options cannot be both enabled");
   }
 
-  if (self.config.httpEnabled == false && self.config.httpsEnabled == false) {
+  if (!self.config.httpEnabled && !self.config.httpsEnabled) {
     throw new Error("invalid configuration: either http or https must be enabled");
   }
 
@@ -69,30 +70,30 @@ var appServer = function(config) {
     // set up a router to hang all alexa apps off of
     var alexaRouter = express.Router();
 
-    var normalizedRoot = root.indexOf('/') === 0 ? root : '/' + root;
+    var normalizedRoot = utils.normalizeApiPath(root);
     self.express.use(normalizedRoot, alexaRouter);
 
     var app_directories = function(srcpath) {
       return fs.readdirSync(srcpath).filter(function(file) {
-        return fs.statSync(path.join(srcpath, file)).isDirectory();
+        return utils.isValidDirectory(path.join(srcpath, file));
       });
     };
 
     app_directories(app_dir).forEach(function(dir) {
-      var package_json = path.join(app_dir, dir, "/package.json");
-      if (!fs.existsSync(package_json) || !fs.statSync(package_json).isFile()) {
+      var package_json = path.join(app_dir, dir, "package.json");
+      if (!utils.isValidFile(package_json)) {
         self.error("   package.json not found in directory " + dir);
         return;
       }
 
-      var pkg = JSON.parse(fs.readFileSync(package_json, 'utf8'));
+      var pkg = utils.readJsonFile(package_json);
       if (!pkg || !pkg.main || !pkg.name) {
         self.error("   failed to load " + package_json);
         return;
       }
 
       var main = fs.realpathSync(path.join(app_dir, dir, pkg.main));
-      if (!fs.existsSync(main) || !fs.statSync(main).isFile()) {
+      if (!utils.isValidFile(main)) {
         self.error("   main file not found for app [" + pkg.name + "]: " + main);
         return;
       }
@@ -127,7 +128,8 @@ var appServer = function(config) {
         postRequest: self.config.postRequest
       });
 
-      self.log("   loaded app [" + pkg.name + "] at endpoint: " + normalizedRoot + "/" + pkg.name);
+      var endpoint = path.posix.join(normalizedRoot, pkg.name);
+      self.log("   loaded app [" + pkg.name + "] at endpoint: " + endpoint);
     });
 
     return self.apps;
@@ -137,7 +139,7 @@ var appServer = function(config) {
   self.load_server_modules = function(server_dir) {
     var server_files = function(srcpath) {
       return fs.readdirSync(srcpath).filter(function(file) {
-        return fs.statSync(path.join(srcpath, file)).isFile();
+        return utils.isValidFile(path.join(srcpath, file));
       });
     };
     server_files(server_dir).forEach(function(file) {
@@ -164,7 +166,7 @@ var appServer = function(config) {
 
     // serve static content
     var static_dir = path.join(self.config.server_root, self.config.public_html);
-    if (fs.existsSync(static_dir) && fs.statSync(static_dir).isDirectory()) {
+    if (utils.isValidDirectory(static_dir)) {
       self.log("serving static content from: " + static_dir);
       self.express.use(express.static(static_dir));
     } else {
@@ -173,7 +175,7 @@ var appServer = function(config) {
 
     // find any server-side processing modules and let them hook in
     var server_dir = path.join(self.config.server_root, self.config.server_dir);
-    if (fs.existsSync(server_dir) && fs.statSync(server_dir).isDirectory()) {
+    if (utils.isValidDirectory(server_dir)) {
       self.log("loading server-side modules from: " + server_dir);
       self.load_server_modules(server_dir);
     } else {
@@ -182,14 +184,14 @@ var appServer = function(config) {
 
     // find and load alexa-app modules
     var app_dir = path.join(self.config.server_root, self.config.app_dir);
-    if (fs.existsSync(app_dir) && fs.statSync(app_dir).isDirectory()) {
+    if (utils.isValidDirectory(app_dir)) {
       self.log("loading apps from: " + app_dir);
       self.load_apps(app_dir, self.config.app_root);
     } else {
       self.log("apps not loaded because directory [" + app_dir + "] does not exist");
     }
 
-    if (self.config.httpsEnabled == true) {
+    if (self.config.httpsEnabled) {
       self.log("enabling https");
 
       if (self.config.privateKey != undefined && self.config.certificate != undefined && self.config.httpsPort != undefined) {
@@ -198,21 +200,21 @@ var appServer = function(config) {
         var certificateFile = path.join(sslCertRoot, self.config.certificate);
         var chainFile = (self.config.chain != undefined) ? path.join(sslCertRoot, self.config.chain) : undefined;
 
-        if (fs.existsSync(privateKeyFile) && fs.existsSync(certificateFile)) {
-          var privateKey = fs.readFileSync(privateKeyFile, 'utf8');
-          var certificate = fs.readFileSync(certificateFile, 'utf8');
+        if (utils.isValidFile(privateKeyFile) && utils.isValidFile(certificateFile)) {
+          var privateKey = utils.readFile(privateKeyFile);
+          var certificate = utils.readFile(certificateFile);
 
           var chain = undefined;
           if (chainFile != undefined) {
-            if (fs.existsSync(chainFile)) {
-              chain = fs.readFileSync(chainFile, 'utf8');
+            if (utils.isValidFile(chainFile)) {
+              chain = utils.readFile(chainFile);
             } else {
-              self.error("chain: '" + self.config.chain + "' does not exist in /sslcert");
+              self.error("chain: '" + self.config.chain + "' does not exist in " + sslCertRoot);
             }
           }
 
           if (chain == undefined && chainFile != undefined) {
-            self.error("failed to load chain from /sslcert, https will not be enabled");
+            self.error("failed to load chain from " + sslCertRoot + ", https will not be enabled");
           } else if (privateKey != undefined && certificate != undefined) {
             var credentials = {
               key: privateKey,
@@ -225,7 +227,7 @@ var appServer = function(config) {
 
             if (chain != undefined) {
               credentials.ca = chain;
-              self.log("using chain certificate from /sslcert");
+              self.log("using chain certificate from " + sslCertRoot);
             }
 
             try {
@@ -243,10 +245,10 @@ var appServer = function(config) {
               self.error("failed to listen via https: " + error);
             }
           } else {
-            self.error("failed to load privateKey or certificate from /sslcert, https will not be enabled");
+            self.error("failed to load privateKey or certificate from " + sslCertRoot + ", https will not be enabled");
           }
         } else {
-          self.error("privateKey: '" + self.config.privateKey + "' or certificate: '" + self.config.certificate + "' do not exist in /sslcert, https will not be enabled");
+          self.error("privateKey: '" + self.config.privateKey + "' or certificate: '" + self.config.certificate + "' do not exist in " + sslCertRoot + ", https will not be enabled");
         }
       } else {
         self.error("httpsPort, privateKey or certificate parameter is not set in config, https will not be enabled");
