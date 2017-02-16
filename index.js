@@ -128,7 +128,7 @@ var appServer = function(config) {
         postRequest: self.config.postRequest
       });
 
-      var endpoint = path.posix.join(normalizedRoot, pkg.name);
+      var endpoint = path.posix.join(normalizedRoot, app.name);
       self.log("   loaded app [" + pkg.name + "] at endpoint: " + endpoint);
     });
 
