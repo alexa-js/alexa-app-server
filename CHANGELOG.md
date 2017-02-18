@@ -5,8 +5,7 @@
 * [#71](https://github.com/alexa-js/alexa-app-server/pull/71), [#68](https://github.com/alexa-js/alexa-app-server/issues/68): Fixed log output containing multiple slashes - [@tejashah88](https://github.com/tejashah88).
 * [#72](https://github.com/alexa-js/alexa-app-server/pull/72): Use `path.join` for constructing relative paths - [@dblock](https://github.com/dblock).
 * [#74](https://github.com/alexa-js/alexa-app-server/pull/74): Added locale selector to test page - [@siedi](https://github.com/siedi).
-* Changed endpoint message to use app name to match route
-[@zweiler](https://github.com/zweiler)
+* [#76](https://github.com/alexa-js/alexa-app-server/pull/76): Changed endpoint message to use app name to match route - [@zweiler](https://github.com/zweiler).
 * Your contribution here.
 
 ### 3.0.0 (February 6, 2017)
