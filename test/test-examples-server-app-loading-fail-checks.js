@@ -14,10 +14,22 @@ describe("Alexa App Server with invalid examples", function() {
 
   afterEach(function() {
     testServer.stop();
-    console.log.restore();
   });
 
   it("starts without loading invalid apps", function() {
+    testServer = alexaAppServer.start({
+      port: 3000,
+      server_root: 'invalid_examples'
+    });
+
+    return request(testServer.express)
+      .get('/')
+      .expect(200).then(function(response) {
+        expect(response.text).to.contain("alexa-app-server is running");
+      });
+  });
+
+  it("loads apps with the app name in the endpoint message", function() {
     sinon.spy(console, 'log');
     testServer = alexaAppServer.start({
       port: 3000,
@@ -27,10 +39,6 @@ describe("Alexa App Server with invalid examples", function() {
     var badAppNameMismatch = '   loaded app [bad_app_name-mismatch] at endpoint: /alexa/bad_app_name_mismatch';
     expect(console.log).to.have.been.calledWithExactly(badAppNameMismatch);
 
-    return request(testServer.express)
-      .get('/')
-      .expect(200).then(function(response) {
-        expect(response.text).to.contain("alexa-app-server is running");
-      });
+    console.log.restore();
   });
 });
