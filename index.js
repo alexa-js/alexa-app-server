@@ -338,7 +338,6 @@ var appServer = function(config) {
       // attach the alexa-app instance to the alexa router
       app.express({
         expressApp: alexaRouter,
-        router: express.Router(),
         debug: self.config.debug,
         checkCert: self.config.verify,
         preRequest: self.config.preRequest,
