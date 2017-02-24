@@ -6,10 +6,109 @@
     <script type="text/javascript" src="../angular.min.js"></script>
     <script type="text/javascript" src="../templates.json"></script>
 
+			$scope.templates = {
+				// LaunchRequest template
+				"launch": {
+				  "version": "1.0",
+				  "session": {
+					"new": true,
+					"sessionId": "amzn1.echo-api.session.abeee1a7-aee0-41e6-8192-e6faaed9f5ef",
+					"application": {
+						"applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
+					},
+					"attributes": {},
+					"user": {
+            "userId": "amzn1.account.AM0A000AA0AAA0A000AA0AAA0A0"
+					}
+				  },
+				  "request": {
+					"type": "LaunchRequest",
+					"requestId": "amzn1.echo-api.request.9cdaa4db-f20e-4c58-8d01-c75322d6c423",
+					"timestamp": "2015-05-13T12:34:56Z"
+				  }
+				}
+				// IntentRequest template
+				,"intent": {
+				  "version": "1.0",
+				  "session": {
+					"new": false,
+					"sessionId": "amzn1.echo-api.session.abeee1a7-aee0-41e6-8192-e6faaed9f5ef",
+					"application": {
+						"applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
+					},
+					"attributes": {},
+					"user": {
+            "userId": "amzn1.account.AM0A000AA0AAA0A000AA0AAA0A0"
+					}
+				  },
+				  "request": {
+					"type": "IntentRequest",
+					"requestId": "amzn1.echo-api.request.6919844a-733e-4e89-893a-fdcb77e2ef0d",
+					"timestamp": "2015-05-13T12:34:56Z",
+					"intent": {
+					  "name": "",
+					  "slots": {}
+					}
+				  }
+				}
+				// SessionEndedRequest template
+				,"session_end": {
+				  "version": "1.0",
+				  "session": {
+					"new": false,
+					"sessionId": "amzn1.echo-api.session.abeee1a7-aee0-41e6-8192-e6faaed9f5ef",
+					"application": {
+						"applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
+					},
+					"attributes": {},
+					"user": {
+            "userId": "amzn1.account.AM0A000AA0AAA0A000AA0AAA0A0"
+					}
+				  },
+				  "request": {
+					"type": "SessionEndedRequest",
+					"requestId": "amzn1.echo-api.request.d8c37cd6-0e1c-458e-8877-5bb4160bf1e1",
+					"timestamp": "2015-05-13T12:34:56Z",
+					"reason": "USER_INITIATED"
+				  }
+				}
+			};
+			// Extract the applicationId if it exists and update the templates
+			var applicationId = "<%= app.id || "" %>";
+			if (applicationId) {
+				$scope.templates.launch.session.application.applicationId = applicationId;
+				$scope.templates.intent.session.application.applicationId = applicationId;
+				$scope.templates.session_end.session.application.applicationId = applicationId;
+			}
+      // Update the timestamps
+      var dtISO = new Date().toISOString();
+      $scope.templates.launch.session.application.timestamp = dtISO;
+      $scope.templates.intent.session.application.timestamp = dtISO;
+      $scope.templates.session_end.session.application.timestamp = dtISO;
+      $scope.templates.launch.request.timestamp = dtISO;
+      $scope.templates.intent.request.timestamp = dtISO;
+      $scope.templates.session_end.request.timestamp = dtISO;
+		});
+		</script>
+		<style>
+		.code { 
+			white-space:pre; 
+			font-family:monospace; 
+			border:1px solid #666; 
+			display:inline-block; 
+			padding:5px; 
+			min-width:400px; 
+			min-height:25px; 
+		}
+		</style>
+	</head>
+	<body>
+=======
     <script>
       function clone(o) {
         return JSON.parse(JSON.stringify(o));
       }
+>>>>>>> 94dd0a76272cff6f989e33f0134d1d3ec4da17b9
 
       // For Angular
       var app = angular.module('alexa', []);
@@ -31,6 +130,35 @@
             $scope.request = {};
           }
 
+<<<<<<< HEAD
+<h2>Response</h2>
+<div ng-show="response">
+	<div id="response" class="code">{{response|json}}</div>
+</div>
+
+<h2>Session</h2>
+<div ng-show="session">
+  <div id="session" class="code">{{session|json}}</div>
+</div>
+
+  <!---
+<h2>Schema</h2>
+<div>
+  <div id="schema" class="code">{{schema|json}}</div>
+</div>
+
+<h2>Custom Slot Types</h2>
+<div>
+  <div id="customSlotTypes" class="code" style="max-height:500px;overflow:auto;"><%=customSlotTypes%></div>
+</div>
+
+<h2>Utterances</h2>
+<div>
+  <div id="utterances" class="code" style="max-height:500px;overflow:auto;"><%=utterances%></div>
+</div>
+-->
+	</body>
+=======
           $scope.intent = null;
         };
 

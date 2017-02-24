@@ -6,6 +6,8 @@
 * [#72](https://github.com/alexa-js/alexa-app-server/pull/72): Use `path.join` for constructing relative paths - [@dblock](https://github.com/dblock).
 * [#74](https://github.com/alexa-js/alexa-app-server/pull/74): Added locale selector to test page - [@siedi](https://github.com/siedi).
 * [#76](https://github.com/alexa-js/alexa-app-server/pull/76): Changed endpoint message to use app name to match route - [@zweiler](https://github.com/zweiler).
+* [#77](https://github.com/alexa-js/alexa-app-server/pull/77): Removed router from `app.express()` configuration options - [@rickwargo](https://github.com/rickwargo).
+
 * Your contribution here.
 
 ### 3.0.0 (February 6, 2017)
