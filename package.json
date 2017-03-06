@@ -1,6 +1,6 @@
 {
   "name": "alexa-app-server",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A web server module for Alexa (Amazon Echo) apps (skills) using Node.js, Express, and alexa-app.",
   "main": "index.js",
   "author": "Matt Kruse",
