@@ -1,13 +1,16 @@
 ## Changelog
 
-### 3.0.1 (Next)
+### 3.0.2 (Next)
+
+* Your contribution here.
+
+### 3.0.1 (March 7, 2017)
 
 * [#71](https://github.com/alexa-js/alexa-app-server/pull/71), [#68](https://github.com/alexa-js/alexa-app-server/issues/68): Fixed log output containing multiple slashes - [@tejashah88](https://github.com/tejashah88).
 * [#72](https://github.com/alexa-js/alexa-app-server/pull/72): Use `path.join` for constructing relative paths - [@dblock](https://github.com/dblock).
 * [#74](https://github.com/alexa-js/alexa-app-server/pull/74): Added locale selector to test page - [@siedi](https://github.com/siedi).
 * [#76](https://github.com/alexa-js/alexa-app-server/pull/76): Changed endpoint message to use app name to match route - [@zweiler](https://github.com/zweiler).
 * [#79](https://github.com/alexa-js/alexa-app-server/pull/77): Removed router from `app.express()` configuration options - [@rickwargo](https://github.com/rickwargo).
-* Your contribution here.
 
 ### 3.0.0 (February 6, 2017)
 
