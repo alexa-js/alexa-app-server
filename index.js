@@ -128,7 +128,7 @@ var appServer = function(config) {
       });
 
       var endpoint = path.posix.join(normalizedRoot, app.name);
-	  self.express.route(endpoint+'/appid').get(function(req, res){
+      self.express.route(endpoint+'/appid').get(function(req, res){
         var response = (self.config.verify ? {} : {"id": app.id});
         res.send(response);
       });

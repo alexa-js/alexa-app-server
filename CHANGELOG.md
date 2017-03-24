@@ -2,6 +2,7 @@
 
 ### 3.0.2 (Next)
 
+* Your contribution here.
 * [#83](https://github.com/alexa-js/alexa-app-server/pull/83), [#77](https://github.com/alexa-js/alexa-app-server/issues/77): Fixed Application ID not getting set when testing - [@benedekh](https://github.com/benedekh).
 
 ### 3.0.1 (March 7, 2017)
