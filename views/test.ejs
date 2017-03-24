@@ -80,13 +80,18 @@
 
         $scope.templates = templates;
 
-        // Extract the applicationId if it exists and update the templates
-        var applicationId = "<%= app.id || "" %>";
-        if (applicationId) {
-          $scope.templates.launch.session.application.applicationId = applicationId;
-          $scope.templates.intent.session.application.applicationId = applicationId;
-          $scope.templates.session_end.session.application.applicationId = applicationId;
-        }
+        $http.get(location.href + '/appid')
+          .then(function onSuccess(response) {
+            app.id = response.data.id;
+          }).finally(function () {
+            // Extract the applicationId if it exists and update the templates
+            var applicationId = app.id || "";
+            if (applicationId) {
+              $scope.templates.launch.session.application.applicationId = applicationId;
+              $scope.templates.intent.session.application.applicationId = applicationId;
+              $scope.templates.session_end.session.application.applicationId = applicationId;
+            }
+        });
       });
     </script>
 

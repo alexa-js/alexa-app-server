@@ -128,6 +128,10 @@ var appServer = function(config) {
       });
 
       var endpoint = path.posix.join(normalizedRoot, app.name);
+	  self.express.route(endpoint+'/appid').get(function(req, res){
+        var response = (self.config.verify ? {} : {"id": app.id});
+        res.send(response);
+      });
       self.log("   loaded app [" + pkg.name + "] at endpoint: " + endpoint);
     });
 
