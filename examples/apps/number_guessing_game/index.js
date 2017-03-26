@@ -1,10 +1,13 @@
 var alexa = require('alexa-app');
+var pkg = require('./package.json');
+var applicationId = (typeof pkg.alexa == 'object' ? pkg.alexa.applicationId : "");
 
 // Allow this module to be reloaded by hotswap when changed
 module.change_code = 1;
 
 // Define an alexa-app
 var app = new alexa.app('number_guessing_game');
+app.id = applicationId;
 
 app.launch(function(req, res) {
   var number = Math.floor(Math.random() * 99) + 1;
