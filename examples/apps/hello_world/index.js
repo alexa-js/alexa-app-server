@@ -1,13 +1,11 @@
 var alexa = require('alexa-app');
-var pkg = require('./package.json');
-var applicationId = (typeof pkg.alexa == 'object' ? pkg.alexa.applicationId : "");
 
 // Allow this module to be reloaded by hotswap when changed
 module.change_code = 1;
 
 // Define an alexa-app
 var app = new alexa.app('hello_world');
-app.id = applicationId;
+app.id = require('./package.json').alexa.applicationId;
 
 app.launch(function(req, res) {
   res.say("Hello World!!");

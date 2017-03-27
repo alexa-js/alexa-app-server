@@ -217,6 +217,11 @@ AlexaAppServer.start({
 
 Each app (skill) is available at a url endpoint on the server, and responds to POST requests from the Echo. If you load an app's endpoint in your browser with a GET request, it will display an echo simulator that can be used to debug your application. With it, you can send different request types to your app, load slots with values you specify, etc and see the actual generated JSON output from your application.
 
+### Show application ID
+
+To show the application ID in the session correctly, set the `id` field of your alexa-app for that value.
+
+
 ## View Generated Schema And Utterances
 
 In the Echo Simulator, your application's schema definition and example utterances are displayed. These can be directly pasted into the Amazon Developer interface when defining your skill.
