@@ -3,6 +3,7 @@
 ### 3.0.2 (Next)
 
 * Your contribution here.
+* [#84](https://github.com/alexa-js/alexa-app-server/pull/84), [#73](https://github.com/alexa-js/alexa-app-server/issues/73): Change default server_root to `__dirname` - [@benedekh](https://github.com/benedekh)
 
 ### 3.0.1 (March 7, 2017)
 

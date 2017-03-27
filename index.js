@@ -22,7 +22,7 @@ var appServer = function(config) {
     httpsEnabled: false,
     public_html: 'public_html',
     server_dir: 'server',
-    server_root: '.',
+    server_root: __dirname,
     app_root: 'alexa',
     app_dir: 'apps'
   };
