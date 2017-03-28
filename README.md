@@ -79,9 +79,9 @@ require('alexa-app-server').start({
 
   // In order to start the server from a working directory other than
   // where your server.js file, you need to provide Node the full path
-  // to your server's root directory. The easiest way is to use __dirname.
-  // Default is '.'.
-  server_root: '.',
+  // to your server's root directory.
+  // Default is __dirname.
+  server_root: __dirname,
 
   // A directory containing static content to serve as the document root.
   // This directory is relative to the script using alexa-app-server, not
