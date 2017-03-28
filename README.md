@@ -217,10 +217,28 @@ AlexaAppServer.start({
 
 Each app (skill) is available at a url endpoint on the server, and responds to POST requests from the Echo. If you load an app's endpoint in your browser with a GET request, it will display an echo simulator that can be used to debug your application. With it, you can send different request types to your app, load slots with values you specify, etc and see the actual generated JSON output from your application.
 
-### Show application ID
+### Show Application ID
 
 To show the application ID in the session correctly, set the `id` field of your alexa-app for that value.
 
+#### Sample Snippet To Export Application ID
+
+This is a code snippet which shows how you can export the application ID from your skill, if the ID is stored in the `package.json`.
+
+```javascript
+var app = new alexa.app('hello_world');
+app.id = require('./package.json').alexa.applicationId;
+```
+
+The corresponding extract from the `package.json`:
+
+```javascript
+{
+  "alexa": {
+    "applicationId": "amzn1.echo-sdk-ams.app.999999-d0ed-9999-ad00-999999d00ebe"
+  }
+}
+```
 
 ## View Generated Schema And Utterances
 
