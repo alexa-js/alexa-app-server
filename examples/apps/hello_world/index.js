@@ -5,6 +5,8 @@ module.change_code = 1;
 
 // Define an alexa-app
 var app = new alexa.app('hello_world');
+app.id = require('./package.json').alexa.applicationId;
+
 app.launch(function(req, res) {
   res.say("Hello World!!");
 });

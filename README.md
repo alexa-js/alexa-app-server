@@ -85,7 +85,7 @@ require('alexa-app-server').start({
 
   // A directory containing static content to serve as the document root.
   // This directory is relative to the script using alexa-app-server, not
-  // relative to the module directory. 
+  // relative to the module directory.
   // Default is 'public_html'.
   public_html: 'public_html',
 
@@ -98,7 +98,7 @@ require('alexa-app-server').start({
 
   // The prefix to use for all Alexa Apps. For example, you may want all
   // your Alexa endpoints to be accessed under the "/api/" path off the
-  // root of your web server. 
+  // root of your web server.
   // Default is 'alexa'.
   app_root: 'alexa',
 
@@ -106,11 +106,11 @@ require('alexa-app-server').start({
   // Default is 'server'.
   server_dir: 'server',
 
-  // Enable http support. 
+  // Enable http support.
   // Default is true.
   httpEnabled: true,
 
-  // The port the server should bind to. 
+  // The port the server should bind to.
   // Default is 8080.
   port: 8080,
 
@@ -124,12 +124,12 @@ require('alexa-app-server').start({
   // Default is true.
   debug: true,
 
-  // Log useful information with console.log(). 
+  // Log useful information with console.log().
   // Default is true.
   log: true,
 
   // Insert alexa-verifier-middleware and add verification for Alexa requests
-  // as required by the Alexa certification process. 
+  // as required by the Alexa certification process.
   // Default is false.
   verify: false,
 
@@ -169,23 +169,23 @@ require('alexa-app-server').start({
   httpsPort: 443,
 
   // The private key filename. This file must reside in the sslcert folder under the
-  // root of the project. 
+  // root of the project.
   // Default is undefined.
   privateKey: 'private-key.pem',
 
   // The certificate filename. This file must reside in the sslcert folder under the root of the
-  // project. 
+  // project.
   // Default is undefined.
   certificate: 'cert.cer',
 
   // The certificate chain bundle filename. This is an optional file that must reside in the
-  // sslcert folder under the root of the project. 
+  // sslcert folder under the root of the project.
   // Default is undefined.
   chain: 'cert.ca_bundle',
 
   // An optional passphrase used to validate certificate and key files. For best practice, don't
   // put the password directly in your source code, especially if it's going to be on GitHub, and
-  // instead, load it from process.env or a file included in the .gitignore list. 
+  // instead, load it from process.env or a file included in the .gitignore list.
   // Default is undefined.
   passphrase: 'passphrase'
 
@@ -227,6 +227,25 @@ AlexaAppServer.start({
 ## Debugging With The Echo Simulator
 
 Each app (skill) is available at a url endpoint on the server, and responds to POST requests from the Echo. If you load an app's endpoint in your browser with a GET request, it will display an echo simulator that can be used to debug your application. With it, you can send different request types to your app, load slots with values you specify, etc and see the actual generated JSON output from your application.
+
+### Show Application ID
+
+To show the application ID in the session correctly, set `applicationId` in `package.json`.
+
+```javascript
+{
+  "alexa": {
+    "applicationId": "amzn1.echo-sdk-ams.app.999999-d0ed-9999-ad00-999999d00ebe"
+  }
+}
+```
+
+Assign the value in your alexa-app.
+
+```javascript
+var app = new alexa.app('hello_world');
+app.id = require('./package.json').alexa.applicationId;
+```
 
 ## View Generated Schema And Utterances
 

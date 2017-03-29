@@ -5,6 +5,7 @@ module.change_code = 1;
 
 // Define an alexa-app
 var app = new alexa.app('number_guessing_game');
+app.id = require('./package.json').alexa.applicationId;
 
 app.launch(function(req, res) {
   var number = Math.floor(Math.random() * 99) + 1;

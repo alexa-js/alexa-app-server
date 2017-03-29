@@ -4,6 +4,7 @@
 
 * Your contribution here.
 * [#84](https://github.com/alexa-js/alexa-app-server/pull/84), [#73](https://github.com/alexa-js/alexa-app-server/issues/73): Changed default server_root to `__dirname` - [@benedekh](https://github.com/benedekh).
+* [#83](https://github.com/alexa-js/alexa-app-server/pull/83), [#77](https://github.com/alexa-js/alexa-app-server/issues/77): Fixed Application ID not getting set in tests - [@benedekh](https://github.com/benedekh).
 
 ### 3.0.1 (March 7, 2017)
 
