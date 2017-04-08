@@ -48,10 +48,10 @@
           $scope.request.request.locale = $scope.locale;
           $scope.request.context.System.apiEndpoint = $scope.apiEndpoint;
 
-          if ($scope.locale === 'en-US') {
-            $scope.request.context.System.apiEndpoint = 'https://api.amazonalexa.com/';
+          if ($scope.locale === 'en-GB' || $scope.locale === 'de-DE') {
+            $scope.request.context.System.apiEndpoint = 'https://api.eu.amazonalexa.com/';
           } else {
-            $scope.request.context.System.apiEndpoint = 'https://api.eu.amazonalexa.com';
+            $scope.request.context.System.apiEndpoint = 'https://api.amazonalexa.com/';
           }
         };
 
