@@ -9,7 +9,11 @@ templates = {
 			},
 			"attributes": {},
 			"user": {
-				"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2"
+				"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2",
+				"permissions": {
+					"consentToken": null
+				},
+				"accessToken": null
 			}
 		},
 		"context": {
@@ -18,13 +22,19 @@ templates = {
 					"applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
 				},
 				"user": {
-					"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2"
+					"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2",
+					"permissions": {
+						"consentToken": null
+					},
+					"accessToken": null
 				},
 				"device": {
+					"deviceId": null,
 					"supportedInterfaces": {
 						"AudioPlayer": {}
 					}
-				}
+				},
+				"apiEndpoint": "https://api.amazonalexa.com/"
 			},
 			"AudioPlayer": {
 				"offsetInMilliseconds": 0,
@@ -48,7 +58,11 @@ templates = {
 			},
 			"attributes": {},
 			"user": {
-				"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2"
+				"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2",
+				"permissions": {
+					"consentToken": null
+				},
+				"accessToken": null
 			}
 		},
 		"context": {
@@ -57,13 +71,19 @@ templates = {
 					"applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
 				},
 				"user": {
-					"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2"
+					"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2",
+					"permissions": {
+						"consentToken": null
+					},
+					"accessToken": null
 				},
 				"device": {
+					"deviceId": null,
 					"supportedInterfaces": {
 						"AudioPlayer": {}
 					}
-				}
+				},
+				"apiEndpoint": "https://api.amazonalexa.com/"
 			},
 			"AudioPlayer": {
 				"offsetInMilliseconds": 0,
@@ -91,7 +111,11 @@ templates = {
 			},
 			"attributes": {},
 			"user": {
-				"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2"
+				"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2",
+				"permissions": {
+					"consentToken": null
+				},
+				"accessToken": null
 			}
 		},
 		"context": {
@@ -100,13 +124,19 @@ templates = {
 					"applicationId": "amzn1.echo-sdk-ams.app.000000-d0ed-0000-ad00-000000d00ebe"
 				},
 				"user": {
-					"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2"
+					"userId": "amzn1.account.AM3B227HF3FAM1B261HK7FFM3A2",
+					"permissions": {
+						"consentToken": null
+					},
+					"accessToken": null
 				},
 				"device": {
+					"deviceId": null,
 					"supportedInterfaces": {
 						"AudioPlayer": {}
 					}
-				}
+				},
+				"apiEndpoint": "https://api.amazonalexa.com/"
 			},
 			"AudioPlayer": {
 				"offsetInMilliseconds": 0,

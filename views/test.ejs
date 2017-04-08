@@ -21,12 +21,22 @@
         $scope.session = {};
         $scope.intent = null;
         $scope.locale = 'en-US';
+        $scope.accessToken = null;
+        $scope.apiEndpoint = 'https://api.amazonalexa.com/';
+        $scope.consentToken = null;
+        $scope.deviceId = null;
 
         $scope.changetype = function() {
           if ($scope.requestType !== '') {
             $scope.request = clone($scope.templates[$scope.requestType]);
             $scope.request.session.attributes = $scope.session;
-            $scope.request.request.locale = $scope.locale;
+            $scope.request.request.timestamp = new Date();
+
+            $scope.changelocale();
+            $scope.changeAccessToken();
+            $scope.changeConsentToken();
+            $scope.changeDeviceId();
+
           } else {
             $scope.request = {};
           }
@@ -36,6 +46,48 @@
 
         $scope.changelocale = function() {
           $scope.request.request.locale = $scope.locale;
+          $scope.request.context.System.apiEndpoint = $scope.apiEndpoint;
+
+          if ($scope.locale === 'en-US') {
+            $scope.request.context.System.apiEndpoint = 'https://api.amazonalexa.com/';
+          } else {
+            $scope.request.context.System.apiEndpoint = 'https://api.eu.amazonalexa.com';
+          }
+        };
+
+        $scope.changeAccessToken = function() {
+
+          var accessToken = null;
+
+          if ($scope.accessToken) {
+            accessToken = $scope.accessToken;
+          }
+
+          $scope.request.context.System.user.accessToken = accessToken;
+          $scope.request.session.user.accessToken = accessToken;
+        };
+
+        $scope.changeConsentToken = function() {
+
+          var consentToken = null;
+
+          if ($scope.consentToken) {
+            consentToken = $scope.consentToken;
+          }
+
+          $scope.request.context.System.user.permissions.consentToken = consentToken;
+          $scope.request.session.user.permissions.consentToken = consentToken;
+        };
+
+        $scope.changeDeviceId = function() {
+
+          var deviceId = null;
+
+          if ($scope.deviceId) {
+            deviceId = $scope.deviceId;
+          }
+
+          $scope.request.context.System.device.deviceId = deviceId;
         };
 
         $scope.changeintent = function() {
@@ -48,6 +100,7 @@
 
         $scope.post = function() {
           if (Object.keys($scope.request).length !== 0) {
+            $scope.request.request.timestamp = new Date();
             $http.post(location.href, $scope.request)
               .then(function onSuccess(response) {
                 $scope.response = response.data;
@@ -115,6 +168,21 @@
         <option value="intent">IntentRequest</option>
         <option value="session_end">SessionEndedRequest</option>
       </select>
+
+      <div id="deviceId">
+        Device ID:
+        <input id="deviceId_input" type="text" value="" ng-model="deviceId" ng-change="changeDeviceId()" />
+      </div>
+
+      <div id="accessToken">
+        Access Token:
+        <input id="accessToken_input" type="text" value="" ng-model="accessToken" ng-change="changeAccessToken()" />
+      </div>
+
+      <div id="consentToken">
+        Consent Token:
+        <input id="consentToken_input" type="text" value="" ng-model="consentToken" ng-change="changeConsentToken()" />
+      </div>
 
       <div id="intent" ng-show="requestType=='intent'">
         Intent:
