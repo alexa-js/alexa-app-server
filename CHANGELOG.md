@@ -3,6 +3,7 @@
 ### 3.0.2 (Next)
 
 * Your contribution here.
+* [#88](https://github.com/alexa-js/alexa-app-server/pull/88): No longer compatible with Node 0.12 - [@martincostello](https://github.com/martincostello).
 * [#88](https://github.com/alexa-js/alexa-app-server/pull/88): Added access token, consent token, device ID and API endpoint to test page - [@martincostello](https://github.com/martincostello).
 * [#84](https://github.com/alexa-js/alexa-app-server/pull/84), [#73](https://github.com/alexa-js/alexa-app-server/issues/73): Changed default server_root to `__dirname` - [@benedekh](https://github.com/benedekh).
 * [#83](https://github.com/alexa-js/alexa-app-server/pull/83), [#77](https://github.com/alexa-js/alexa-app-server/issues/77): Fixed Application ID not getting set in tests - [@benedekh](https://github.com/benedekh).
