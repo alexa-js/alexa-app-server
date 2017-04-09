@@ -12,7 +12,6 @@ matrix:
         - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
 node_js:
-  - 0.12
   - 1
   - 2
   - 3
