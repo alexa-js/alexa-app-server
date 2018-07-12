@@ -1,8 +1,7 @@
 ## Changelog
 
-### 3.0.2 (Next)
+### 3.0.2 (July 12, 2018)
 
-* Your contribution here.
 * [#88](https://github.com/alexa-js/alexa-app-server/pull/88): No longer compatible with Node 0.12 - [@martincostello](https://github.com/martincostello).
 * [#88](https://github.com/alexa-js/alexa-app-server/pull/88): Added access token, consent token, device ID and API endpoint to test page - [@martincostello](https://github.com/martincostello).
 * [#84](https://github.com/alexa-js/alexa-app-server/pull/84), [#73](https://github.com/alexa-js/alexa-app-server/issues/73): Changed default server_root to `__dirname` - [@benedekh](https://github.com/benedekh).
