@@ -8,7 +8,7 @@ An Alexa App (Skill) Server module using Node.js and the [alexa-app](https://www
 
 ## Stable Release
 
-You're reading the documentation for the stable release of alexa-app-server, 3.0.2. Please see [CHANGELOG](CHANGELOG.md) and make sure to read [UPGRADING](UPGRADING.md) when upgrading from a previous version.
+You're reading the documentation for the next release of alexa-app-server, which should be 3.0.3. Please see [CHANGELOG](CHANGELOG.md) and make sure to read [UPGRADING](UPGRADING.md) when upgrading from a previous version. The current stable release is [3.0.2](https://github.com/alexa-js/alexa-app-server/tree/v3.0.2).
 
 ## Installation
 
